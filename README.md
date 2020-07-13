@@ -65,3 +65,4 @@ ID | Leírás
 
 ### Osztály diagram
 
+![](class_diagram.PNG)
