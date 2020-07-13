@@ -48,14 +48,20 @@ ID | Leírás
 16 | A pizzák listázásánál látszik az értékelések átlaga.
 17 | Egy pizzán az értékelések számát és átlagát a kijelentkezett felhasználók is látják.
 18 | Lehet saját pizzát összeállítani.
-19 | Egy pizzán legfeljebb 5 feltét szerepelhet.
+19 | Egy pizzán legfeljebb 5 feltét szerepelhet és legalább 1.
 20 | A pizzának csak 1 alapot lehet megadni (tejföl vagy paradicsomszósz vagy ....).
 21 | Az összerakott pizzát hozzá lehet adni a kosárhoz.
 22 | Az összerakott pizzát törölni lehet a kosárból.
 23 | Az összerakott pizzát meg lehet rendelni a kosáron keresztül.
+24 | A felhasználó tud regisztrálni.
+25 | A felhasználó be tud lépni a regisztrált fiókjával.
+26 | A felhasználó ki tud lépni, ha be van jelentkezve.
 
 ## Terv
 
-### Use-case
+### Use-case diagram
+
+![](usecase_diagram.PNG)
 
 ### Osztály diagram
+
