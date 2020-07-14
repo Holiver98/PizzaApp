@@ -66,3 +66,8 @@ ID | Leírás
 ### Osztály diagram
 
 ![](class_diagram.PNG)
+
+### Szekvencia diagram
+
+#### Megrendelés leadása
+![](seq_dia_Cart-PlaceOrder.PNG)
