@@ -61,7 +61,7 @@ ID | Leírás
 
 ### Use-case diagram
 
-![](usecase_diagram.PNG)
+![](usecase_diagram.png)
 
 ### Osztály diagram
 
