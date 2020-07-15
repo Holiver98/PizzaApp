@@ -28,4 +28,12 @@ public interface IRatingService {
      * @return A list of the ratings of the given pizza.
      */
     List<Rating> getRatingsOfPizza(Pizza pizza);
+
+    /**
+     * Get all the ratings that the given user has made.
+     *
+     * @param userEmailAddress The email address, that identifies the user.
+     * @return A list of the ratings, that the user made.
+     */
+    List<Rating> getRatingsOfUser(String userEmailAddress);
 }

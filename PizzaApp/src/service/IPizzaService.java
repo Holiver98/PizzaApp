@@ -23,13 +23,15 @@ public interface IPizzaService {
 
     /**
      * Gets all the pizzas from the database.
+     *
      * @return A list of all the pizzas.
      */
     List<Pizza> getPizzas();
 
     /**
      * Gets all the pizzas from the database, that aren't a custom-made pizza.
-     * @return A list of the pizzas.
+     *
+     * @return A list of the basic pizzas.
      */
     List<Pizza> getBasicPizzas(); //non custom-made pizzas
 
@@ -42,7 +44,7 @@ public interface IPizzaService {
     Pizza getPizzaById(long pizzaId);
 
     /**
-     * Replaces the pizza in the database that has the same id, as the pizza argument.
+     * Updates the pizza in the database that has the same id, as the pizza argument.
      *
      * @param pizza The pizza to be updated.
      */
