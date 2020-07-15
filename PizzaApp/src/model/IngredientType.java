@@ -1,6 +1,6 @@
 package model;
 
 public enum IngredientType {
-    PizzaTopping,
-    PizzaBaseSauce
+    PIZZA_TOPPING,
+    PIZZA_BASESAUCE
 }

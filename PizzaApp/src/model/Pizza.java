@@ -6,7 +6,7 @@ public class Pizza {
     private long id;
     private String name;
     private Set<Ingredient> ingredients;
-    private int radius;
+    private PizzaSize size;
     private float ratingAverage;
     private float price;
     private boolean isCustom;
@@ -23,8 +23,8 @@ public class Pizza {
         return ingredients;
     }
 
-    public int getRadius() {
-        return radius;
+    public PizzaSize getSize() {
+        return size;
     }
 
     public float getRatingAverage() {
@@ -51,8 +51,8 @@ public class Pizza {
         this.ingredients = ingredients;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+    public void setSize(PizzaSize size) {
+        this.size = size;
     }
 
     public void setRatingAverage(float ratingAverage) {
@@ -73,7 +73,7 @@ public class Pizza {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", ingredients=" + ingredients +
-                ", radius=" + radius +
+                ", size=" + size +
                 ", ratingAverage=" + ratingAverage +
                 ", price=" + price +
                 ", isCustom=" + isCustom +
