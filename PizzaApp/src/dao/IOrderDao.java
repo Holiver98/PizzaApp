@@ -1,6 +1,6 @@
-package DAO;
+package dao;
 
-import Model.Order;
+import model.Order;
 
 import java.util.List;
 

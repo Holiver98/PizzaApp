@@ -1,6 +1,4 @@
-package Model;
-
-import java.util.Objects;
+package model;
 
 public class Rating {
     private String pizzaName;

@@ -1,7 +1,7 @@
-package DAO;
+package dao;
 
-import Model.Ingredient;
-import Model.IngredientType;
+import model.Ingredient;
+import model.IngredientType;
 
 import java.util.List;
 

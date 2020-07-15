@@ -1,6 +1,6 @@
-package DAO;
+package dao;
 
-import Model.User;
+import model.User;
 
 public interface IUserDao {
     long saveUser(User user);

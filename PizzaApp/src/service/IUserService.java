@@ -1,6 +1,6 @@
-package Service;
+package service;
 
-import Model.User;
+import model.User;
 
 public interface IUserService {
     void login(String emailAddress, String password);

@@ -1,6 +1,6 @@
-package Service;
+package service;
 
-import Model.Pizza;
+import model.Pizza;
 
 public interface ICartService {
     void addPizzaToCart(Pizza pizza);

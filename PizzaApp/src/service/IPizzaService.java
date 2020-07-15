@@ -1,10 +1,11 @@
-package DAO;
+package service;
 
-import Model.Pizza;
+import model.Pizza;
 
 import java.util.List;
 
-public interface IPizzaDao {
+public interface IPizzaService {
+    float calculatePrice();
     long savePizza(Pizza pizza);
     List<Pizza> getPizzas();
     List<Pizza> getBasicPizzas(); //non custom-made pizzas

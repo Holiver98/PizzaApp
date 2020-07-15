@@ -1,7 +1,7 @@
-package DAO;
+package dao;
 
-import Model.Pizza;
-import Model.Rating;
+import model.Pizza;
+import model.Rating;
 
 import java.util.List;
 
