@@ -1,17 +1,11 @@
 package model;
 
+import java.util.Objects;
+
 public class Rating {
-    private String pizzaName;
+    private long pizzaId;
     private int rating;
     private String userEmailAddress;
-
-    public String getPizzaName() {
-        return pizzaName;
-    }
-
-    public void setPizzaName(String pizzaName) {
-        this.pizzaName = pizzaName;
-    }
 
     public int getRating() {
         return rating;
@@ -29,12 +23,35 @@ public class Rating {
         this.userEmailAddress = userEmailAddress;
     }
 
+    public long getPizzaId() {
+        return pizzaId;
+    }
+
+    public void setPizzaId(long pizzaId) {
+        this.pizzaId = pizzaId;
+    }
+
     @Override
     public String toString() {
         return "Rating{" +
-                "pizzaName='" + pizzaName + '\'' +
+                "pizzaId=" + pizzaId +
                 ", rating=" + rating +
                 ", userEmailAddress='" + userEmailAddress + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Rating)) return false;
+        Rating rating1 = (Rating) o;
+        return pizzaId == rating1.pizzaId &&
+                rating == rating1.rating &&
+                userEmailAddress.equals(rating1.userEmailAddress);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pizzaId, rating, userEmailAddress);
     }
 }

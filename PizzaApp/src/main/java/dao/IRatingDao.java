@@ -40,6 +40,16 @@ public interface IRatingDao {
     List<Rating> getRatingsOfUser(String userEmailAddress);
 
     /**
+     * Gets the rating, that the user made on the pizza with the given id.
+     * Each user can only have 1 rating for 1 pizza.
+     *
+     * @param userEmailAddress The email address of the user.
+     * @param pizzaId The pizza we want the rating of.
+     * @return The rating the user made on this pizza, or null if the user didn't rate the pizza.
+     */
+    Rating getRatingOfUserForPizza(String userEmailAddress, long pizzaId);
+
+    /**
      * Updates the ratings in the database, that ahs the same id, as the rating argument.
      *
      * @param rating The rating to be updated.
