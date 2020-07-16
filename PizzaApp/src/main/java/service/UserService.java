@@ -2,11 +2,11 @@ package service;
 
 import dao.IUserDao;
 import model.User;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class UserService implements IUserService {
 
     private IUserDao userDao;
+    private User loggedInUser;
 
     public UserService(IUserDao dao)
     {
@@ -15,16 +15,43 @@ public class UserService implements IUserService {
 
     @Override
     public void login(String emailAddress, String password) {
-        throw new NotImplementedException();
+        if(loggedInUser != null){
+            System.out.println("Already logged in!");
+            return;
+        }
+
+        User user = userDao.getUserByEmailAddress(emailAddress);
+
+        if(user == null){
+            System.out.println("User not registered!");
+            return;
+        }
+
+        if(!password.equals(user.getPassword())){
+            System.out.println("Invalid password!");
+            return;
+        }
+
+        loggedInUser = user;
     }
 
     @Override
     public void logout() {
-        throw new NotImplementedException();
+        if(loggedInUser == null){
+            System.out.println("Can't logout, because user is not logged in!");
+            return;
+        }
+
+        loggedInUser = null;
     }
 
     @Override
     public void register(User user) {
+        if(user == null)
+        {
+            return;
+        }
+
         if(!isValidUserName(user.getUsername())) {
             System.out.println("Invalid username");
             return;
@@ -50,13 +77,13 @@ public class UserService implements IUserService {
 
     @Override
     public User getLoggedInUser() {
-        throw new NotImplementedException();
+        return loggedInUser;
     }
 
     private boolean isValidUserName(String username) {
         if(username == null){
             return false;
-        }else if(username.length() < 5){
+        }else if(username.length() < 3){
             return false;
         }
 
@@ -78,11 +105,11 @@ public class UserService implements IUserService {
             return false;
         }
 
-        if(!emailAddress.contains("@")){
-            return false;
-        }
-        else {
+        String emailFormat = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        if(emailAddress.matches(emailFormat)){
             return true;
+        }else{
+            return false;
         }
     }
 
