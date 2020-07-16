@@ -17,8 +17,9 @@ public interface IPizzaService {
      * Recalculates the rating average for the pizza, using fresh data from the database.
      *
      * @param pizzaId The id of the pizza to update.
+     * @return The average rating.
      */
-    void recalculateRatingAverage(long pizzaId);
+    float recalculateRatingAverage(long pizzaId);
 
     /**
      * Saves the pizza into database.
