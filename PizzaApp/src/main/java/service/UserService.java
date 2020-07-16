@@ -15,6 +15,10 @@ public class UserService implements IUserService {
 
     @Override
     public void login(String emailAddress, String password) {
+        if(password == null || emailAddress == null){
+            return;
+        }
+
         if(loggedInUser != null){
             System.out.println("Already logged in!");
             return;

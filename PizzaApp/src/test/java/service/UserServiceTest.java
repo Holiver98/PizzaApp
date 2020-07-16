@@ -116,4 +116,74 @@ public class UserServiceTest {
         //Assert
         Mockito.verify(userDao, Mockito.times(0)).saveUser(bob);
     }
+
+    @Test
+    void login_registered_user_should_log_user_in(){
+        //Arrange
+        User bob = new User();
+        bob.setUsername("Bob");
+        bob.setPassword("123hello");
+        bob.setEmailAddress("bob123@test.hu");
+
+        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+
+        //Act
+        userService.login(bob.getEmailAddress(), bob.getPassword());
+        User loggedInUser = userService.getLoggedInUser();
+
+        //Assert
+        assertThat(loggedInUser).isEqualTo(bob);
+    }
+
+    @Test
+    void login_unregistered_user_should_not_log_user_in(){
+        //Arrange
+        User bob = new User();
+        bob.setUsername("Bob");
+        bob.setPassword("123hello");
+        bob.setEmailAddress("bob123@test.hu");
+
+        //Act
+        userService.login(bob.getEmailAddress(), bob.getPassword());
+        User loggedInUser = userService.getLoggedInUser();
+
+        //Assert
+        assertThat(loggedInUser).isNull();
+    }
+
+    @Test
+    void login_user_password_null_should_not_log_user_in(){
+        //Arrange
+        User bob = new User();
+        bob.setUsername("Bob");
+        bob.setPassword("123hello");
+        bob.setEmailAddress("bob123@test.hu");
+
+        Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+
+        //Act
+        userService.login(bob.getEmailAddress(), null);
+        User loggedInUser = userService.getLoggedInUser();
+
+        //Assert
+        assertThat(loggedInUser).isNull();
+    }
+
+    @Test
+    void login_user_email_null_should_not_log_user_in(){
+        //Arrange
+        User bob = new User();
+        bob.setUsername("Bob");
+        bob.setPassword("123hello");
+        bob.setEmailAddress("bob123@test.hu");
+
+        Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+
+        //Act
+        userService.login(bob.getEmailAddress(), null);
+        User loggedInUser = userService.getLoggedInUser();
+
+        //Assert
+        assertThat(loggedInUser).isNull();
+    }
 }
