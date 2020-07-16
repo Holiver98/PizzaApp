@@ -1,0 +1,4 @@
+service\CartServiceTest.class
+dao\UserDaoTest.class
+service\RatingServiceTest.class
+service\UserServiceTest.class
