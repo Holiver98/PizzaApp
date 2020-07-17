@@ -3,13 +3,16 @@ package service;
 import dao.IOrderDao;
 import model.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class CartService implements ICartService{
     private final int cartItemLimit = 15;
+    private final int minIngredients = 1;
+    private final int maxIngredients = 5;
+    private final int maxBaseSauce = 1;
+    private final int minBaseSauce = 1;
     private List<Pizza> cartContent = new ArrayList<Pizza>();
     private IUserService userService;
     private IOrderDao orderDao;
@@ -22,10 +25,15 @@ public class CartService implements ICartService{
     }
 
     @Override
+    public List<Pizza> getCartContent() {
+        return cartContent;
+    }
+
+    @Override
     public void addPizzaToCart(Pizza pizza) {
         if(pizza == null){
             return;
-        }else if(cartContent.size() >= 15){
+        }else if(cartContent.size() >= cartItemLimit){
             System.out.println("Cart is full!");
             return;
         }if(!isValidPizza(pizza)){
@@ -70,31 +78,33 @@ public class CartService implements ICartService{
 
     private boolean isValidPizza(Pizza pizza){
         if(pizza.getName() == null || pizza.getIngredients() == null ||
-        pizza.getSize() == null || pizza.getPrice() == 0.0f){
+        pizza.getSize() == null || pizza.getPrice() <= 0.0f){
             return false;
-        }else if(pizza.getIngredients().size() < 1 || pizza.getIngredients().size() > 5){
+        }else if(pizza.getIngredients().size() < minIngredients || pizza.getIngredients().size() > maxIngredients){
             return false;
         }
 
-        if(hasMoreThanOneBaseSauce(pizza)){
+        if(hasMoreOrLessBaseSauceThanNeeded(pizza)){
+            System.out.println("There has to be exactly 1 base sauce!");
             return false;
         }
 
         return true;
     }
 
-    private boolean hasMoreThanOneBaseSauce(Pizza pizza){
+    private boolean hasMoreOrLessBaseSauceThanNeeded(Pizza pizza){
         int numberOfBaseSauces = 0;
         for (Ingredient i: pizza.getIngredients()) {
             if(i.getType().equals(IngredientType.PIZZA_BASESAUCE)){
                 numberOfBaseSauces++;
-                if(numberOfBaseSauces >= 2){
-                    return true;
-                }
             }
         }
 
-        return false;
+        if(numberOfBaseSauces > maxBaseSauce || numberOfBaseSauces < minBaseSauce){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private float CalculateTotalPrice(){
