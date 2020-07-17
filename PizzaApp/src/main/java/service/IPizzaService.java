@@ -9,7 +9,7 @@ public interface IPizzaService {
      * Calculates the price of the pizza.
      *
      * @param pizza The pizza, which price will be calculated.
-     * @return The price of the pizza.
+     * @return The price of the pizza, or -1, if there are no or invalid ingredients.
      */
     float calculatePrice(Pizza pizza);
 
