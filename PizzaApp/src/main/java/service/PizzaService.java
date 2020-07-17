@@ -70,17 +70,21 @@ public class PizzaService implements IPizzaService {
 
     @Override
     public List<Pizza> getPizzas() {
-        return null;
+        return pizzaDao.getPizzas();
     }
 
     @Override
     public List<Pizza> getBasicPizzas() {
-        return null;
+        return pizzaDao.getBasicPizzas();
     }
 
     @Override
     public Pizza getPizzaById(long pizzaId) {
-        return null;
+        if(pizzaId < 0){
+            return null;
+        }else{
+            return pizzaDao.getPizzaById(pizzaId);
+        }
     }
 
     @Override
@@ -90,6 +94,14 @@ public class PizzaService implements IPizzaService {
 
     @Override
     public void deletePizza(Pizza pizza) {
+        if(pizza == null){
+            return;
+        }
 
+        if(pizza.getId() < 0){
+            return;
+        }
+
+        pizzaDao.deletePizza(pizza);
     }
 }

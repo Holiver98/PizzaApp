@@ -243,6 +243,6 @@ public class CartServiceTest extends CartServiceTestBase{
         assertThat(savedOrder.getPizzas().contains(cheesePizza)).isEqualTo(true);
         assertThat(savedOrder.getTotalPrice()).isEqualTo(pepperoniPizza.getPrice() + cheesePizza.getPrice());
         Date currentTime = new Date();
-        assertThat(savedOrder.getDate()).isBefore(currentTime);
+        assertThat(savedOrder.getDate()).isBeforeOrEqualTo(currentTime);
     }
 }
