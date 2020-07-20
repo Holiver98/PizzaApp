@@ -50,6 +50,7 @@ public class PizzaService implements IPizzaService {
 
     @Override
     public float recalculateRatingAverage(long pizzaId) {
+        //TODO: implement float recalculateRatingAverage(long pizzaId)
         return 0;
     }
 
