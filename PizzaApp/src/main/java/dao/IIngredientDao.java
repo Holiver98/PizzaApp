@@ -9,7 +9,7 @@ public interface IIngredientDao {
     /**
      * Saves the ingredient into database.
      *
-     * @param ingredient The id the database generated for the ingredient.
+     * @param ingredient The ingredient to be saved.
      */
     void saveIngredient(Ingredient ingredient);
 
@@ -46,7 +46,7 @@ public interface IIngredientDao {
     /**
      * Deletes the ingredient from the database, if it exists.
      *
-     * @param ingredient The ingredient to be deleted.
+     * @param ingredientName The name of the ingredient to be deleted.
      */
-    void deleteIngredient(Ingredient ingredient);
+    void deleteIngredient(String ingredientName);
 }

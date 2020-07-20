@@ -25,10 +25,10 @@ public interface IRatingService {
     /**
      * Gets all the ratings of the given pizza.
      *
-     * @param pizza The pizza, which ratings we want to know.
+     * @param pizzaId The id of the pizza, which ratings we want to know.
      * @return A list of the ratings of the given pizza.
      */
-    List<Rating> getRatingsOfPizza(Pizza pizza);
+    List<Rating> getRatingsOfPizza(long pizzaId);
 
     /**
      * Get all the ratings that the given user has made.

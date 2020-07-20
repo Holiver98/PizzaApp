@@ -26,10 +26,10 @@ public interface IRatingDao {
     /**
      * Gets all the ratings from the database, of a given pizza.
      *
-     * @param pizza The pizza, which ratings we want to know.
+     * @param pizzaId The id of the pizza, which ratings we want to know.
      * @return A list of all the ratings of the given pizza.
      */
-    List<Rating> getRatingsOfPizza(Pizza pizza);
+    List<Rating> getRatingsOfPizza(long pizzaId);
 
     /**
      * Get all the ratings that the given user has made.
@@ -58,8 +58,11 @@ public interface IRatingDao {
 
     /**
      * Deletes the rating from the database, if it exists.
+     * The pizzaId and the userEmailAddress identifies the rating, because each user can
+     * only rate a pizza once.
      *
-     * @param rating The rating to be deleted.
+     * @param pizzaId The id of the pizza, which was rated.
+     * @param userEmailAddress The email address of the user, who rated the pizza.
      */
-    void deleteRating(Rating rating);
+    void deleteRating(long pizzaId, String userEmailAddress);
 }

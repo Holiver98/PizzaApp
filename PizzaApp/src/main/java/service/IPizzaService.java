@@ -61,7 +61,7 @@ public interface IPizzaService {
     /**
      * Deletes the pizza from the database, if it exists.
      *
-     * @param pizza The pizza to be deleted.
+     * @param pizzaId The id of the pizza to be deleted.
      */
-    void deletePizza(Pizza pizza);
+    void deletePizza(long pizzaId);
 }

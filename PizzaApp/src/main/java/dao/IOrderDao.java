@@ -46,7 +46,7 @@ public interface IOrderDao {
     /**
      * Deleted the order from the database, if it exists.
      *
-     * @param order The order to be deleted.
+     * @param orderId The id of the order to be deleted.
      */
-    void deleteOrder(Order order);
+    void deleteOrder(long orderId);
 }

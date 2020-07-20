@@ -56,7 +56,12 @@ public class UserDao implements IUserDao{
     }
 
     @Override
-    public void deleteUser(User user) {
-        dbContext.users.remove(user);
+    public void deleteUser(String emailAddress) {
+        for (User user : dbContext.users) {
+            if(user.getEmailAddress().equals(emailAddress)){
+                dbContext.users.remove(user);
+                return;
+            }
+        }
     }
 }

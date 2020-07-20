@@ -28,9 +28,9 @@ public interface IUserDao {
     void updateUser(User user);
 
     /**
-     * Deletes the user from the database, if it exists.
+     * Deletes the user with the given emailAddress from the database, if it exists.
      *
-     * @param user The user to be deleted.
+     * @param emailAddress The email address of the user.
      */
-    void deleteUser(User user);
+    void deleteUser(String emailAddress);
 }

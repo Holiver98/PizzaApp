@@ -91,16 +91,12 @@ public class PizzaService implements IPizzaService {
     }
 
     @Override
-    public void deletePizza(Pizza pizza) {
-        if(pizza == null){
+    public void deletePizza(long pizzaId) {
+        if(pizzaId < 0){
             return;
         }
 
-        if(pizza.getId() < 0){
-            return;
-        }
-
-        pizzaDao.deletePizza(pizza);
+        pizzaDao.deletePizza(pizzaId);
     }
 
     private boolean arePricesValid(Pizza pizza) {

@@ -221,7 +221,7 @@ public class UserDaoTest {
         database.users.add(max);
 
         //Act
-        userDao.deleteUser(bob);
+        userDao.deleteUser(bob.getEmailAddress());
 
         //Assert
         assertThat(database.users).hasSize(2)

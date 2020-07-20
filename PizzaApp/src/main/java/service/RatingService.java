@@ -53,8 +53,8 @@ public class RatingService implements IRatingService{
     }
 
     @Override
-    public List<Rating> getRatingsOfPizza(Pizza pizza) {
-        return ratingDao.getRatingsOfPizza(pizza);
+    public List<Rating> getRatingsOfPizza(long pizzaId) {
+        return ratingDao.getRatingsOfPizza(pizzaId);
     }
 
     @Override
