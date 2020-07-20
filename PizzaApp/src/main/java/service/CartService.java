@@ -72,8 +72,7 @@ public class CartService implements ICartService{
         order.setDate(currentTime);
         orderDao.saveOrder(order);
 
-        String mailText = generateOrderMailText(order);
-        mailService.sendMailTo(loggedInUser.getEmailAddress(), mailText);
+        mailService.sendOrderConfirmationEmail(order);
     }
 
     private boolean isValidPizza(Pizza pizza){
@@ -115,9 +114,5 @@ public class CartService implements ICartService{
         }
 
         return totalPrice;
-    }
-
-    private String generateOrderMailText(Order order){
-        return "Thanks for ordering! OrderInformations: " + order.toString();
     }
 }

@@ -177,7 +177,9 @@ public class CartServiceTest extends CartServiceTestBase{
         cartService.placeOrder();
 
         //Assert
-        Mockito.verify(mailService, Mockito.times(1)).sendMailTo(Mockito.eq(loggedInUser.getEmailAddress()), Mockito.anyString());
+        Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());
+        Order savedOrder = orderArgumentCaptor.getValue();
+        Mockito.verify(mailService, Mockito.times(1)).sendOrderConfirmationEmail(savedOrder);
         Mockito.verify(orderDao, Mockito.times(1)).saveOrder(Mockito.any());
     }
 
