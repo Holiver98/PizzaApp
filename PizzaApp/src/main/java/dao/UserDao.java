@@ -3,6 +3,7 @@ package dao;
 import database.InMemoryDatabase;
 import model.User;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserDao implements IUserDao{
     private InMemoryDatabase dbContext;
@@ -18,25 +19,20 @@ public class UserDao implements IUserDao{
             return;
         }
 
-        for (User dbUser : dbContext.users){
-            if(Objects.equals(dbUser.getEmailAddress(), user.getEmailAddress()))
-            {
-                //Email already registered
-                return;
-            }
+        Optional<User> dbUser = getUserByEmailAddress(user.getEmailAddress());
+        if(dbUser.isPresent()){
+            //Email already registered
+            return;
         }
 
         dbContext.users.add(user);
     }
 
     @Override
-    public User getUserByEmailAddress(String emailAddress) {
-        for (User dbUser : dbContext.users) {
-            if(Objects.equals(dbUser.getEmailAddress(), emailAddress)){
-                return dbUser;
-            }
-        }
-        return null;
+    public Optional<User> getUserByEmailAddress(String emailAddress) {
+                return dbContext.users.stream()
+                .filter(u -> u.getEmailAddress().equals(emailAddress))
+                .findFirst();
     }
 
     @Override
@@ -46,22 +42,19 @@ public class UserDao implements IUserDao{
             return;
         }
 
-        for (User dbUser : dbContext.users) {
-            if(Objects.equals(dbUser.getEmailAddress(), user.getEmailAddress())){
-                dbUser.setUsername(user.getUsername());
-                dbUser.setPassword(user.getPassword());
-                return;
-            }
-        }
+        Optional<User> oldUser = getUserByEmailAddress(user.getEmailAddress());
+        oldUser.ifPresent(o -> updateOldUser(o, user));
+    }
+
+    private User updateOldUser(User oldUser, User newUser){
+        oldUser.setUsername(newUser.getUsername());
+        oldUser.setPassword(newUser.getPassword());
+        return oldUser;
     }
 
     @Override
     public void deleteUser(String emailAddress) {
-        for (User user : dbContext.users) {
-            if(user.getEmailAddress().equals(emailAddress)){
-                dbContext.users.remove(user);
-                return;
-            }
-        }
+        Optional<User> user = getUserByEmailAddress(emailAddress);
+        user.ifPresent(u -> dbContext.users.remove(u));
     }
 }

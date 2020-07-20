@@ -108,7 +108,7 @@ public class UserServiceTest {
         bob.setPassword("123hello");
         bob.setEmailAddress("bob123@test.hu");
 
-        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
         userService.register(bob);
@@ -125,7 +125,7 @@ public class UserServiceTest {
         bob.setPassword("123hello");
         bob.setEmailAddress("bob123@test.hu");
 
-        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
         userService.login(bob.getEmailAddress(), bob.getPassword());
@@ -159,7 +159,7 @@ public class UserServiceTest {
         bob.setPassword("123hello");
         bob.setEmailAddress("bob123@test.hu");
 
-        Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+        Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
         userService.login(bob.getEmailAddress(), null);
@@ -177,7 +177,7 @@ public class UserServiceTest {
         bob.setPassword("123hello");
         bob.setEmailAddress("bob123@test.hu");
 
-        Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(bob);
+        Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
         userService.login(bob.getEmailAddress(), null);

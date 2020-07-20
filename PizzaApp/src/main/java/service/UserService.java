@@ -3,6 +3,8 @@ package service;
 import dao.IUserDao;
 import model.User;
 
+import java.util.Optional;
+
 public class UserService implements IUserService {
 
     private IUserDao userDao;
@@ -24,11 +26,14 @@ public class UserService implements IUserService {
             return;
         }
 
-        User user = userDao.getUserByEmailAddress(emailAddress);
+        Optional<User> userResult = userDao.getUserByEmailAddress(emailAddress);
+        User user;
 
-        if(user == null){
+        if(!userResult.isPresent()){
             System.out.println("User not registered!");
             return;
+        }else{
+            user = userResult.get();
         }
 
         if(!password.equals(user.getPassword())){
@@ -118,8 +123,8 @@ public class UserService implements IUserService {
     }
 
     private boolean isEmailRegistered(String emailAddress){
-        User user = userDao.getUserByEmailAddress(emailAddress);
-        if(user == null) {
+        Optional<User> user = userDao.getUserByEmailAddress(emailAddress);
+        if(!user.isPresent()) {
             return false;
         }else{
             return true;

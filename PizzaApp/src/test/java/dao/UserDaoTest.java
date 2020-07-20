@@ -7,7 +7,9 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.Option;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserDaoTest {
 
@@ -42,10 +44,10 @@ public class UserDaoTest {
         database.users.add(max);
 
         //Act
-        User resultUser = userDao.getUserByEmailAddress("test5465@something.com");
+        Optional<User> resultUser = userDao.getUserByEmailAddress("test5465@something.com");
 
         //Assert
-        assertThat(resultUser).isEqualTo(bob);
+        assertThat(resultUser.get()).isEqualTo(bob);
     }
 
     @Test
@@ -70,10 +72,10 @@ public class UserDaoTest {
         database.users.add(max);
 
         //Act
-        User resultUser = userDao.getUserByEmailAddress("te11111115@something.com");
+        Optional<User> resultUser = userDao.getUserByEmailAddress("te11111115@something.com");
 
         //Assert
-        assertThat(resultUser).isNull();
+        assertThat(resultUser.isPresent()).isEqualTo(false);
     }
 
     @Test
@@ -98,10 +100,10 @@ public class UserDaoTest {
         database.users.add(max);
 
         //Act
-        User resultUser = userDao.getUserByEmailAddress(null);
+        Optional<User> resultUser = userDao.getUserByEmailAddress(null);
 
         //Assert
-        assertThat(resultUser).isNull();
+        assertThat(resultUser.isPresent()).isEqualTo(false);
     }
 
     @Test
