@@ -25,7 +25,7 @@ public interface IPizzaService {
      * Saves the pizza into database.
      *
      * @param pizza The pizza to be saved.
-     * @return The id the database generated for the pizza.
+     * @return The id the database generated for the pizza, or -1, if the did not get saved.
      */
     long savePizza(Pizza pizza);
 

@@ -48,16 +48,6 @@ public class PizzaService implements IPizzaService {
         return totalPrice.floatValue();
     }
 
-    private boolean arePricesValid(Pizza pizza) {
-        for (Ingredient i: pizza.getIngredients()) {
-            if(i.getPrice() < 0f){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     @Override
     public float recalculateRatingAverage(long pizzaId) {
         return 0;
@@ -65,7 +55,11 @@ public class PizzaService implements IPizzaService {
 
     @Override
     public long savePizza(Pizza pizza) {
-        return 0;
+        if(!isValidPizza(pizza)){
+            return -1;
+        }
+
+        return pizzaDao.savePizza(pizza);
     }
 
     @Override
@@ -89,7 +83,11 @@ public class PizzaService implements IPizzaService {
 
     @Override
     public void updatePizza(Pizza pizza) {
+        if(!isValidPizza(pizza)){
+            return;
+        }
 
+        pizzaDao.updatePizza(pizza);
     }
 
     @Override
@@ -103,5 +101,27 @@ public class PizzaService implements IPizzaService {
         }
 
         pizzaDao.deletePizza(pizza);
+    }
+
+    private boolean arePricesValid(Pizza pizza) {
+        for (Ingredient i: pizza.getIngredients()) {
+            if(i.getPrice() < 0f){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidPizza(Pizza pizza){
+        if(pizza == null){
+            return false;
+        }else if(pizza.getId() < 0){
+            return false;
+        }else if(!arePricesValid(pizza)){
+            return false;
+        }
+
+        return true;
     }
 }
