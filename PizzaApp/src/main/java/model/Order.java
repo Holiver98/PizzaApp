@@ -2,6 +2,7 @@ package model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Order {
     private long id;
@@ -59,5 +60,22 @@ public class Order {
                 ", date=" + date +
                 ", totalPrice=" + totalPrice +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return id == order.id &&
+                Float.compare(order.totalPrice, totalPrice) == 0 &&
+                userEmailAddress.equals(order.userEmailAddress) &&
+                pizzas.equals(order.pizzas) &&
+                date.equals(order.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userEmailAddress, pizzas, date, totalPrice);
     }
 }

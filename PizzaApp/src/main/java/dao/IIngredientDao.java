@@ -4,6 +4,7 @@ import model.Ingredient;
 import model.IngredientType;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IIngredientDao {
     /**
@@ -26,7 +27,7 @@ public interface IIngredientDao {
      * @param name The name of the ingredient.
      * @return The ingredient with the given name, or null, if it doesn't exist in the database.
      */
-    Ingredient getIngredientByName(String name);
+    Optional<Ingredient> getIngredientByName(String name);
 
     /**
      * Gets all the ingredients from the database, that have the given type.

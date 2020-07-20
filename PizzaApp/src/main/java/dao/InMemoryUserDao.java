@@ -45,15 +45,14 @@ public class InMemoryUserDao implements IUserDao{
         oldUser.ifPresent(o -> updateOldUser(o, user));
     }
 
-    private User updateOldUser(User oldUser, User newUser){
-        oldUser.setUsername(newUser.getUsername());
-        oldUser.setPassword(newUser.getPassword());
-        return oldUser;
-    }
-
     @Override
     public void deleteUser(String emailAddress) {
         Optional<User> user = getUserByEmailAddress(emailAddress);
         user.ifPresent(u -> dbContext.users.remove(u));
+    }
+
+    private void updateOldUser(User oldUser, User newUser){
+        oldUser.setUsername(newUser.getUsername());
+        oldUser.setPassword(newUser.getPassword());
     }
 }
