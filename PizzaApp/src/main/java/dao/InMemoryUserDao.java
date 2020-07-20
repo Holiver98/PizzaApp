@@ -2,13 +2,12 @@ package dao;
 
 import database.InMemoryDatabase;
 import model.User;
-import java.util.Objects;
 import java.util.Optional;
 
-public class UserDao implements IUserDao{
+public class InMemoryUserDao implements IUserDao{
     private InMemoryDatabase dbContext;
 
-    public UserDao(InMemoryDatabase context) {
+    public InMemoryUserDao(InMemoryDatabase context) {
         dbContext = context;
     }
 

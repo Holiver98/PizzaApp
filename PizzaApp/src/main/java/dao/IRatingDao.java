@@ -1,6 +1,5 @@
 package dao;
 
-import model.Pizza;
 import model.Rating;
 
 import java.util.List;

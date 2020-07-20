@@ -7,11 +7,9 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.text.html.Option;
-import java.util.Objects;
 import java.util.Optional;
 
-public class UserDaoTest {
+public class InMemoryUserDaoTest {
 
     private InMemoryDatabase database;
     private IUserDao userDao;
@@ -19,7 +17,7 @@ public class UserDaoTest {
     @BeforeEach
     void init(){
         database = new InMemoryDatabase();
-        userDao = new UserDao(database);
+        userDao = new InMemoryUserDao(database);
     }
 
     @Test
