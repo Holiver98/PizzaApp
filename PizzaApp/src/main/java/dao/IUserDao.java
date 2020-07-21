@@ -2,6 +2,8 @@ package dao;
 
 import model.User;
 
+import java.util.Optional;
+
 public interface IUserDao {
     /**
      * Saves the user into database.
@@ -18,7 +20,7 @@ public interface IUserDao {
      * @param emailAddress The email address, that identifies the user.
      * @return The user identified by the given email address, or null, if it doesn't exist in the database.
      */
-    User getUserByEmailAddress(String emailAddress);
+    Optional<User> getUserByEmailAddress(String emailAddress);
 
     /**
      * Updates the user in the database, that has the same id, as the user argument.
@@ -28,9 +30,9 @@ public interface IUserDao {
     void updateUser(User user);
 
     /**
-     * Deletes the user from the database, if it exists.
+     * Deletes the user with the given emailAddress from the database, if it exists.
      *
-     * @param user The user to be deleted.
+     * @param emailAddress The email address of the user.
      */
-    void deleteUser(User user);
+    void deleteUser(String emailAddress);
 }

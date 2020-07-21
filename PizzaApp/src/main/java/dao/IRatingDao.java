@@ -1,6 +1,5 @@
 package dao;
 
-import model.Pizza;
 import model.Rating;
 
 import java.util.List;
@@ -26,10 +25,10 @@ public interface IRatingDao {
     /**
      * Gets all the ratings from the database, of a given pizza.
      *
-     * @param pizza The pizza, which ratings we want to know.
+     * @param pizzaId The id of the pizza, which ratings we want to know.
      * @return A list of all the ratings of the given pizza.
      */
-    List<Rating> getRatingsOfPizza(Pizza pizza);
+    List<Rating> getRatingsOfPizza(long pizzaId);
 
     /**
      * Get all the ratings that the given user has made.
@@ -40,6 +39,16 @@ public interface IRatingDao {
     List<Rating> getRatingsOfUser(String userEmailAddress);
 
     /**
+     * Gets the rating, that the user made on the pizza with the given id.
+     * Each user can only have 1 rating for 1 pizza.
+     *
+     * @param userEmailAddress The email address of the user.
+     * @param pizzaId The pizza we want the rating of.
+     * @return The rating the user made on this pizza, or null if the user didn't rate the pizza.
+     */
+    Rating getRatingOfUserForPizza(String userEmailAddress, long pizzaId);
+
+    /**
      * Updates the ratings in the database, that ahs the same id, as the rating argument.
      *
      * @param rating The rating to be updated.
@@ -48,8 +57,11 @@ public interface IRatingDao {
 
     /**
      * Deletes the rating from the database, if it exists.
+     * The pizzaId and the userEmailAddress identifies the rating, because each user can
+     * only rate a pizza once.
      *
-     * @param rating The rating to be deleted.
+     * @param pizzaId The id of the pizza, which was rated.
+     * @param userEmailAddress The email address of the user, who rated the pizza.
      */
-    void deleteRating(Rating rating);
+    void deleteRating(long pizzaId, String userEmailAddress);
 }

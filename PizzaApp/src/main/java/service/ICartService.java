@@ -2,7 +2,16 @@ package service;
 
 import model.Pizza;
 
+import java.util.List;
+
 public interface ICartService {
+    /**
+     * Returns the cart's content.
+     *
+     * @return A list of pizzas.
+     */
+    List<Pizza> getCartContent();
+
     /**
      * Adds the given pizza to the cart, if it is not already full.
      *

@@ -1,18 +1,18 @@
 package service;
 
-import model.Pizza;
 import model.Rating;
 
 import java.util.List;
 
 public interface IRatingService {
     /**
-     * Give the pizza the given rating by the currently logged in user.
+     * Give the pizza with the given id the given rating by the currently logged in user.
+     * Also updates the ratingAverage of the pizza.
      *
-     * @param pizza The pizza to be rated.
+     * @param pizzaId The id of the pizza to be rated.
      * @param rating A rating of 1-5 to give the pizza.
      */
-    void ratePizza(Pizza pizza, int rating);
+    void ratePizza(long pizzaId, int rating);
 
     /**
      * Gets all the ratings from the database.
@@ -24,10 +24,10 @@ public interface IRatingService {
     /**
      * Gets all the ratings of the given pizza.
      *
-     * @param pizza The pizza, which ratings we want to know.
+     * @param pizzaId The id of the pizza, which ratings we want to know.
      * @return A list of the ratings of the given pizza.
      */
-    List<Rating> getRatingsOfPizza(Pizza pizza);
+    List<Rating> getRatingsOfPizza(long pizzaId);
 
     /**
      * Get all the ratings that the given user has made.

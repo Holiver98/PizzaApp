@@ -4,12 +4,13 @@ import model.Ingredient;
 import model.IngredientType;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IIngredientDao {
     /**
      * Saves the ingredient into database.
      *
-     * @param ingredient The id the database generated for the ingredient.
+     * @param ingredient The ingredient to be saved.
      */
     void saveIngredient(Ingredient ingredient);
 
@@ -26,7 +27,7 @@ public interface IIngredientDao {
      * @param name The name of the ingredient.
      * @return The ingredient with the given name, or null, if it doesn't exist in the database.
      */
-    Ingredient getIngredientByName(String name);
+    Optional<Ingredient> getIngredientByName(String name);
 
     /**
      * Gets all the ingredients from the database, that have the given type.
@@ -46,7 +47,7 @@ public interface IIngredientDao {
     /**
      * Deletes the ingredient from the database, if it exists.
      *
-     * @param ingredient The ingredient to be deleted.
+     * @param ingredientName The name of the ingredient to be deleted.
      */
-    void deleteIngredient(Ingredient ingredient);
+    void deleteIngredient(String ingredientName);
 }

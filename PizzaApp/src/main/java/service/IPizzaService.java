@@ -9,15 +9,25 @@ public interface IPizzaService {
      * Calculates the price of the pizza.
      *
      * @param pizza The pizza, which price will be calculated.
-     * @return The price of the pizza.
+     * @return The price of the pizza, or -1, if there are no or invalid ingredients.
      */
     float calculatePrice(Pizza pizza);
+
+    /**
+     * Recalculates the rating average for the pizza, using fresh data from the database.
+     * It also updates the pizza in the database with the new value.
+     *
+     * @param pizzaId The id of the pizza to update.
+     * @return The average rating, or 0 if there are no ratings, or -1 if other problems arise (for example
+     * the pizza is not in the database).
+     */
+    float recalculateRatingAverage(long pizzaId);
 
     /**
      * Saves the pizza into database.
      *
      * @param pizza The pizza to be saved.
-     * @return The id the database generated for the pizza.
+     * @return The id the database generated for the pizza, or -1, if the did not get saved.
      */
     long savePizza(Pizza pizza);
 
@@ -53,7 +63,7 @@ public interface IPizzaService {
     /**
      * Deletes the pizza from the database, if it exists.
      *
-     * @param pizza The pizza to be deleted.
+     * @param pizzaId The id of the pizza to be deleted.
      */
-    void deletePizza(Pizza pizza);
+    void deletePizza(long pizzaId);
 }

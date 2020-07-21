@@ -3,7 +3,15 @@ package service;
 import model.User;
 
 public interface IUserService {
+    /**
+     * Logs in the user, that is identified by the emailAddress, if the user is
+     * already registered and the password matches.
+     *
+     * @param emailAddress The email address, that identifies the user.
+     * @param password The password of the user.
+     */
     void login(String emailAddress, String password);
+
     /**
      * Logs the currently logged in user out.
      */
