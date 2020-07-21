@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Order {
-    private long id;
+    private long id = -1;
     private String userEmailAddress;
     private List<Pizza> pizzas;
     private Date date;

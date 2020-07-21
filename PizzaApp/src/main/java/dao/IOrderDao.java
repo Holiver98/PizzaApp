@@ -3,13 +3,15 @@ package dao;
 import model.Order;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IOrderDao {
     /**
      * Saves the order into database.
      *
      * @param order The order to be saved.
-     * @return the id the database generated for the order.
+     * @return The id the database generated for the order, or -1 if the operation was
+     * unsuccessful (for example the order already exists in the database).
      */
     long saveOrder(Order order);
 
@@ -34,7 +36,7 @@ public interface IOrderDao {
      * @param orderId The id of the order.
      * @return The order with the given id or null if it isn't in the database.
      */
-    Order getOrderById(long orderId);
+    Optional<Order> getOrderById(long orderId);
 
     /**
      * Updates the order in the database, that has the same id, as the order argument.
