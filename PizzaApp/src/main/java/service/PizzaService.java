@@ -2,8 +2,10 @@ package service;
 
 import dao.IIngredientDao;
 import dao.IPizzaDao;
+import dao.IRatingDao;
 import model.Ingredient;
 import model.Pizza;
+import model.Rating;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,10 +14,12 @@ public class PizzaService implements IPizzaService {
 
     private IIngredientDao ingredientDao;
     private IPizzaDao pizzaDao;
+    private IRatingDao ratingDao;
 
-    public PizzaService(IPizzaDao pizzaDao, IIngredientDao ingredientDao){
+    public PizzaService(IPizzaDao pizzaDao, IIngredientDao ingredientDao, IRatingDao ratingDao){
         this.pizzaDao = pizzaDao;
         this.ingredientDao = ingredientDao;
+        this.ratingDao = ratingDao;
     }
 
     @Override
@@ -50,8 +54,29 @@ public class PizzaService implements IPizzaService {
 
     @Override
     public float recalculateRatingAverage(long pizzaId) {
-        //TODO: implement float recalculateRatingAverage(long pizzaId)
-        return 0;
+        Pizza pizzaToUpdate = pizzaDao.getPizzaById(pizzaId);
+        if(pizzaToUpdate == null){
+            System.out.println("Pizza with id("+ pizzaId +") was not found in the database!");
+            return -1;
+        }
+
+        List<Rating> ratings = ratingDao.getRatingsOfPizza(pizzaId);
+        int ratingSumm = 0;
+        for (Rating rating : ratings) {
+            ratingSumm += rating.getRating();
+        }
+
+        float newRatingAverage;
+        if(ratings.size() == 0){
+            return 0;
+        }else{
+            newRatingAverage = (float)ratingSumm / (float)ratings.size();
+        }
+
+        pizzaToUpdate.setRatingAverage(newRatingAverage);
+        pizzaDao.updatePizza(pizzaToUpdate);
+
+        return newRatingAverage;
     }
 
     @Override

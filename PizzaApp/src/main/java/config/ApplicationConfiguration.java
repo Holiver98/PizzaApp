@@ -1,9 +1,6 @@
 package config;
 
-import dao.IIngredientDao;
-import dao.IPizzaDao;
-import dao.InMemoryIngredientDao;
-import dao.InMemoryPizzaDao;
+import dao.*;
 import database.InMemoryDatabase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +27,10 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    public IRatingDao inMemoryRatingDao(){return new InMemoryRatingDao(inMemoryDatabase());}
+
+    @Bean
     public IPizzaService pizzaService(){
-        return new PizzaService(inMemoryPizzaDao(), inMemoryIngredientDao());
+        return new PizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(), inMemoryRatingDao());
     }
 }
