@@ -149,7 +149,6 @@ public class RatingServiceTest {
 
         Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(null);
         Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
-        Mockito.lenient().when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
 
         //Act
         ratingService.ratePizza(pizzaId, rating);
@@ -157,5 +156,167 @@ public class RatingServiceTest {
         //Assert
         Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
         Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+    }
+
+    @Test
+    void ratePizza_Rating_Lower_Than_Required_Should_Not_Rate_Pizza(){
+        //Arrange
+        final int rating = 0;
+        final long pizzaId = 1;
+
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaId);
+        pizza.setName("Pepperoni Pizza");
+        pizza.setSize(PizzaSize.NORMAL);
+
+        User loggedInUser = new User();
+        loggedInUser.setUsername("Simon");
+        loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
+        loggedInUser.setPassword("123123dsa");
+
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        //Act
+        ratingService.ratePizza(pizzaId, rating);
+
+        //Assert
+        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
+        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+    }
+
+    @Test
+    void ratePizza_Rating_Lower_Than_Required_Should_Not_Rate_Pizza_2(){
+        //Arrange
+        final int rating = -14;
+        final long pizzaId = 1;
+
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaId);
+        pizza.setName("Pepperoni Pizza");
+        pizza.setSize(PizzaSize.NORMAL);
+
+        User loggedInUser = new User();
+        loggedInUser.setUsername("Simon");
+        loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
+        loggedInUser.setPassword("123123dsa");
+
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        //Act
+        ratingService.ratePizza(pizzaId, rating);
+
+        //Assert
+        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
+        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+    }
+
+    @Test
+    void ratePizza_Rating_Higher_Than_Required_Should_Not_Rate_Pizza(){
+        //Arrange
+        final int rating = 6;
+        final long pizzaId = 1;
+
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaId);
+        pizza.setName("Pepperoni Pizza");
+        pizza.setSize(PizzaSize.NORMAL);
+
+        User loggedInUser = new User();
+        loggedInUser.setUsername("Simon");
+        loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
+        loggedInUser.setPassword("123123dsa");
+
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        //Act
+        ratingService.ratePizza(pizzaId, rating);
+
+        //Assert
+        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
+        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+    }
+
+    @Test
+    void ratePizza_Rating_Higher_Than_Required_Should_Not_Rate_Pizza_2(){
+        //Arrange
+        final int rating = 13;
+        final long pizzaId = 1;
+
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaId);
+        pizza.setName("Pepperoni Pizza");
+        pizza.setSize(PizzaSize.NORMAL);
+
+        User loggedInUser = new User();
+        loggedInUser.setUsername("Simon");
+        loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
+        loggedInUser.setPassword("123123dsa");
+
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        //Act
+        ratingService.ratePizza(pizzaId, rating);
+
+        //Assert
+        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
+        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+    }
+
+    @Test
+    void ratePizza_Rating_Valid_Lower_Limit_Should_Rate_Pizza(){
+        //Arrange
+        final int rating = 1;
+        final long pizzaId = 1;
+
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaId);
+        pizza.setName("Pepperoni Pizza");
+        pizza.setSize(PizzaSize.NORMAL);
+
+        User loggedInUser = new User();
+        loggedInUser.setUsername("Simon");
+        loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
+        loggedInUser.setPassword("123123dsa");
+
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        //Act
+        ratingService.ratePizza(pizzaId, rating);
+
+        //Assert
+        Mockito.verify(ratingDao, Mockito.times(1)).saveRating(Mockito.any());
+        Mockito.verify(pizzaService, Mockito.times(1)).recalculateRatingAverage(pizzaId);
+    }
+
+    @Test
+    void ratePizza_Rating_Valid_Upper_Limit_Should_Rate_Pizza(){
+        //Arrange
+        final int rating = 5;
+        final long pizzaId = 1;
+
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaId);
+        pizza.setName("Pepperoni Pizza");
+        pizza.setSize(PizzaSize.NORMAL);
+
+        User loggedInUser = new User();
+        loggedInUser.setUsername("Simon");
+        loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
+        loggedInUser.setPassword("123123dsa");
+
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        //Act
+        ratingService.ratePizza(pizzaId, rating);
+
+        //Assert
+        Mockito.verify(ratingDao, Mockito.times(1)).saveRating(Mockito.any());
+        Mockito.verify(pizzaService, Mockito.times(1)).recalculateRatingAverage(pizzaId);
     }
 }

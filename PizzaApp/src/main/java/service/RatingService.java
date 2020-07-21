@@ -21,6 +21,11 @@ public class RatingService implements IRatingService{
 
     @Override
     public void ratePizza(long pizzaId, int rating) {
+        if(!isRatingValid(rating)){
+            System.out.println("Invalid rating: (" + rating + ")");
+            return;
+        }
+
         User user = userService.getLoggedInUser();
         if(user == null){
             System.out.println("You need to be logged in to rate pizzas!");
@@ -60,5 +65,13 @@ public class RatingService implements IRatingService{
     @Override
     public List<Rating> getRatingsOfUser(String userEmailAddress) {
         return ratingDao.getRatingsOfUser(userEmailAddress);
+    }
+
+    private boolean isRatingValid(int rating) {
+        if(rating < 1 || rating > 5){
+            return false;
+        }else{
+            return true;
+        }
     }
 }
