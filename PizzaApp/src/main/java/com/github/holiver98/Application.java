@@ -19,9 +19,9 @@ import java.util.Set;
 public class Application {
     public static void main(String[] args) {
         ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
-
-        printBeanDefinitions(applicationContext);
+        
         testingPizzaService(applicationContext);
+        applicationContext.getBean(IPizzaService.class).savePizza(new Pizza());
     }
 
     private static void printBeanDefinitions(ApplicationContext applicationContext){
@@ -42,6 +42,7 @@ public class Application {
         Set<Ingredient> ingredients = createTestSetOfIngredients();
         pizza.setIngredients(ingredients);
         pizza.setPrice(pizzaService.calculatePrice(pizza));
+        pizza.setId(0);
 
         pizzaService.savePizza(pizza);
         System.out.println(pizzaService.calculatePrice(pizza));
