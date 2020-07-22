@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface IUserDao {
     /**
-     * Saves the user into com.github.holiver98.database.
+     * Saves the user into database.
      * It does not return the generated id, because the email address already
      * identifies the user.
      *
@@ -15,22 +15,22 @@ public interface IUserDao {
     void saveUser(User user);
 
     /**
-     * Gets the user by email address from the com.github.holiver98.database.
+     * Gets the user by email address from the database.
      *
      * @param emailAddress The email address, that identifies the user.
-     * @return The user identified by the given email address, or null, if it doesn't exist in the com.github.holiver98.database.
+     * @return The user identified by the given email address, or null, if it doesn't exist in the database.
      */
     Optional<User> getUserByEmailAddress(String emailAddress);
 
     /**
-     * Updates the user in the com.github.holiver98.database, that has the same id, as the user argument.
+     * Updates the user in the database, that has the same id, as the user argument.
      *
      * @param user The user to be updated.
      */
     void updateUser(User user);
 
     /**
-     * Deletes the user with the given emailAddress from the com.github.holiver98.database, if it exists.
+     * Deletes the user with the given emailAddress from the database, if it exists.
      *
      * @param emailAddress The email address of the user.
      */

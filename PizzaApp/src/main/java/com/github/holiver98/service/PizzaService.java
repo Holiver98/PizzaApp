@@ -56,7 +56,7 @@ public class PizzaService implements IPizzaService {
     public float recalculateRatingAverage(long pizzaId) {
         Pizza pizzaToUpdate = pizzaDao.getPizzaById(pizzaId);
         if(pizzaToUpdate == null){
-            System.out.println("Pizza with id("+ pizzaId +") was not found in the com.github.holiver98.database!");
+            System.out.println("Pizza with id("+ pizzaId +") was not found in the database!");
             return -1;
         }
 

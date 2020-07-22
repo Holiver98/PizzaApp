@@ -22,7 +22,7 @@ public class InMemoryOrderDao implements IOrderDao{
 
         Optional<Order> dbOrder = getOrderById(order.getId());
         if(dbOrder.isPresent()){
-            //already in com.github.holiver98.database
+            //already in database
             return -1;
         }
 

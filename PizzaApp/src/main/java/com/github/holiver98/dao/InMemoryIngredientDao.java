@@ -24,7 +24,7 @@ public class InMemoryIngredientDao implements IIngredientDao {
 
         Optional<Ingredient> dbIngredient = getIngredientByName(ingredient.getName());
         if(dbIngredient.isPresent()){
-            //Already in com.github.holiver98.database
+            //Already in database
             return;
         }
 

@@ -14,54 +14,54 @@ public interface IPizzaService {
     float calculatePrice(Pizza pizza);
 
     /**
-     * Recalculates the rating average for the pizza, using fresh data from the com.github.holiver98.database.
-     * It also updates the pizza in the com.github.holiver98.database with the new value.
+     * Recalculates the rating average for the pizza, using fresh data from the database.
+     * It also updates the pizza in the database with the new value.
      *
      * @param pizzaId The id of the pizza to update.
      * @return The average rating, or 0 if there are no ratings, or -1 if other problems arise (for example
-     * the pizza is not in the com.github.holiver98.database).
+     * the pizza is not in the database).
      */
     float recalculateRatingAverage(long pizzaId);
 
     /**
-     * Saves the pizza into com.github.holiver98.database.
+     * Saves the pizza into database.
      *
      * @param pizza The pizza to be saved.
-     * @return The id the com.github.holiver98.database generated for the pizza, or -1, if the did not get saved.
+     * @return The id the database generated for the pizza, or -1, if the did not get saved.
      */
     long savePizza(Pizza pizza);
 
     /**
-     * Gets all the pizzas from the com.github.holiver98.database.
+     * Gets all the pizzas from the database.
      *
      * @return A list of all the pizzas.
      */
     List<Pizza> getPizzas();
 
     /**
-     * Gets all the pizzas from the com.github.holiver98.database, that aren't a custom-made pizza.
+     * Gets all the pizzas from the database, that aren't a custom-made pizza.
      *
      * @return A list of the basic pizzas.
      */
     List<Pizza> getBasicPizzas(); //non custom-made pizzas
 
     /**
-     * Gets a pizza by it's id from the com.github.holiver98.database.
+     * Gets a pizza by it's id from the database.
      *
      * @param pizzaId The id of the pizza.
-     * @return The pizza with the given id or null if it is not in the com.github.holiver98.database.
+     * @return The pizza with the given id or null if it is not in the database.
      */
     Pizza getPizzaById(long pizzaId);
 
     /**
-     * Updates the pizza in the com.github.holiver98.database that has the same id, as the pizza argument.
+     * Updates the pizza in the database that has the same id, as the pizza argument.
      *
      * @param pizza The pizza to be updated.
      */
     void updatePizza(Pizza pizza);
 
     /**
-     * Deletes the pizza from the com.github.holiver98.database, if it exists.
+     * Deletes the pizza from the database, if it exists.
      *
      * @param pizzaId The id of the pizza to be deleted.
      */

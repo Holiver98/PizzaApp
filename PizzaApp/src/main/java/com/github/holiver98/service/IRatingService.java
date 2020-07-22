@@ -15,7 +15,7 @@ public interface IRatingService {
     void ratePizza(long pizzaId, int rating);
 
     /**
-     * Gets all the ratings from the com.github.holiver98.database.
+     * Gets all the ratings from the database.
      *
      * @return A list of all the ratings.
      */
