@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import com.github.holiver98.service.IPizzaService;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Application {
     public static void main(String[] args) {
         ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
 
+        printBeanDefinitions(applicationContext);
         testingPizzaService(applicationContext);
     }
 
@@ -42,6 +44,7 @@ public class Application {
         pizza.setPrice(pizzaService.calculatePrice(pizza));
 
         pizzaService.savePizza(pizza);
+        System.out.println(pizzaService.calculatePrice(pizza));
 
         System.out.println();
         System.out.println("Pizzas retrieved: " + pizzaService.getPizzas());
