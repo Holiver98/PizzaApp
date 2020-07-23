@@ -6,7 +6,7 @@ import com.github.holiver98.model.IngredientType;
 import java.util.List;
 import java.util.Optional;
 
-public interface IIngredientDao {
+public interface IInMemoryIngredientDao {
     /**
      * Saves the ingredient into database.
      *

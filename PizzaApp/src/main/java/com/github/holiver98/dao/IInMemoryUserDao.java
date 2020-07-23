@@ -4,7 +4,7 @@ import com.github.holiver98.model.User;
 
 import java.util.Optional;
 
-public interface IUserDao {
+public interface IInMemoryUserDao {
     /**
      * Saves the user into database.
      * It does not return the generated id, because the email address already

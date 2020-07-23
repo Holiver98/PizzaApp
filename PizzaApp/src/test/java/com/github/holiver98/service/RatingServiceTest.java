@@ -1,6 +1,6 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IRatingDao;
+import com.github.holiver98.dao.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.PizzaSize;
 import com.github.holiver98.model.Rating;
@@ -16,16 +16,16 @@ public class RatingServiceTest {
 
     private IPizzaService pizzaService;
     private IUserService userService;
-    private IRatingDao ratingDao;
+    private IInMemoryRatingDao ratingDao;
 
-    private RatingService ratingService;
+    private InMemoryRatingService ratingService;
 
     @BeforeEach
     void init(){
         pizzaService = Mockito.mock(IPizzaService.class);
         userService = Mockito.mock(IUserService.class);
-        ratingDao = Mockito.mock(IRatingDao.class);
-        ratingService = new RatingService(ratingDao, userService, pizzaService);
+        ratingDao = Mockito.mock(IInMemoryRatingDao.class);
+        ratingService = new InMemoryRatingService(ratingDao, userService, pizzaService);
     }
 
     @Test

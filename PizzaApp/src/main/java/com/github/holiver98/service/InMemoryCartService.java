@@ -1,13 +1,13 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IOrderDao;
+import com.github.holiver98.dao.IInMemoryOrderDao;
 import com.github.holiver98.model.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CartService implements ICartService{
+public class InMemoryCartService implements ICartService{
     private final int cartItemLimit = 15;
     private final int minIngredients = 1;
     private final int maxIngredients = 5;
@@ -15,10 +15,10 @@ public class CartService implements ICartService{
     private final int minBaseSauce = 1;
     private List<Pizza> cartContent = new ArrayList<Pizza>();
     private IUserService userService;
-    private IOrderDao orderDao;
+    private IInMemoryOrderDao orderDao;
     private IMailService mailService;
 
-    public CartService(IUserService userService, IOrderDao orderDao, IMailService mailService){
+    public InMemoryCartService(IUserService userService, IInMemoryOrderDao orderDao, IMailService mailService){
         this.userService = userService;
         this.orderDao = orderDao;
         this.mailService = mailService;

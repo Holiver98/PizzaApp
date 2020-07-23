@@ -4,7 +4,7 @@ import com.github.holiver98.model.Rating;
 
 import java.util.List;
 
-public interface IRatingDao {
+public interface IInMemoryRatingDao {
     /**
      * Saves the rating into database.
      * It does not return the generated id, because the rating contains the user's

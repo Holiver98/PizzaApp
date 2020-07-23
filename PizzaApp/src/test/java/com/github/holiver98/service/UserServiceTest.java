@@ -1,6 +1,6 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IUserDao;
+import com.github.holiver98.dao.IInMemoryUserDao;
 import com.github.holiver98.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,13 +13,13 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    private IUserDao userDao;
-    private UserService userService;
+    private IInMemoryUserDao userDao;
+    private InMemoryUserService userService;
 
     @BeforeEach
     void init(){
-        userDao = Mockito.mock(IUserDao.class);
-        userService = new UserService(userDao);
+        userDao = Mockito.mock(IInMemoryUserDao.class);
+        userService = new InMemoryUserService(userDao);
     }
 
     @Test

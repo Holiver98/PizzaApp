@@ -1,8 +1,8 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IIngredientDao;
-import com.github.holiver98.dao.IPizzaDao;
-import com.github.holiver98.dao.IRatingDao;
+import com.github.holiver98.dao.IInMemoryIngredientDao;
+import com.github.holiver98.dao.IInMemoryPizzaDao;
+import com.github.holiver98.dao.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,18 +18,18 @@ import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PizzaServiceTest extends PizzaServiceTestBase{
-    private IIngredientDao ingredientDao;
-    private IPizzaDao pizzaDao;
-    private IRatingDao ratingDao;
+    private IInMemoryIngredientDao ingredientDao;
+    private IInMemoryPizzaDao pizzaDao;
+    private IInMemoryRatingDao ratingDao;
 
-    private PizzaService pizzaService;
+    private InMemoryPizzaService pizzaService;
 
     @BeforeEach
     void init(){
-        ingredientDao = Mockito.mock(IIngredientDao.class);
-        pizzaDao = Mockito.mock(IPizzaDao.class);
-        ratingDao = Mockito.mock(IRatingDao.class);
-        pizzaService = new PizzaService(pizzaDao, ingredientDao, ratingDao);
+        ingredientDao = Mockito.mock(IInMemoryIngredientDao.class);
+        pizzaDao = Mockito.mock(IInMemoryPizzaDao.class);
+        ratingDao = Mockito.mock(IInMemoryRatingDao.class);
+        pizzaService = new InMemoryPizzaService(pizzaDao, ingredientDao, ratingDao);
     }
 
     @Test

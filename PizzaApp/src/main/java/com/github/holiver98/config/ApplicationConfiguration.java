@@ -15,44 +15,44 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public IIngredientDao inMemoryIngredientDao(){
+    public IInMemoryIngredientDao inMemoryIngredientDao(){
         return new InMemoryIngredientDao(inMemoryDatabase());
     }
 
     @Bean
-    public IPizzaDao inMemoryPizzaDao(){
+    public IInMemoryPizzaDao inMemoryPizzaDao(){
         return new InMemoryPizzaDao(inMemoryDatabase());
     }
 
     @Bean
-    public IRatingDao inMemoryRatingDao(){return new InMemoryRatingDao(inMemoryDatabase());}
+    public IInMemoryRatingDao inMemoryRatingDao(){return new InMemoryRatingDao(inMemoryDatabase());}
 
     @Bean
-    public IOrderDao inMemoryOrderDao(){return new InMemoryOrderDao(inMemoryDatabase());}
+    public IInMemoryOrderDao inMemoryOrderDao(){return new InMemoryOrderDao(inMemoryDatabase());}
 
     @Bean
-    public IUserDao inMemoryUserDao(){return new InMemoryUserDao(inMemoryDatabase());}
+    public IInMemoryUserDao inMemoryUserDao(){return new InMemoryUserDao(inMemoryDatabase());}
 
     @Bean
-    public IUserService userService(){
-        return new UserService(inMemoryUserDao());
+    public IUserService inMemoryUserService(){
+        return new InMemoryUserService(inMemoryUserDao());
     }
 
     @Bean
     public IMailService mailService(){ return new MailService(); }
 
     @Bean
-    public IPizzaService pizzaService(){
-        return new PizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(), inMemoryRatingDao());
+    public IPizzaService inMemoryPizzaService(){
+        return new InMemoryPizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(), inMemoryRatingDao());
     }
 
     @Bean
-    public ICartService cartService(){
-        return new CartService(userService(), inMemoryOrderDao(), mailService());
+    public ICartService inMemoryCartService(){
+        return new InMemoryCartService(inMemoryUserService(), inMemoryOrderDao(), mailService());
     }
 
     @Bean
-    public IRatingService ratingService(){
-        return new RatingService(inMemoryRatingDao(), userService(), pizzaService());
+    public IRatingService inMemoryRatingService(){
+        return new InMemoryRatingService(inMemoryRatingDao(), inMemoryUserService(), inMemoryPizzaService());
     }
 }

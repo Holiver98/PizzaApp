@@ -1,19 +1,19 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IRatingDao;
+import com.github.holiver98.dao.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
 
 import java.util.List;
 
-public class RatingService implements IRatingService{
+public class InMemoryRatingService implements IRatingService{
 
-    private IRatingDao ratingDao;
+    private IInMemoryRatingDao ratingDao;
     private IUserService userService;
     private IPizzaService pizzaService;
 
-    public RatingService(IRatingDao dao, IUserService userService, IPizzaService pizzaService){
+    public InMemoryRatingService(IInMemoryRatingDao dao, IUserService userService, IPizzaService pizzaService){
         ratingDao = dao;
         this.userService = userService;
         this.pizzaService = pizzaService;

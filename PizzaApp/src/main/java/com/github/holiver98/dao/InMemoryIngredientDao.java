@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class InMemoryIngredientDao implements IIngredientDao {
+public class InMemoryIngredientDao implements IInMemoryIngredientDao {
 
     private InMemoryDatabase dbContext;
 

@@ -1,6 +1,6 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IOrderDao;
+import com.github.holiver98.dao.IInMemoryOrderDao;
 import com.github.holiver98.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,21 +17,21 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class CartServiceTest extends CartServiceTestBase{
 
-    private IOrderDao orderDao;
+    private IInMemoryOrderDao orderDao;
     private IMailService mailService;
     private IUserService userService;
 
-    private CartService cartService;
+    private InMemoryCartService cartService;
 
     @Captor
     private ArgumentCaptor<Order> orderArgumentCaptor;
 
     @BeforeEach
     void init(){
-        orderDao = Mockito.mock(IOrderDao.class);
+        orderDao = Mockito.mock(IInMemoryOrderDao.class);
         mailService = Mockito.mock(IMailService.class);
         userService = Mockito.mock(IUserService.class);
-        cartService = new CartService(userService, orderDao, mailService);
+        cartService = new InMemoryCartService(userService, orderDao, mailService);
     }
 
     @Test

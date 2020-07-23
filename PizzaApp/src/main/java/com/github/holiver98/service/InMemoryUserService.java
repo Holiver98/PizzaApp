@@ -1,16 +1,16 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IUserDao;
+import com.github.holiver98.dao.IInMemoryUserDao;
 import com.github.holiver98.model.User;
 
 import java.util.Optional;
 
-public class UserService implements IUserService {
+public class InMemoryUserService implements IUserService {
 
-    private IUserDao userDao;
+    private IInMemoryUserDao userDao;
     private User loggedInUser;
 
-    public UserService(IUserDao dao)
+    public InMemoryUserService(IInMemoryUserDao dao)
     {
         userDao = dao;
     }

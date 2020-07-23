@@ -5,7 +5,7 @@ import com.github.holiver98.model.Order;
 import java.util.List;
 import java.util.Optional;
 
-public interface IOrderDao {
+public interface IInMemoryOrderDao {
     /**
      * Saves the order into database.
      *

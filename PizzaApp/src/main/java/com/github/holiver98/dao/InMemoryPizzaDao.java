@@ -5,7 +5,7 @@ import com.github.holiver98.model.Pizza;
 
 import java.util.List;
 
-public class InMemoryPizzaDao implements IPizzaDao {
+public class InMemoryPizzaDao implements IInMemoryPizzaDao {
     //TODO: implement InMemoryPizzaDao
     private InMemoryDatabase dbContext;
 

@@ -4,7 +4,7 @@ import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.User;
 import java.util.Optional;
 
-public class InMemoryUserDao implements IUserDao{
+public class InMemoryUserDao implements IInMemoryUserDao {
     private InMemoryDatabase dbContext;
 
     public InMemoryUserDao(InMemoryDatabase context) {

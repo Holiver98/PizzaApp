@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class InMemoryOrderDao implements IOrderDao{
+public class InMemoryOrderDao implements IInMemoryOrderDao {
     private InMemoryDatabase dbContext;
 
     public InMemoryOrderDao(InMemoryDatabase context) {

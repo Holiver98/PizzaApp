@@ -1,8 +1,8 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IIngredientDao;
-import com.github.holiver98.dao.IPizzaDao;
-import com.github.holiver98.dao.IRatingDao;
+import com.github.holiver98.dao.IInMemoryIngredientDao;
+import com.github.holiver98.dao.IInMemoryPizzaDao;
+import com.github.holiver98.dao.IInMemoryRatingDao;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
@@ -10,13 +10,13 @@ import com.github.holiver98.model.Rating;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PizzaService implements IPizzaService {
+public class InMemoryPizzaService implements IPizzaService {
 
-    private IIngredientDao ingredientDao;
-    private IPizzaDao pizzaDao;
-    private IRatingDao ratingDao;
+    private IInMemoryIngredientDao ingredientDao;
+    private IInMemoryPizzaDao pizzaDao;
+    private IInMemoryRatingDao ratingDao;
 
-    public PizzaService(IPizzaDao pizzaDao, IIngredientDao ingredientDao, IRatingDao ratingDao){
+    public InMemoryPizzaService(IInMemoryPizzaDao pizzaDao, IInMemoryIngredientDao ingredientDao, IInMemoryRatingDao ratingDao){
         this.pizzaDao = pizzaDao;
         this.ingredientDao = ingredientDao;
         this.ratingDao = ratingDao;

@@ -4,7 +4,7 @@ import com.github.holiver98.model.Pizza;
 
 import java.util.List;
 
-public interface IPizzaDao {
+public interface IInMemoryPizzaDao {
     /**
      * Saves the pizza into database.
      *

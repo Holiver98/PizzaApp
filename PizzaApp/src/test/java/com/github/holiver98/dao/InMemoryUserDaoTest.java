@@ -12,7 +12,7 @@ import java.util.Optional;
 public class InMemoryUserDaoTest {
 
     private InMemoryDatabase database;
-    private IUserDao userDao;
+    private IInMemoryUserDao userDao;
 
     @BeforeEach
     void init(){
