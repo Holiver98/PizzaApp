@@ -6,6 +6,8 @@ import com.github.holiver98.service.inmemory.InMemoryCartService;
 import com.github.holiver98.service.inmemory.InMemoryPizzaService;
 import com.github.holiver98.service.inmemory.InMemoryRatingService;
 import com.github.holiver98.service.inmemory.InMemoryUserService;
+import com.github.holiver98.service.jpa.JpaCartService;
+import com.github.holiver98.service.jpa.JpaPizzaService;
 import com.github.holiver98.service.jpa.JpaRatingService;
 import com.github.holiver98.service.jpa.JpaUserService;
 import org.springframework.context.annotation.Bean;
@@ -74,4 +76,12 @@ public class ApplicationConfiguration {
     public IRatingService jpaRatingService(){
         return new JpaRatingService();
     }
+
+    @Bean
+    @Primary
+    public ICartService jpaCartService() { return new JpaCartService(); }
+
+    @Bean
+    @Primary
+    public IPizzaService jpaPizzaService(){ return new JpaPizzaService(); }
 }
