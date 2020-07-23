@@ -9,9 +9,9 @@ import java.util.Set;
 public class Pizza {
     @Id
     @GeneratedValue
-    private long id = -1;
+    private long id;//TODO: address:  private long id = -1;
     private String name;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Ingredient> ingredients;
     @Enumerated(EnumType.STRING)
     private PizzaSize size;

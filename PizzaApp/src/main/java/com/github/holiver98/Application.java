@@ -1,6 +1,7 @@
 package com.github.holiver98;
 
 import com.github.holiver98.config.ApplicationConfiguration;
+import com.github.holiver98.dal.jpa.IIngredientRepository;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.IngredientType;
 import com.github.holiver98.model.Pizza;
@@ -21,7 +22,6 @@ public class Application {
         ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
         
         testingPizzaService(applicationContext);
-        applicationContext.getBean(IPizzaService.class).savePizza(new Pizza());
     }
 
     private static void printBeanDefinitions(ApplicationContext applicationContext){
@@ -39,10 +39,9 @@ public class Application {
         pizza.setCustom(false);
         pizza.setSize(PizzaSize.NORMAL);
         pizza.setName("Pepperoni pizzaroni");
-        Set<Ingredient> ingredients = createTestSetOfIngredients();
+        Set<Ingredient> ingredients = createTestSetOfIngredients(context);
         pizza.setIngredients(ingredients);
         pizza.setPrice(pizzaService.calculatePrice(pizza));
-        pizza.setId(0);
 
         pizzaService.savePizza(pizza);
         System.out.println(pizzaService.calculatePrice(pizza));
@@ -52,7 +51,7 @@ public class Application {
         System.out.println("************");
     }
 
-    private static Set<Ingredient> createTestSetOfIngredients(){
+    private static Set<Ingredient> createTestSetOfIngredients(ApplicationContext ctx){
         Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
         Ingredient onion = new Ingredient();
@@ -73,6 +72,11 @@ public class Application {
         ingredients.add(onion);
         ingredients.add(tomato);
         ingredients.add(cheese);
+
+        IIngredientRepository repo = ctx.getBean(IIngredientRepository.class);
+        repo.save(onion);
+        repo.save(tomato);
+        repo.save(cheese);
 
         return ingredients;
     }
