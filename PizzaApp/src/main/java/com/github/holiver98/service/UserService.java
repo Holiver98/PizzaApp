@@ -3,17 +3,14 @@ package com.github.holiver98.service;
 import com.github.holiver98.dao.IInMemoryUserDao;
 import com.github.holiver98.model.User;
 import com.github.holiver98.repository.IUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
 public class UserService implements IUserService {
+    @Autowired
     private IUserRepository userRepository;
     private User loggedInUser;
-
-    public UserService(IUserRepository repo)
-    {
-        userRepository = repo;
-    }
 
     @Override
     public void login(String emailAddress, String password) {

@@ -5,6 +5,7 @@ import com.github.holiver98.database.InMemoryDatabase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.github.holiver98.service.*;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -54,5 +55,11 @@ public class ApplicationConfiguration {
     @Bean
     public IRatingService inMemoryRatingService(){
         return new InMemoryRatingService(inMemoryRatingDao(), inMemoryUserService(), inMemoryPizzaService());
+    }
+
+    @Bean
+    @Primary
+    public IUserService userService(){
+        return new UserService();
     }
 }
