@@ -59,7 +59,13 @@ public class ApplicationConfiguration {
 
     @Bean
     @Primary
-    public IUserService userService(){
-        return new UserService();
+    public IUserService jpaUserService(){
+        return new JpaUserService();
+    }
+
+    @Bean
+    @Primary
+    public IRatingService jpaRatingService(){
+        return new JpaRatingService();
     }
 }

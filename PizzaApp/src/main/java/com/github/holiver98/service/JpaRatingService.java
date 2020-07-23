@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class RatingService implements IRatingService {
+public class JpaRatingService implements IRatingService {
     @Autowired
     private IRatingRepository ratingRepository;
     @Autowired
