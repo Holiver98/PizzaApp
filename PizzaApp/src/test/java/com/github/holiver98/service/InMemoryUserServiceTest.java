@@ -1,7 +1,8 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IInMemoryUserDao;
+import com.github.holiver98.dal.inmemory.IInMemoryUserDao;
 import com.github.holiver98.model.User;
+import com.github.holiver98.service.inmemory.InMemoryUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

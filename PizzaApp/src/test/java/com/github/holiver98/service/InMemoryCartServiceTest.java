@@ -1,7 +1,8 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dao.IInMemoryOrderDao;
+import com.github.holiver98.dal.inmemory.IInMemoryOrderDao;
 import com.github.holiver98.model.*;
+import com.github.holiver98.service.inmemory.InMemoryCartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
