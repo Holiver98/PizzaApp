@@ -15,7 +15,7 @@ import java.util.Date;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CartServiceTest extends CartServiceTestBase{
+public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
 
     private IInMemoryOrderDao orderDao;
     private IMailService mailService;

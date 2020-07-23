@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class RatingServiceTest {
+public class InMemoryRatingServiceTest {
 
     private IPizzaService pizzaService;
     private IUserService userService;

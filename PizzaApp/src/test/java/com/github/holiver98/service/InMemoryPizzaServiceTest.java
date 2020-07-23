@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class PizzaServiceTest extends PizzaServiceTestBase{
+public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     private IInMemoryIngredientDao ingredientDao;
     private IInMemoryPizzaDao pizzaDao;
     private IInMemoryRatingDao ratingDao;

@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class InMemoryUserServiceTest {
 
     private IInMemoryUserDao userDao;
     private InMemoryUserService userService;

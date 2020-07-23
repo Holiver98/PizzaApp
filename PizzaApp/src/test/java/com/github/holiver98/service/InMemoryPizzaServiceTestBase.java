@@ -7,7 +7,7 @@ import com.github.holiver98.model.Pizza;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PizzaServiceTestBase {
+public class InMemoryPizzaServiceTestBase {
     protected Pizza createPizzaWith3IngredientsGivenThePrices(float ingredientPrice1,
                                                               float ingredientPrice2,
                                                               float ingredientPrice3){
