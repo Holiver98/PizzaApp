@@ -74,7 +74,7 @@ public class ApplicationConfiguration {
     @Bean
     @Primary
     public IRatingService jpaRatingService(){
-        return new JpaRatingService();
+        return new JpaRatingService(jpaUserService(), jpaPizzaService());
     }
 
     @Bean
