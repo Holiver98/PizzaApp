@@ -39,7 +39,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void addPizzaToCart_Adding_Valid_Pizza_To_Empty_Cart_Should_Add_Pizza(){
         //Arrange
-        Pizza validPizza = createValidPizza("pepperoni");
+        Pizza validPizza = createValidPizza("pepperoni", 1L);
 
         //Act
         cartService.addPizzaToCart(validPizza);
@@ -52,12 +52,12 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void addPizzaToCart_Adding_Valid_Pizza_To_Full_Cart_Should_Not_Add_Pizza(){
         //Arrange
-        Pizza validPizza = createValidPizza("pepperoni");
+        Pizza validPizza = createValidPizza("pepperoni", 1L);
         for(int i=0; i<15; i++){
             cartService.getCartContent().add(validPizza);
         }
 
-        Pizza anotherValidPizza = createValidPizza("Bestpizza");
+        Pizza anotherValidPizza = createValidPizza("Bestpizza", 2L);
 
         //Act
         cartService.addPizzaToCart(anotherValidPizza);
@@ -105,7 +105,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void removePizzaFromCart_Cart_Is_Empty_Should_Not_Do_Anything(){
         //Arrange
-        Pizza pizza = createValidPizza("pepperoni pizza");
+        Pizza pizza = createValidPizza("pepperoni pizza", 1L);
 
         //Act
         cartService.removePizzaFromCart(pizza);
@@ -117,7 +117,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void removePizzaFromCart_Duplicate_Pizzas_In_Cart_Should_Only_Remove_One(){
         //Arrange
-        Pizza pizza = createValidPizza("pepperoni pizza");
+        Pizza pizza = createValidPizza("pepperoni pizza", 1L);
         cartService.getCartContent().add(pizza);
         cartService.getCartContent().add(pizza);
         cartService.getCartContent().add(pizza);
@@ -132,12 +132,12 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void removePizzaFromCart_No_Such_Pizza_In_Cart_Should_Not_Remove(){
         //Arrange
-        Pizza pizza = createValidPizza("pepperoni pizza");
+        Pizza pizza = createValidPizza("pepperoni pizza", 1L);
         cartService.getCartContent().add(pizza);
         cartService.getCartContent().add(pizza);
         cartService.getCartContent().add(pizza);
 
-        Pizza differentPizza = createValidPizza("Cheese pizza");
+        Pizza differentPizza = createValidPizza("Cheese pizza", 2L);
 
         //Act
         cartService.removePizzaFromCart(differentPizza);
@@ -149,7 +149,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void removePizzaFromCart_Passing_Null_Should_Not_Do_Anything(){
         //Arrange
-        Pizza pizza = createValidPizza("pepperoni pizza");
+        Pizza pizza = createValidPizza("pepperoni pizza", 1L);
         cartService.getCartContent().add(pizza);
         cartService.getCartContent().add(pizza);
         cartService.getCartContent().add(pizza);
@@ -164,7 +164,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void placeOrder_Placing_Order_With_3_Pizzas_Should_Save_Order_And_Send_Email(){
         //Arrange
-        Pizza validPizza = createValidPizza("Pepperoni pizza");
+        Pizza validPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
@@ -188,7 +188,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void placeOrder_While_Being_Logged_Out_Should_Not_Place_Order(){
         //Arrange
-        Pizza validPizza = createValidPizza("Pepperoni pizza");
+        Pizza validPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
@@ -223,9 +223,9 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Test
     void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information(){
         //Arrange
-        Pizza pepperoniPizza = createValidPizza("Pepperoni pizza");
+        Pizza pepperoniPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(pepperoniPizza);
-        Pizza cheesePizza = createValidPizza("Cheese pizza");
+        Pizza cheesePizza = createValidPizza("Cheese pizza", 2L);
         cartService.getCartContent().add(cheesePizza);
 
         User loggedInUser = new User();

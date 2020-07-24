@@ -9,12 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class InMemoryCartServiceTestBase {
-    protected Pizza createValidPizza(String name){
+    protected Pizza createValidPizza(String name, Long id){
         Pizza pizza = new Pizza();
         pizza.setName(name);
         pizza.setSize(PizzaSize.NORMAL);
         pizza.setPrice(20.5f);
         pizza.setCustom(false);
+        pizza.setId(id);
 
         Set<Ingredient> ingredients = new HashSet<Ingredient>();
         Ingredient tomatoSauce = new Ingredient();

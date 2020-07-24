@@ -150,7 +150,7 @@ public class JpaPizzaService implements IPizzaService {
     private boolean isValidPizza(Pizza pizza){
         if(pizza == null){
             return false;
-        }else if(pizza.getId() < 0){
+        }else if(pizza.getId() == null){
             return false;
         }else if(!arePricesValid(pizza)){
             return false;

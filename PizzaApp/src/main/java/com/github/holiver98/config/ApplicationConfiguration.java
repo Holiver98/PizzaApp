@@ -79,7 +79,7 @@ public class ApplicationConfiguration {
 
     @Bean
     @Primary
-    public ICartService jpaCartService() { return new JpaCartService(); }
+    public ICartService jpaCartService() { return new JpaCartService(jpaUserService(), mailService()); }
 
     @Bean
     @Primary
