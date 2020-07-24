@@ -12,6 +12,7 @@ public class InMemoryPizzaServiceTestBase {
                                                               float ingredientPrice2,
                                                               float ingredientPrice3){
         Pizza pizza = new Pizza();
+        pizza.setId(1L);
         Set<Ingredient> ingredients = new HashSet<Ingredient>();
         Ingredient tomatoSauce = new Ingredient();
         tomatoSauce.setName("tomato sauce");

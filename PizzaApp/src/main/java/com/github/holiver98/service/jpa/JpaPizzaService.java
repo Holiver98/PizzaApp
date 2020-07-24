@@ -3,17 +3,13 @@ package com.github.holiver98.service.jpa;
 import com.github.holiver98.dal.jpa.IIngredientRepository;
 import com.github.holiver98.dal.jpa.IPizzaRepository;
 import com.github.holiver98.dal.jpa.IRatingRepository;
-import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
-import com.github.holiver98.service.IPizzaService;
+import com.github.holiver98.service.PizzaServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
-public class JpaPizzaService implements IPizzaService {
+public class JpaPizzaService extends PizzaServiceBase {
     @Autowired
     private IIngredientRepository ingredientRepository;
     @Autowired
@@ -22,63 +18,8 @@ public class JpaPizzaService implements IPizzaService {
     private IRatingRepository ratingRepository;
 
     @Override
-    public float calculatePrice(Pizza pizza) {
-        if(pizza == null){
-            return -1f;
-        }
-
-        if(pizza.getIngredients() == null){
-            System.out.println("Ingredients list not initialized!");
-            return -1f;
-        }
-
-        if(pizza.getIngredients().size() == 0){
-            System.out.println("There are no ingredients assigned to this pizza!");
-            return -1f;
-        }
-
-        if(!arePricesValid(pizza)){
-            System.out.println("Invalid ingredient prices!");
-            return -1f;
-        }
-
-        BigDecimal totalPrice = new BigDecimal(0);
-        for (Ingredient i: pizza.getIngredients()) {
-            BigDecimal ingredientPrice = new BigDecimal(Float.toString(i.getPrice()));
-            totalPrice = totalPrice.add(ingredientPrice);
-        }
-
-        return totalPrice.floatValue();
-    }
-
-    @Override
-    public float recalculateRatingAverage(long pizzaId) {
-        Optional<Pizza> optionalPizzaToUpdate = pizzaRepository.findById(pizzaId);
-        Pizza pizzaToUpdate;
-        if(!optionalPizzaToUpdate.isPresent()){
-            System.out.println("Pizza with id("+ pizzaId +") was not found in the database!");
-            return -1;
-        }else{
-            pizzaToUpdate = optionalPizzaToUpdate.get();
-        }
-
-        List<Rating> ratings = ratingRepository.findByPizzaId(pizzaId);
-        int ratingSumm = 0;
-        for (Rating rating : ratings) {
-            ratingSumm += rating.getRating();
-        }
-
-        float newRatingAverage;
-        if(ratings.size() == 0){
-            return 0;
-        }else{
-            newRatingAverage = (float)ratingSumm / (float)ratings.size();
-        }
-
-        pizzaToUpdate.setRatingAverage(newRatingAverage);
-        pizzaRepository.save(pizzaToUpdate);//update
-
-        return newRatingAverage;
+    protected List<Rating> getRatingsOfPizza(long pizzaId) {
+        return ratingRepository.findByPizzaId(pizzaId);
     }
 
     @Override
@@ -135,27 +76,5 @@ public class JpaPizzaService implements IPizzaService {
         }
 
         pizzaRepository.deleteById(pizzaId);
-    }
-
-    private boolean arePricesValid(Pizza pizza) {
-        for (Ingredient i: pizza.getIngredients()) {
-            if(i.getPrice() < 0f){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean isValidPizza(Pizza pizza){
-        if(pizza == null){
-            return false;
-        }else if(pizza.getId() == null){
-            return false;
-        }else if(!arePricesValid(pizza)){
-            return false;
-        }
-
-        return true;
     }
 }

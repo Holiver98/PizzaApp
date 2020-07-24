@@ -95,9 +95,9 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     void recalculateRatingAverage_Should_Return_Correct_Value_And_Update_Pizza(){
         //Arrange
         long pizzaId = 1;
-        Pizza pizza = new Pizza();
-        pizza.setId(pizzaId);
-        Mockito.when(pizzaDao.getPizzaById(pizzaId)).thenReturn(pizza);
+        Pizza validPizza = createPizzaWith3IngredientsGivenThePrices(3.1f, 2.2f, 3.2f);
+        validPizza.setId(pizzaId);
+        Mockito.when(pizzaDao.getPizzaById(pizzaId)).thenReturn(validPizza);
 
         List<Rating> ratingsInDatabase = new ArrayList<Rating>();
         Rating ratingOfBob = new Rating();
@@ -127,16 +127,16 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
         //Assert
         float expectedValue = 2.66666667f;
         assertThat(newRatingAverage).isEqualTo(expectedValue);
-        assertThat(pizza.getRatingAverage()).isEqualTo(expectedValue);
+        assertThat(validPizza.getRatingAverage()).isEqualTo(expectedValue);
     }
 
     @Test
     void recalculateRatingAverage_Should_Return_Correct_Value(){
         //Arrange
         long pizzaId = 1;
-        Pizza pizza = new Pizza();
-        pizza.setId(pizzaId);
-        Mockito.when(pizzaDao.getPizzaById(pizzaId)).thenReturn(pizza);
+        Pizza validPizza = createPizzaWith3IngredientsGivenThePrices(3.1f, 2.2f, 3.2f);
+        validPizza.setId(pizzaId);
+        Mockito.when(pizzaDao.getPizzaById(pizzaId)).thenReturn(validPizza);
 
         List<Rating> ratingsInDatabase = new ArrayList<Rating>();
         Rating ratingOfBob = new Rating();
@@ -172,9 +172,9 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     void recalculateRatingAverage_Should_Return_Correct_Value_2(){
         //Arrange
         long pizzaId = 1;
-        Pizza pizza = new Pizza();
-        pizza.setId(pizzaId);
-        Mockito.when(pizzaDao.getPizzaById(pizzaId)).thenReturn(pizza);
+        Pizza validPizza = createPizzaWith3IngredientsGivenThePrices(3.1f, 2.2f, 3.2f);
+        validPizza.setId(pizzaId);
+        Mockito.when(pizzaDao.getPizzaById(pizzaId)).thenReturn(validPizza);
 
         List<Rating> ratingsInDatabase = new ArrayList<Rating>();
         Rating ratingOfBob = new Rating();
