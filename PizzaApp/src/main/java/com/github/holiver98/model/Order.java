@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Order {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private String userEmailAddress;
     @ManyToMany
     private List<Pizza> pizzas;

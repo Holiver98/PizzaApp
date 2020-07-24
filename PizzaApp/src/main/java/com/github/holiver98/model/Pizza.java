@@ -9,7 +9,7 @@ import java.util.Set;
 public class Pizza {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private String name;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Ingredient> ingredients;

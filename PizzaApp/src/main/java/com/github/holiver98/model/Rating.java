@@ -10,7 +10,7 @@ import javax.persistence.IdClass;
 @Data
 public class Rating {
     @Id
-    private long pizzaId;
+    private Long pizzaId;
     @Id
     private int rating;
     @Id
