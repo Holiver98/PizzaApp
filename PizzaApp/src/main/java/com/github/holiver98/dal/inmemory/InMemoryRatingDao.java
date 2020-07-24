@@ -4,7 +4,6 @@ import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.Rating;
 
 import java.util.List;
-//TODO: implement class
 public class InMemoryRatingDao implements IInMemoryRatingDao {
     private InMemoryDatabase dbContext;
 

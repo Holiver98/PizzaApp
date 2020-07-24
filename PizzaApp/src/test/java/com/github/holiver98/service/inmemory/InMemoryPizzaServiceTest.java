@@ -1,11 +1,10 @@
-package com.github.holiver98.service;
+package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryIngredientDao;
 import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
 import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
-import com.github.holiver98.service.inmemory.InMemoryPizzaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

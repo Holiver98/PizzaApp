@@ -1,4 +1,4 @@
-package com.github.holiver98.service;
+package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryUserDao;
 import com.github.holiver98.model.User;
