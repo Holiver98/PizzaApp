@@ -9,10 +9,6 @@ import java.util.List;
 
 public abstract class CartServiceBase implements ICartService {
     protected final int cartItemLimit = 15;
-    protected final int minIngredients = 1;
-    protected final int maxIngredients = 5;
-    protected final int maxBaseSauce = 1;
-    protected final int minBaseSauce = 1;
     protected List<Pizza> cartContent = new ArrayList<Pizza>();
     protected IUserService userService;
     protected IMailService mailService;
@@ -36,7 +32,7 @@ public abstract class CartServiceBase implements ICartService {
             System.out.println("Cart is full!");
             return;
         }
-        if(!isValidPizza(pizza)){
+        if(!PizzaServiceBase.isValidPizza(pizza)){
             System.out.println("Invalid pizza!");
             return;
         }
@@ -82,44 +78,6 @@ public abstract class CartServiceBase implements ICartService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }
-
-    protected boolean isValidPizza(Pizza pizza){
-        if(pizza == null){
-            return false;
-        }
-
-        boolean hasUninitializedFields = pizza.getName() == null ||
-                pizza.getIngredients() == null ||
-                pizza.getSize() == null ||
-                pizza.getId() == null;
-        if(hasUninitializedFields){
-            return false;
-        }
-
-        boolean hasInvalidNumberOfIngredients = pizza.getIngredients().size() < minIngredients ||
-                pizza.getIngredients().size() > maxIngredients;
-        boolean hasInvalidNumberOfBasesauces = !hasValidNumberOfBasesauces(pizza);
-        if(hasInvalidNumberOfBasesauces ||
-                hasInvalidNumberOfIngredients ||
-                pizza.getPrice() <= 0.0f){
-            return false;
-        }
-
-        return true;
-    }
-
-    protected boolean hasValidNumberOfBasesauces(Pizza pizza){
-        int numberOfBaseSauces = 0;
-        for (Ingredient ingredient: pizza.getIngredients()) {
-            boolean ingredientIsBasesauce = ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE);
-            if(ingredientIsBasesauce){
-                numberOfBaseSauces++;
-            }
-        }
-
-        boolean hasValidNumberOfBasesauces = numberOfBaseSauces <= maxBaseSauce && numberOfBaseSauces >= minBaseSauce;
-        return hasValidNumberOfBasesauces;
     }
 
     protected float CalculateTotalPrice(){
