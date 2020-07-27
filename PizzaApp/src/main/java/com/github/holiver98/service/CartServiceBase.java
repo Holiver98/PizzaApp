@@ -2,6 +2,7 @@ package com.github.holiver98.service;
 
 import com.github.holiver98.model.*;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,7 +72,11 @@ public abstract class CartServiceBase implements ICartService {
         order.setDate(currentTime);
         save(order);
 
-        mailService.sendOrderConfirmationEmail(order);
+        try {
+            mailService.sendOrderConfirmationEmail(order);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     protected boolean isValidPizza(Pizza pizza){

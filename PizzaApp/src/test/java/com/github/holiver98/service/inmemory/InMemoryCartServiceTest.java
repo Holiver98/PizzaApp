@@ -12,6 +12,7 @@ import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.*;
@@ -181,7 +182,11 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         //Assert
         Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());
         Order savedOrder = orderArgumentCaptor.getValue();
-        Mockito.verify(mailService, Mockito.times(1)).sendOrderConfirmationEmail(savedOrder);
+        try {
+            Mockito.verify(mailService, Mockito.times(1)).sendOrderConfirmationEmail(savedOrder);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         Mockito.verify(orderDao, Mockito.times(1)).saveOrder(Mockito.any());
     }
 
@@ -199,7 +204,11 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         cartService.placeOrder();
 
         //Assert
-        Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
+        try {
+            Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
 
@@ -216,7 +225,11 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         cartService.placeOrder();
 
         //Assert
-        Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
+        try {
+            Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
 
