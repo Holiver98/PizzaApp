@@ -23,7 +23,6 @@ public abstract class UserServiceBase implements IUserService{
 
         Optional<User> userResult = findByEmailAddress(emailAddress);
         User user;
-
         if(!userResult.isPresent()){
             System.out.println("User not registered!");
             return;
@@ -41,11 +40,6 @@ public abstract class UserServiceBase implements IUserService{
 
     @Override
     public void logout() {
-        if(loggedInUser == null){
-            System.out.println("Can't logout, because user is not logged in!");
-            return;
-        }
-
         loggedInUser = null;
     }
 
@@ -90,7 +84,6 @@ public abstract class UserServiceBase implements IUserService{
         }else if(username.length() < 3){
             return false;
         }
-
         return true;
     }
 
@@ -100,7 +93,6 @@ public abstract class UserServiceBase implements IUserService{
         } else if(password.length() < 5) {
             return false;
         }
-
         return true;
     }
 
@@ -110,19 +102,11 @@ public abstract class UserServiceBase implements IUserService{
         }
 
         String emailFormat = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-        if(emailAddress.matches(emailFormat)){
-            return true;
-        }else{
-            return false;
-        }
+        return emailAddress.matches(emailFormat);
     }
 
     protected boolean isEmailRegistered(String emailAddress){
-        Optional<User> user = findByEmailAddress(emailAddress);
-        if(!user.isPresent()) {
-            return false;
-        }else{
-            return true;
-        }
+        Optional<User> registeredUser = findByEmailAddress(emailAddress);
+        return registeredUser.isPresent();
     }
 }
