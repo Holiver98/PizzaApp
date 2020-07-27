@@ -31,16 +31,15 @@ public abstract class CartServiceBase implements ICartService {
 
     @Override
     public void addPizzaToCart(Pizza pizza) {
-        if(pizza == null){
-            return;
-        }else if(cartContent.size() >= cartItemLimit){
+        boolean cartIsFull = cartContent.size() >= cartItemLimit;
+        if(cartIsFull){
             System.out.println("Cart is full!");
             return;
-        }if(!isValidPizza(pizza)){
+        }
+        if(!isValidPizza(pizza)){
             System.out.println("Invalid pizza!");
             return;
         }
-
         cartContent.add(pizza);
     }
 
@@ -49,29 +48,35 @@ public abstract class CartServiceBase implements ICartService {
         if(pizza == null){
             return;
         }
-
         cartContent.remove(pizza);
     }
 
     @Override
     public void placeOrder() {
-        if(cartContent.isEmpty()){
+        boolean cartIsEmpty = cartContent.isEmpty();
+        if(cartIsEmpty){
             return;
         }
-
         User loggedInUser = userService.getLoggedInUser();
         if(loggedInUser == null){
             return;
         }
+        Order order = createOrder(loggedInUser);
+        save(order);
+        trySendOrderConfirmationEmail(order);
+    }
 
+    private Order createOrder(User loggedInUser) {
         Order order = new Order();
         order.setPizzas(cartContent);
         order.setUserEmailAddress(loggedInUser.getEmailAddress());
         order.setTotalPrice(CalculateTotalPrice());
         Date currentTime = new Date();
         order.setDate(currentTime);
-        save(order);
+        return order;
+    }
 
+    private void trySendOrderConfirmationEmail(Order order) {
         try {
             mailService.sendOrderConfirmationEmail(order);
         } catch (MessagingException e) {
@@ -80,41 +85,48 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     protected boolean isValidPizza(Pizza pizza){
-        if(pizza.getName() == null || pizza.getIngredients() == null ||
-                pizza.getSize() == null || pizza.getPrice() <= 0.0f || pizza.getId() == null){
-            return false;
-        }else if(pizza.getIngredients().size() < minIngredients || pizza.getIngredients().size() > maxIngredients){
+        if(pizza == null){
             return false;
         }
 
-        if(hasMoreOrLessBaseSauceThanNeeded(pizza)){
-            System.out.println("There has to be exactly 1 base sauce!");
+        boolean hasUninitializedFields = pizza.getName() == null ||
+                pizza.getIngredients() == null ||
+                pizza.getSize() == null ||
+                pizza.getId() == null;
+        if(hasUninitializedFields){
+            return false;
+        }
+
+        boolean hasInvalidNumberOfIngredients = pizza.getIngredients().size() < minIngredients ||
+                pizza.getIngredients().size() > maxIngredients;
+        boolean hasInvalidNumberOfBasesauces = !hasValidNumberOfBasesauces(pizza);
+        if(hasInvalidNumberOfBasesauces ||
+                hasInvalidNumberOfIngredients ||
+                pizza.getPrice() <= 0.0f){
             return false;
         }
 
         return true;
     }
 
-    protected boolean hasMoreOrLessBaseSauceThanNeeded(Pizza pizza){
+    protected boolean hasValidNumberOfBasesauces(Pizza pizza){
         int numberOfBaseSauces = 0;
-        for (Ingredient i: pizza.getIngredients()) {
-            if(i.getType().equals(IngredientType.PIZZA_BASESAUCE)){
+        for (Ingredient ingredient: pizza.getIngredients()) {
+            boolean ingredientIsBasesauce = ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE);
+            if(ingredientIsBasesauce){
                 numberOfBaseSauces++;
             }
         }
 
-        if(numberOfBaseSauces > maxBaseSauce || numberOfBaseSauces < minBaseSauce){
-            return true;
-        }else{
-            return false;
-        }
+        boolean hasValidNumberOfBasesauces = numberOfBaseSauces <= maxBaseSauce && numberOfBaseSauces >= minBaseSauce;
+        return hasValidNumberOfBasesauces;
     }
 
     protected float CalculateTotalPrice(){
         float totalPrice = 0f;
 
-        for (Pizza p: cartContent) {
-            totalPrice += p.getPrice();
+        for (Pizza pizza: cartContent) {
+            totalPrice += pizza.getPrice();
         }
 
         return totalPrice;
