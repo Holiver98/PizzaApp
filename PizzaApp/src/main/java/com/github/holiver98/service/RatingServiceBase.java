@@ -1,10 +1,8 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.dal.jpa.IRatingRepository;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -48,10 +46,7 @@ public abstract class RatingServiceBase implements IRatingService{
             return;
         }
 
-        Rating ratingToGive = new Rating();
-        ratingToGive.setPizzaId(pizzaId);
-        ratingToGive.setRating(rating);
-        ratingToGive.setUserEmailAddress(user.getEmailAddress());
+        Rating ratingToGive = createRating(pizzaId, rating, user.getEmailAddress());
         save(ratingToGive);
         pizzaService.recalculateRatingAverage(pizzaId);
     }
@@ -72,10 +67,14 @@ public abstract class RatingServiceBase implements IRatingService{
     }
 
     protected boolean isRatingValid(int rating) {
-        if(rating < 1 || rating > 5){
-            return false;
-        }else{
-            return true;
-        }
+        return rating >= 1 && rating <= 5;
+    }
+
+    private Rating createRating(long pizzaId, int rating, String emailAddress) {
+        Rating newRating = new Rating();
+        newRating.setPizzaId(pizzaId);
+        newRating.setRating(rating);
+        newRating.setUserEmailAddress(emailAddress);
+        return newRating;
     }
 }
