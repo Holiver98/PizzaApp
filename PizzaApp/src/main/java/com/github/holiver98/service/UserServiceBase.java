@@ -1,41 +1,21 @@
 package com.github.holiver98.service;
 
 import com.github.holiver98.model.User;
-
 import java.util.Optional;
 
-public abstract class UserServiceBase implements IUserService{
+public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     protected User loggedInUser;
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
 
     @Override
-    public void login(String emailAddress, String password) {
-        if(password == null || emailAddress == null){
-            return;
-        }
-
-        if(loggedInUser != null){
-            System.out.println("Already logged in!");
-            return;
-        }
-
-        Optional<User> userResult = findByEmailAddress(emailAddress);
-        User user;
-        if(!userResult.isPresent()){
-            System.out.println("User not registered!");
-            return;
-        }else{
-            user = userResult.get();
-        }
-
-        if(!password.equals(user.getPassword())){
-            System.out.println("Invalid password!");
-            return;
-        }
-
-        loggedInUser = user;
+    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotRegisteredException {
+        super.login(emailAddress, password);
+        checkIfAlreadyLoggedIn();
+        User userInfo = getUserIfRegistered(emailAddress);
+        checkIfPasswordMatches(password, userInfo);
+        loggedInUser = userInfo;
     }
 
     @Override
@@ -44,32 +24,10 @@ public abstract class UserServiceBase implements IUserService{
     }
 
     @Override
-    public void register(User user) {
-        if(user == null)
-        {
-            return;
-        }
-
-        if(!isValidUserName(user.getUsername())) {
-            System.out.println("Invalid username");
-            return;
-        }
-
-        if(!isValidPassword(user.getPassword())) {
-            System.out.println("Invalid password");
-            return;
-        }
-
-        if(!isValidEmailAddress(user.getEmailAddress())) {
-            System.out.println("Invalid email address");
-            return;
-        }
-
-        if(isEmailRegistered(user.getEmailAddress())){
-            System.out.println("Email already registered");
-            return;
-        }
-
+    public void register(User user) throws InvalidInputException, AlreadyRegisteredException {
+        super.register(user);
+        checkIfUserInformationAreValid(user);
+        checkIfAlreadyRegistered(user);
         save(user);
     }
 
@@ -108,5 +66,46 @@ public abstract class UserServiceBase implements IUserService{
     protected boolean isEmailRegistered(String emailAddress){
         Optional<User> registeredUser = findByEmailAddress(emailAddress);
         return registeredUser.isPresent();
+    }
+
+    private void checkIfAlreadyRegistered(User user) throws AlreadyRegisteredException {
+        if(isEmailRegistered(user.getEmailAddress())){
+            throw new AlreadyRegisteredException("email already registered: " + user.getEmailAddress());
+        }
+    }
+
+    private void checkIfUserInformationAreValid(User user) throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
+        if(!isValidUserName(user.getUsername())) {
+            throw new InvalidUsernameException("invalid username: " + user.getUsername());
+        }
+
+        if(!isValidPassword(user.getPassword())) {
+            throw new InvalidPasswordException("invalid password: " + user.getPassword());
+        }
+
+        if(!isValidEmailAddress(user.getEmailAddress())) {
+            throw new InvalidEmailException("invalid email address: " + user.getEmailAddress());
+        }
+    }
+
+    private void checkIfAlreadyLoggedIn() {
+        if(loggedInUser != null){
+            throw new UnsupportedOperationException("Already logged in!");
+        }
+    }
+
+    private User getUserIfRegistered(String emailAddress) throws NotRegisteredException {
+        Optional<User> registeredUser = findByEmailAddress(emailAddress);
+        if(!registeredUser.isPresent()){
+            throw new NotRegisteredException("The email address (" + emailAddress + ") is not registered!");
+        }else{
+            return registeredUser.get();
+        }
+    }
+
+    private void checkIfPasswordMatches(String password, User registeredUser) throws IncorrectPasswordException {
+        if(!password.equals(registeredUser.getPassword())){
+            throw new IncorrectPasswordException("password incorrect: " + password);
+        }
     }
 }

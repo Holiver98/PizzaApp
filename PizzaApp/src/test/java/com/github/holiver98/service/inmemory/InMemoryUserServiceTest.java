@@ -2,7 +2,9 @@ package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryUserDao;
 import com.github.holiver98.model.User;
+import com.github.holiver98.service.UserServiceBaseExceptionHandler;
 import com.github.holiver98.service.inmemory.InMemoryUserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,14 +34,18 @@ public class InMemoryUserServiceTest {
         bob.setEmailAddress("bob123@test.hu");
 
         //Act
-        userService.register(bob);
+        try {
+            userService.register(bob);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //Assert
         Mockito.verify(userDao, Mockito.times(1)).saveUser(bob);
     }
 
     @Test
-    void register_invalid_username_should_not_save_user(){
+    void register_invalid_username_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("D");
@@ -47,14 +53,13 @@ public class InMemoryUserServiceTest {
         bob.setEmailAddress("bob123@test.hu");
 
         //Act
-        userService.register(bob);
-
         //Assert
-        Mockito.verify(userDao, Mockito.times(0)).saveUser(bob);
+        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidUsernameException.class,
+                () -> userService.register(bob));
     }
 
     @Test
-    void register_invalid_password_should_not_save_user(){
+    void register_invalid_password_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -62,14 +67,13 @@ public class InMemoryUserServiceTest {
         bob.setEmailAddress("bob123@test.hu");
 
         //Act
-        userService.register(bob);
-
         //Assert
-        Mockito.verify(userDao, Mockito.times(0)).saveUser(bob);
+        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidPasswordException.class,
+                () -> userService.register(bob));
     }
 
     @Test
-    void register_invalid_email_should_not_save_user(){
+    void register_invalid_email_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -77,14 +81,13 @@ public class InMemoryUserServiceTest {
         bob.setEmailAddress("bob123hu");
 
         //Act
-        userService.register(bob);
-
         //Assert
-        Mockito.verify(userDao, Mockito.times(0)).saveUser(bob);
+        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidEmailException.class,
+                () -> userService.register(bob));
     }
 
     @Test
-    void register_invalid_email_should_not_save_user_2(){
+    void register_invalid_email_should_throw_exception_2(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -92,14 +95,13 @@ public class InMemoryUserServiceTest {
         bob.setEmailAddress("@@@@@@@@");
 
         //Act
-        userService.register(bob);
-
         //Assert
-        Mockito.verify(userDao, Mockito.times(0)).saveUser(bob);
+        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidEmailException.class,
+                () -> userService.register(bob));
     }
 
     @Test
-    void register_already_registered_user_should_not_save_user(){
+    void register_already_registered_user_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -109,10 +111,9 @@ public class InMemoryUserServiceTest {
         Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
-        userService.register(bob);
-
         //Assert
-        Mockito.verify(userDao, Mockito.times(0)).saveUser(bob);
+        Assertions.assertThrows(UserServiceBaseExceptionHandler.AlreadyRegisteredException.class,
+                () -> userService.register(bob));
     }
 
     @Test
@@ -126,15 +127,19 @@ public class InMemoryUserServiceTest {
         Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
-        userService.login(bob.getEmailAddress(), bob.getPassword());
-        User loggedInUser = userService.getLoggedInUser();
+        try {
+            userService.login(bob.getEmailAddress(), bob.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //Assert
+        User loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser).isEqualTo(bob);
     }
 
     @Test
-    void login_unregistered_user_should_not_log_user_in(){
+    void login_unregistered_user_should_not_log_user_in_and_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -142,15 +147,15 @@ public class InMemoryUserServiceTest {
         bob.setEmailAddress("bob123@test.hu");
 
         //Act
-        userService.login(bob.getEmailAddress(), bob.getPassword());
-        User loggedInUser = userService.getLoggedInUser();
-
         //Assert
+        Assertions.assertThrows(UserServiceBaseExceptionHandler.NotRegisteredException.class,
+                () -> userService.login(bob.getEmailAddress(), bob.getPassword()));
+        User loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser).isNull();
     }
 
     @Test
-    void login_user_password_null_should_not_log_user_in(){
+    void login_user_password_null_should_not_log_user_in_and_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -160,15 +165,15 @@ public class InMemoryUserServiceTest {
         Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
-        userService.login(bob.getEmailAddress(), null);
-        User loggedInUser = userService.getLoggedInUser();
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> userService.login(bob.getEmailAddress(), null));
+        User loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser).isNull();
     }
 
     @Test
-    void login_user_email_null_should_not_log_user_in(){
+    void login_user_email_null_should_not_log_user_in_and_should_throw_exception(){
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -178,10 +183,10 @@ public class InMemoryUserServiceTest {
         Mockito.lenient().when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
-        userService.login(bob.getEmailAddress(), null);
-        User loggedInUser = userService.getLoggedInUser();
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> userService.login(null, bob.getPassword()));
+        User loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser).isNull();
     }
 }
