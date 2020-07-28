@@ -28,8 +28,17 @@ public abstract class PizzaServiceBase implements IPizzaService {
     public abstract void deletePizza(long pizzaId);
 
     public static boolean isValidPizza(Pizza pizza){
-        if(pizza == null){
+        try {
+            checkIfPizzaIsValid(pizza);
+        } catch (InvalidInputException e) {
             return false;
+        }
+        return true;
+    }
+
+    public static void checkIfPizzaIsValid(Pizza pizza) throws InvalidInputException {
+        if(pizza == null){
+            throw new NullPointerException("pizza was null");
         }
 
         boolean hasUninitializedFields = pizza.getName() == null ||
@@ -37,7 +46,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
                 pizza.getSize() == null ||
                 pizza.getId() == null;
         if(hasUninitializedFields){
-            return false;
+            throw new InvalidInputException("");
         }
 
         boolean hasInvalidNumberOfIngredients = pizza.getIngredients().size() < minIngredients ||
@@ -48,10 +57,8 @@ public abstract class PizzaServiceBase implements IPizzaService {
                 hasInvalidNumberOfIngredients ||
                 hasInvalidIngredientPrices ||
                 pizza.getPrice() < 0.0f){
-            return false;
+            throw new InvalidInputException("");
         }
-
-        return true;
     }
 
     @Override

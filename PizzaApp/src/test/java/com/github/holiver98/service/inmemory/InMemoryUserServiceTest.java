@@ -2,8 +2,7 @@ package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryUserDao;
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.UserServiceBaseExceptionHandler;
-import com.github.holiver98.service.inmemory.InMemoryUserService;
+import com.github.holiver98.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +53,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidUsernameException.class,
+        Assertions.assertThrows(InvalidUsernameException.class,
                 () -> userService.register(bob));
     }
 
@@ -68,7 +67,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidPasswordException.class,
+        Assertions.assertThrows(InvalidPasswordException.class,
                 () -> userService.register(bob));
     }
 
@@ -82,7 +81,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidEmailException.class,
+        Assertions.assertThrows(InvalidEmailException.class,
                 () -> userService.register(bob));
     }
 
@@ -96,7 +95,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(UserServiceBaseExceptionHandler.InvalidEmailException.class,
+        Assertions.assertThrows(InvalidEmailException.class,
                 () -> userService.register(bob));
     }
 
@@ -112,7 +111,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(UserServiceBaseExceptionHandler.AlreadyRegisteredException.class,
+        Assertions.assertThrows(AlreadyRegisteredException.class,
                 () -> userService.register(bob));
     }
 
@@ -148,7 +147,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(UserServiceBaseExceptionHandler.NotRegisteredException.class,
+        Assertions.assertThrows(NotRegisteredException.class,
                 () -> userService.login(bob.getEmailAddress(), bob.getPassword()));
         User loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser).isNull();

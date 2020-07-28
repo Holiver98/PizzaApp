@@ -7,6 +7,7 @@ import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.IPizzaService;
 import com.github.holiver98.service.IUserService;
+import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.RatingServiceBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -150,7 +151,7 @@ public class InMemoryRatingServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(RatingServiceBase.NotFoundException.class, () ->  ratingService.ratePizza(pizzaId, rating));
+        Assertions.assertThrows(NotFoundException.class, () ->  ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test

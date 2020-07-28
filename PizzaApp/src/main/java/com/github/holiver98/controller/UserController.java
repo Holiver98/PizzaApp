@@ -1,10 +1,8 @@
 package com.github.holiver98.controller;
 
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.UserServiceBaseExceptionHandler;
+import com.github.holiver98.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,9 +34,9 @@ public class UserController {
     private void tryLogin(LoginInfo loginInfo) {
         try {
             userService.login(loginInfo.emailAddress, loginInfo.password);
-        } catch (UserServiceBaseExceptionHandler.IncorrectPasswordException e) {
+        } catch (IncorrectPasswordException e) {
             e.printStackTrace();
-        } catch (UserServiceBaseExceptionHandler.NotRegisteredException e) {
+        } catch (NotRegisteredException e) {
             e.printStackTrace();
         }
     }
@@ -46,9 +44,9 @@ public class UserController {
     private void tryRegister(User user) {
         try {
             userService.register(user);
-        } catch (UserServiceBaseExceptionHandler.InvalidInputException e) {
+        } catch (InvalidInputException e) {
             e.printStackTrace();
-        } catch (UserServiceBaseExceptionHandler.AlreadyRegisteredException e) {
+        } catch (AlreadyRegisteredException e) {
             e.printStackTrace();
         }
     }

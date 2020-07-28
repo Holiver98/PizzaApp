@@ -12,7 +12,7 @@ public interface IRatingService {
      * @param pizzaId The id of the pizza to be rated.
      * @param rating A rating of 1-5 to give the pizza.
      */
-    void ratePizza(long pizzaId, int rating);
+    void ratePizza(long pizzaId, int rating) throws NoPermissionException, NotFoundException;
 
     /**
      * Gets all the ratings from the database.

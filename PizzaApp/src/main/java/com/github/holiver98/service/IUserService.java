@@ -10,7 +10,7 @@ public interface IUserService {
      * @param emailAddress The email address, that identifies the user.
      * @param password The password of the user.
      */
-    void login(String emailAddress, String password) throws UserServiceBaseExceptionHandler.IncorrectPasswordException, UserServiceBaseExceptionHandler.NotRegisteredException;
+    void login(String emailAddress, String password) throws IncorrectPasswordException, NotRegisteredException;
 
     /**
      * Logs the currently logged in user out.
@@ -22,7 +22,7 @@ public interface IUserService {
      *
      * @param user The user we want to register. Contains the user information.
      */
-    void register(User user) throws UserServiceBaseExceptionHandler.InvalidInputException, UserServiceBaseExceptionHandler.AlreadyRegisteredException;
+    void register(User user) throws InvalidInputException, AlreadyRegisteredException;
 
     /**
      * Gets the currently logged in user.

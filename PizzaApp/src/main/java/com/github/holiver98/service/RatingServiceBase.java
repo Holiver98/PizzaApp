@@ -22,7 +22,7 @@ public abstract class RatingServiceBase implements IRatingService{
     protected abstract List<Rating> findByUserEmailAddress(String emailAddress);
 
     @Override
-    public void ratePizza(long pizzaId, int rating) {
+    public void ratePizza(long pizzaId, int rating) throws NoPermissionException, NotFoundException {
         User user = tryGetLoggedInUser();
         checkForExceptions(pizzaId, rating, user);
         Rating ratingToGive = createRating(pizzaId, rating, user.getEmailAddress());
@@ -57,7 +57,7 @@ public abstract class RatingServiceBase implements IRatingService{
         return newRating;
     }
 
-    private User tryGetLoggedInUser() {
+    private User tryGetLoggedInUser() throws NoPermissionException {
         User user = userService.getLoggedInUser();
         if(user == null){
             throw new NoPermissionException("Only logged in users may rate pizzas.");
@@ -65,7 +65,7 @@ public abstract class RatingServiceBase implements IRatingService{
         return user;
     }
 
-    private void checkForExceptions(long pizzaId, int rating, User user) {
+    private void checkForExceptions(long pizzaId, int rating, User user) throws NotFoundException {
         checkIfRatingValid(rating);
         checkIfPizzaExists(pizzaId);
         checkIfUserAlreadyRatedThisPizza(pizzaId, user);
@@ -77,7 +77,7 @@ public abstract class RatingServiceBase implements IRatingService{
         }
     }
 
-    private void checkIfPizzaExists(long pizzaId) {
+    private void checkIfPizzaExists(long pizzaId) throws NotFoundException {
         Pizza pizza = pizzaService.getPizzaById(pizzaId);
         if(pizza == null){
             throw new NotFoundException("No pizza exists with this id!");
@@ -88,18 +88,6 @@ public abstract class RatingServiceBase implements IRatingService{
         Rating ratingOfUserOnThisPizza = findByUserEmailAddressAndPizzaId(user.getEmailAddress(), pizzaId);
         if(ratingOfUserOnThisPizza != null){
             throw new UnsupportedOperationException("User ("+ user.getEmailAddress() +") already rated this pizza!");
-        }
-    }
-
-    public static class NoPermissionException extends RuntimeException{
-        public NoPermissionException(String message){
-            super(message);
-        }
-    }
-
-    public static class NotFoundException extends RuntimeException{
-        public NotFoundException(String message){
-            super(message);
         }
     }
 }

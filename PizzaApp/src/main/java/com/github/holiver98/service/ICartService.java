@@ -17,7 +17,7 @@ public interface ICartService {
      *
      * @param pizza The pizza to be added to the cart.
      */
-    void addPizzaToCart(Pizza pizza);
+    void addPizzaToCart(Pizza pizza) throws CartServiceBase.CartIsFullException, InvalidInputException;
 
     /**
      * Removes the given pizza from the cart, if it is in the cart.
@@ -32,5 +32,5 @@ public interface ICartService {
      * notifies the user with an email containing the order information.
      * Only logged in users may place an order.
      */
-    void placeOrder();
+    void placeOrder() throws CartServiceBase.CartIsEmptyException, NoPermissionException;
 }

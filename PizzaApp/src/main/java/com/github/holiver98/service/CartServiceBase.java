@@ -26,36 +26,31 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void addPizzaToCart(Pizza pizza) {
+    public void addPizzaToCart(Pizza pizza) throws CartIsFullException, InvalidInputException {
         boolean cartIsFull = cartContent.size() >= cartItemLimit;
         if(cartIsFull){
-            System.out.println("Cart is full!");
-            return;
+            throw new CartIsFullException("Cart is full!");
         }
-        if(!PizzaServiceBase.isValidPizza(pizza)){
-            System.out.println("Invalid pizza!");
-            return;
-        }
+        PizzaServiceBase.checkIfPizzaIsValid(pizza);
         cartContent.add(pizza);
     }
 
     @Override
     public void removePizzaFromCart(Pizza pizza) {
         if(pizza == null){
-            return;
+            throw new NullPointerException("pizza is null");
         }
         cartContent.remove(pizza);
     }
 
     @Override
-    public void placeOrder() {
-        boolean cartIsEmpty = cartContent.isEmpty();
-        if(cartIsEmpty){
-            return;
+    public void placeOrder() throws CartIsEmptyException, NoPermissionException {
+        if(cartContent.isEmpty()){
+            throw new CartIsEmptyException("Cart is empty!");
         }
         User loggedInUser = userService.getLoggedInUser();
         if(loggedInUser == null){
-            return;
+            throw new NoPermissionException("The user has to be logged in to place order!");
         }
         Order order = createOrder(loggedInUser);
         save(order);
@@ -88,5 +83,17 @@ public abstract class CartServiceBase implements ICartService {
         }
 
         return totalPrice;
+    }
+
+    public static class CartIsFullException extends Exception{
+        public CartIsFullException(String message){
+            super(message);
+        }
+    }
+
+    public static class CartIsEmptyException extends Exception{
+        public CartIsEmptyException(String message){
+            super(message);
+        }
     }
 }
