@@ -23,29 +23,8 @@ public abstract class RatingServiceBase implements IRatingService{
 
     @Override
     public void ratePizza(long pizzaId, int rating) {
-        if(!isRatingValid(rating)){
-            System.out.println("Invalid rating: (" + rating + ")");
-            return;
-        }
-
-        User user = userService.getLoggedInUser();
-        if(user == null){
-            System.out.println("You need to be logged in to rate pizzas!");
-            return;
-        }
-
-        Pizza pizza = pizzaService.getPizzaById(pizzaId);
-        if(pizza == null){
-            System.out.println("No pizza exists with this id!");
-            return;
-        }
-
-        Rating ratingOfUserOnThisPizza = findByUserEmailAddressAndPizzaId(user.getEmailAddress(), pizzaId);
-        if(ratingOfUserOnThisPizza != null){
-            System.out.println("User already rated this pizza!");
-            return;
-        }
-
+        User user = tryGetLoggedInUser();
+        checkForExceptions(pizzaId, rating, user);
         Rating ratingToGive = createRating(pizzaId, rating, user.getEmailAddress());
         save(ratingToGive);
         pizzaService.recalculateRatingAverage(pizzaId);
@@ -76,5 +55,51 @@ public abstract class RatingServiceBase implements IRatingService{
         newRating.setRating(rating);
         newRating.setUserEmailAddress(emailAddress);
         return newRating;
+    }
+
+    private User tryGetLoggedInUser() {
+        User user = userService.getLoggedInUser();
+        if(user == null){
+            throw new NoPermissionException("Only logged in users may rate pizzas.");
+        }
+        return user;
+    }
+
+    private void checkForExceptions(long pizzaId, int rating, User user) {
+        checkIfRatingValid(rating);
+        checkIfPizzaExists(pizzaId);
+        checkIfUserAlreadyRatedThisPizza(pizzaId, user);
+    }
+
+    private void checkIfRatingValid(int rating) {
+        if(!isRatingValid(rating)){
+            throw new IllegalArgumentException("Invalid rating, must be between 1 and 5, but was: (" + rating + ")");
+        }
+    }
+
+    private void checkIfPizzaExists(long pizzaId) {
+        Pizza pizza = pizzaService.getPizzaById(pizzaId);
+        if(pizza == null){
+            throw new NotFoundException("No pizza exists with this id!");
+        }
+    }
+
+    private void checkIfUserAlreadyRatedThisPizza(long pizzaId, User user) {
+        Rating ratingOfUserOnThisPizza = findByUserEmailAddressAndPizzaId(user.getEmailAddress(), pizzaId);
+        if(ratingOfUserOnThisPizza != null){
+            throw new UnsupportedOperationException("User ("+ user.getEmailAddress() +") already rated this pizza!");
+        }
+    }
+
+    public static class NoPermissionException extends RuntimeException{
+        public NoPermissionException(String message){
+            super(message);
+        }
+    }
+
+    public static class NotFoundException extends RuntimeException{
+        public NotFoundException(String message){
+            super(message);
+        }
     }
 }

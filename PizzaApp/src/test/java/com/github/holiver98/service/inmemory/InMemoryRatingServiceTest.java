@@ -7,7 +7,8 @@ import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.IPizzaService;
 import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.inmemory.InMemoryRatingService;
+import com.github.holiver98.service.RatingServiceBase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,11 +58,8 @@ public class InMemoryRatingServiceTest {
         Mockito.when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -122,11 +120,8 @@ public class InMemoryRatingServiceTest {
         Mockito.lenient().when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(RatingServiceBase.NoPermissionException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -154,11 +149,8 @@ public class InMemoryRatingServiceTest {
         Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(RatingServiceBase.NotFoundException.class, () ->  ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -181,11 +173,8 @@ public class InMemoryRatingServiceTest {
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -208,11 +197,8 @@ public class InMemoryRatingServiceTest {
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -235,11 +221,8 @@ public class InMemoryRatingServiceTest {
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -262,11 +245,8 @@ public class InMemoryRatingServiceTest {
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating);
-
         //Assert
-        Mockito.verify(ratingDao, Mockito.times(0)).saveRating(Mockito.any());
-        Mockito.verify(pizzaService, Mockito.times(0)).recalculateRatingAverage(Mockito.anyLong());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
