@@ -3,13 +3,11 @@ package com.github.holiver98.service.inmemory;
 import com.github.holiver98.dal.inmemory.IInMemoryIngredientDao;
 import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
 import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
-import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
-import com.github.holiver98.service.IPizzaService;
+import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class InMemoryPizzaService extends PizzaServiceBase {
@@ -32,7 +30,7 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     @Override
     public long savePizza(Pizza pizza) {
         if(!isValidPizza(pizza)){
-            return -1;
+            throw new IllegalArgumentException("invalid pizza");
         }
 
         return pizzaDao.savePizza(pizza);
@@ -49,11 +47,16 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public Pizza getPizzaById(long pizzaId) {
+    public Pizza getPizzaById(long pizzaId) throws NotFoundException {
         if(pizzaId < 0){
             return null;
         }else{
-            return pizzaDao.getPizzaById(pizzaId);
+            Pizza pizza = pizzaDao.getPizzaById(pizzaId);
+            if(pizza == null){
+                throw new NotFoundException("pizza not found with id: " + pizzaId);
+            }else{
+                return pizza;
+            }
         }
     }
 

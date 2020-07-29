@@ -5,6 +5,8 @@ import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
 import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
+import com.github.holiver98.service.NotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,7 +94,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     }
 
     @Test
-    void recalculateRatingAverage_Should_Return_Correct_Value_And_Update_Pizza(){
+    void recalculateRatingAverage_Should_Return_Correct_Value_And_Update_Pizza() throws NotFoundException {
         //Arrange
         long pizzaId = 1;
         Pizza validPizza = createPizzaWith3IngredientsGivenThePrices(3.1f, 2.2f, 3.2f);
@@ -131,7 +133,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     }
 
     @Test
-    void recalculateRatingAverage_Should_Return_Correct_Value(){
+    void recalculateRatingAverage_Should_Return_Correct_Value() throws NotFoundException {
         //Arrange
         long pizzaId = 1;
         Pizza validPizza = createPizzaWith3IngredientsGivenThePrices(3.1f, 2.2f, 3.2f);
@@ -169,7 +171,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     }
 
     @Test
-    void recalculateRatingAverage_Should_Return_Correct_Value_2(){
+    void recalculateRatingAverage_Should_Return_Correct_Value_2() throws NotFoundException {
         //Arrange
         long pizzaId = 1;
         Pizza validPizza = createPizzaWith3IngredientsGivenThePrices(3.1f, 2.2f, 3.2f);
@@ -207,7 +209,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     }
 
     @Test
-    void recalculateRatingAverage_No_Rating_For_Pizza_Should_Return_0_And_Update_Pizza(){
+    void recalculateRatingAverage_No_Rating_For_Pizza_Should_Return_0_And_Update_Pizza() throws NotFoundException {
         //Arrange
         long pizzaId = 1;
         Pizza pizza = new Pizza();
@@ -226,7 +228,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     }
 
     @Test
-    void recalculateRatingAverage_Pizza_Not_In_Database_Should_Return_Minus_1(){
+    void recalculateRatingAverage_Pizza_Not_In_Database_Should_Throw_Exception(){
         //Arrange
         long pizzaId = 43;
         Mockito.lenient().when(pizzaDao.getPizzaById(pizzaId)).thenReturn(null);
@@ -235,9 +237,8 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
         Mockito.lenient().when(ratingDao.getRatingsOfPizza(pizzaId)).thenReturn(ratingsInDatabase);
 
         //Act
-        float result = pizzaService.recalculateRatingAverage(pizzaId);
-
         //Assert
-        assertThat(result).isEqualTo(-1f);
+        Assertions.assertThrows(NotFoundException.class,
+                () -> pizzaService.recalculateRatingAverage(pizzaId));
     }
 }

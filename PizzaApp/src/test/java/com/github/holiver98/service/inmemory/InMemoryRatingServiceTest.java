@@ -31,7 +31,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Pizza_Already_Rated_By_This_User_Should_Not_Rate_Pizza(){
+    void ratePizza_Pizza_Already_Rated_By_This_User_Should_Not_Rate_Pizza() throws NotFoundException {
         //Arrange
         final int rating = 3;
         final long pizzaId = 1;
@@ -93,7 +93,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_User_Isnt_Logged_In_Should_Throw_Exception(){
+    void ratePizza_User_Isnt_Logged_In_Should_Throw_Exception() throws NotFoundException {
         //Arrange
         final int rating = 3;
         final long pizzaId = 1;
@@ -123,7 +123,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Pizza_Doesnt_Exist_Should_Throw_Exception(){
+    void ratePizza_Pizza_Doesnt_Exist_Should_Throw_Exception() throws NotFoundException {
         //Arrange
         final int rating = 3;
         final long pizzaId = 1;
@@ -152,7 +152,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Lower_Than_Required_Should_Throw_Exception(){
+    void ratePizza_Rating_Lower_Than_Required_Should_Throw_Exception() throws NotFoundException {
         //Arrange
         final int rating = 0;
         final long pizzaId = 1;
@@ -176,7 +176,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Lower_Than_Required_Should_Throw_Exception_2(){
+    void ratePizza_Rating_Lower_Than_Required_Should_Throw_Exception_2() throws NotFoundException {
         //Arrange
         final int rating = -14;
         final long pizzaId = 1;
@@ -200,7 +200,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Higher_Than_Required_Should_Throw_Exception(){
+    void ratePizza_Rating_Higher_Than_Required_Should_Throw_Exception() throws NotFoundException {
         //Arrange
         final int rating = 6;
         final long pizzaId = 1;
@@ -224,7 +224,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Higher_Than_Required_Should_Throw_Exception_2(){
+    void ratePizza_Rating_Higher_Than_Required_Should_Throw_Exception_2() throws NotFoundException {
         //Arrange
         final int rating = 13;
         final long pizzaId = 1;

@@ -5,8 +5,10 @@ import com.github.holiver98.dal.jpa.IPizzaRepository;
 import com.github.holiver98.dal.jpa.IRatingRepository;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
+import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 public class JpaPizzaService extends PizzaServiceBase {
@@ -25,12 +27,11 @@ public class JpaPizzaService extends PizzaServiceBase {
     @Override
     public long savePizza(Pizza pizza) {
         if(!isValidPizza(pizza)){
-            return -1;
+            throw new IllegalArgumentException("invalid pizza");
         }
 
-        if(pizzaRepository.existsById(pizza.getId())){
-            System.out.println("Pizza already exists!");
-            return -1;
+        if(pizza.getId() != null){
+            throw new IllegalArgumentException("pizza should not have an id");
         }
 
         return pizzaRepository.save(pizza).getId();
@@ -47,23 +48,23 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public Pizza getPizzaById(long pizzaId) {
+    public Pizza getPizzaById(long pizzaId) throws NotFoundException {
         if(pizzaId < 0){
             return null;
         }else{
-            return pizzaRepository.findById(pizzaId).orElse(null);
+            return pizzaRepository.findById(pizzaId)
+                    .orElseThrow(() -> new NotFoundException("pizza with id (" + pizzaId + ") not found"));
         }
     }
 
     @Override
-    public void updatePizza(Pizza pizza) {
+    public void updatePizza(Pizza pizza) throws NotFoundException {
         if(!isValidPizza(pizza)){
-            return;
+            throw new IllegalArgumentException("invalid pizza");
         }
 
         if(!pizzaRepository.existsById(pizza.getId())){
-            System.out.println("Pizza doesn't exist!");
-            return;
+            throw new NotFoundException("pizza with id (" + pizza.getId() + ") not found");
         }
 
         pizzaRepository.save(pizza);

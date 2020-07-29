@@ -18,10 +18,10 @@ public interface IPizzaService {
      * It also updates the pizza in the database with the new value.
      *
      * @param pizzaId The id of the pizza to update.
-     * @return The average rating, or 0 if there are no ratings, or -1 if other problems arise (for example
-     * the pizza is not in the database).
+     * @return The average rating, or 0 if there are no ratings
+     * @throws NotFoundException - no pizza was found in the database with this id
      */
-    float recalculateRatingAverage(long pizzaId);
+    float recalculateRatingAverage(long pizzaId) throws NotFoundException;
 
     /**
      * Saves the pizza into database.
@@ -50,15 +50,17 @@ public interface IPizzaService {
      *
      * @param pizzaId The id of the pizza.
      * @return The pizza with the given id or null if it is not in the database.
+     * @throws NotFoundException - no pizza was found in the database with this id
      */
-    Pizza getPizzaById(long pizzaId);
+    Pizza getPizzaById(long pizzaId) throws NotFoundException;
 
     /**
      * Updates the pizza in the database that has the same id, as the pizza argument.
      *
      * @param pizza The pizza to be updated.
+     * @throws NotFoundException - no pizza was found in the database with this id
      */
-    void updatePizza(Pizza pizza);
+    void updatePizza(Pizza pizza) throws NotFoundException;
 
     /**
      * Deletes the pizza from the database, if it exists.

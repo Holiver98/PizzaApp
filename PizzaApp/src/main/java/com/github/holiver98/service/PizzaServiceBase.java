@@ -21,9 +21,9 @@ public abstract class PizzaServiceBase implements IPizzaService {
     @Override
     public abstract List<Pizza> getBasicPizzas();
     @Override
-    public abstract Pizza getPizzaById(long pizzaId);
+    public abstract Pizza getPizzaById(long pizzaId) throws NotFoundException;
     @Override
-    public abstract void updatePizza(Pizza pizza);
+    public abstract void updatePizza(Pizza pizza) throws NotFoundException;
     @Override
     public abstract void deletePizza(long pizzaId);
 
@@ -43,8 +43,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
 
         boolean hasUninitializedFields = pizza.getName() == null ||
                 pizza.getIngredients() == null ||
-                pizza.getSize() == null ||
-                pizza.getId() == null;
+                pizza.getSize() == null;
         if(hasUninitializedFields){
             throw new IllegalArgumentException("pizza has uninitialized fields");
         }
@@ -77,13 +76,8 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public float recalculateRatingAverage(long pizzaId) {
+    public float recalculateRatingAverage(long pizzaId) throws NotFoundException {
         Pizza pizzaToUpdate = getPizzaById(pizzaId);
-        if(pizzaToUpdate == null){
-            System.out.println("Pizza with id("+ pizzaId +") was not found in the database!");
-            return -1;
-        }
-
         List<Rating> ratings = getRatingsOfPizza(pizzaId);
         float newRatingAverage = calculateNewRatingAverage(ratings);
         pizzaToUpdate.setRatingAverage(newRatingAverage);
