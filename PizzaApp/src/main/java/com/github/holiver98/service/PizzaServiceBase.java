@@ -40,24 +40,11 @@ public abstract class PizzaServiceBase implements IPizzaService {
         if(pizza == null){
             throw new NullPointerException("pizza was null");
         }
-
-        boolean hasUninitializedFields = pizza.getName() == null ||
-                pizza.getIngredients() == null ||
-                pizza.getSize() == null;
-        if(hasUninitializedFields){
-            throw new IllegalArgumentException("pizza has uninitialized fields");
-        }
-
-        boolean hasInvalidNumberOfIngredients = pizza.getIngredients().size() < minIngredients ||
-                pizza.getIngredients().size() > maxIngredients;
-        boolean hasInvalidNumberOfBasesauces = !hasValidNumberOfBasesauces(pizza);
-        boolean hasInvalidIngredientPrices = !areIngredientPricesValid(pizza);
-        if(hasInvalidNumberOfBasesauces ||
-                hasInvalidNumberOfIngredients ||
-                hasInvalidIngredientPrices ||
-                pizza.getPrice() < 0.0f){
-            throw new IllegalArgumentException("invalid pizza");
-        }
+        checkIfFieldsAreInitialized(pizza);
+        checkIfHasValidNumberOfBasesauces(pizza);
+        checkIfHasValidNumberOfIngredients(pizza);
+        checkIfHasValidIngredientPrices(pizza);
+        checkIfPizzaPriceIsNotNegative(pizza);
     }
 
     @Override
@@ -83,6 +70,41 @@ public abstract class PizzaServiceBase implements IPizzaService {
         pizzaToUpdate.setRatingAverage(newRatingAverage);
         updatePizza(pizzaToUpdate);
         return newRatingAverage;
+    }
+
+    private static void checkIfFieldsAreInitialized(Pizza pizza) {
+        boolean hasUninitializedFields = pizza.getName() == null ||
+                pizza.getIngredients() == null ||
+                pizza.getSize() == null;
+        if(hasUninitializedFields){
+            throw new IllegalArgumentException("invalid pizza: has uninitialized fields");
+        }
+    }
+
+    private static void checkIfHasValidNumberOfBasesauces(Pizza pizza) {
+        if(!hasValidNumberOfBasesauces(pizza)){
+            throw new IllegalArgumentException("invalid pizza: invalid number of base sauces");
+        }
+    }
+
+    private static void checkIfHasValidNumberOfIngredients(Pizza pizza) {
+        boolean hasInvalidNumberOfIngredients = pizza.getIngredients().size() < minIngredients ||
+                pizza.getIngredients().size() > maxIngredients;
+        if(hasInvalidNumberOfIngredients){
+            throw new IllegalArgumentException("invalid pizza: invalid number of ingredients");
+        }
+    }
+
+    private static void checkIfHasValidIngredientPrices(Pizza pizza) {
+        if(!areIngredientPricesValid(pizza)){
+            throw new IllegalArgumentException("invalid pizza: invalid ingredient prices");
+        }
+    }
+
+    private static void checkIfPizzaPriceIsNotNegative(Pizza pizza) {
+        if(pizza.getPrice() < 0.0f){
+            throw new IllegalArgumentException("invalid pizza: invalid price");
+        }
     }
 
     private float calculateNewRatingAverage(List<Rating> ratings) {
