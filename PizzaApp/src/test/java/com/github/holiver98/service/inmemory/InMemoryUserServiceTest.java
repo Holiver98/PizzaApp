@@ -53,7 +53,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(InvalidUsernameException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> userService.register(bob));
     }
 
@@ -67,7 +67,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(InvalidPasswordException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> userService.register(bob));
     }
 
@@ -81,7 +81,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(InvalidEmailException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> userService.register(bob));
     }
 
@@ -95,7 +95,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(InvalidEmailException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> userService.register(bob));
     }
 

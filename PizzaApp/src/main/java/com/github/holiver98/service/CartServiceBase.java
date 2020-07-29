@@ -26,10 +26,10 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void addPizzaToCart(Pizza pizza) throws CartIsFullException, InvalidInputException {
+    public void addPizzaToCart(Pizza pizza) throws CartIsFullException{
         boolean cartIsFull = cartContent.size() >= cartItemLimit;
         if(cartIsFull){
-            throw new CartIsFullException("Cart is full!");
+            throw new CartIsFullException("Cart is full, can't add any more pizza!");
         }
         PizzaServiceBase.checkIfPizzaIsValid(pizza);
         cartContent.add(pizza);
@@ -38,7 +38,7 @@ public abstract class CartServiceBase implements ICartService {
     @Override
     public void removePizzaFromCart(Pizza pizza) {
         if(pizza == null){
-            throw new NullPointerException("pizza is null");
+            throw new NullPointerException("pizza was null");
         }
         cartContent.remove(pizza);
     }
@@ -46,7 +46,7 @@ public abstract class CartServiceBase implements ICartService {
     @Override
     public void placeOrder() throws CartIsEmptyException, NoPermissionException {
         if(cartContent.isEmpty()){
-            throw new CartIsEmptyException("Cart is empty!");
+            throw new CartIsEmptyException("Cart is empty, can't place order!");
         }
         User loggedInUser = userService.getLoggedInUser();
         if(loggedInUser == null){
@@ -83,17 +83,5 @@ public abstract class CartServiceBase implements ICartService {
         }
 
         return totalPrice;
-    }
-
-    public static class CartIsFullException extends Exception{
-        public CartIsFullException(String message){
-            super(message);
-        }
-    }
-
-    public static class CartIsEmptyException extends Exception{
-        public CartIsEmptyException(String message){
-            super(message);
-        }
     }
 }

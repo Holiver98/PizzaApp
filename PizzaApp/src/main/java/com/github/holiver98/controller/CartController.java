@@ -1,10 +1,7 @@
 package com.github.holiver98.controller;
 
 import com.github.holiver98.model.Pizza;
-import com.github.holiver98.service.CartServiceBase;
-import com.github.holiver98.service.ICartService;
-import com.github.holiver98.service.InvalidInputException;
-import com.github.holiver98.service.NoPermissionException;
+import com.github.holiver98.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +22,7 @@ public class CartController {
     public void addPizzaToCart(@RequestBody Pizza pizza){
         try {
             cartService.addPizzaToCart(pizza);
-        } catch (CartServiceBase.CartIsFullException e) {
-            e.printStackTrace();
-        } catch (InvalidInputException e) {
+        } catch (CartIsFullException e) {
             e.printStackTrace();
         }
     }
@@ -41,7 +36,7 @@ public class CartController {
     public void placeOrder(){
         try {
             cartService.placeOrder();
-        } catch (CartServiceBase.CartIsEmptyException | NoPermissionException e) {
+        } catch (CartIsEmptyException e) {
             e.printStackTrace();
         }
     }

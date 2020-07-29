@@ -5,10 +5,7 @@ import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.PizzaSize;
 import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.IPizzaService;
-import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.NotFoundException;
-import com.github.holiver98.service.RatingServiceBase;
+import com.github.holiver98.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +61,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Happy_Path_Should_Rate_Pizza(){
+    void ratePizza_Happy_Path_Should_Rate_Pizza() throws NotFoundException {
         //Arrange
         final int rating = 3;
         final long pizzaId = 1;
@@ -96,7 +93,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_User_Isnt_Logged_In_Should_Not_Rate_Pizza(){
+    void ratePizza_User_Isnt_Logged_In_Should_Throw_Exception(){
         //Arrange
         final int rating = 3;
         final long pizzaId = 1;
@@ -122,11 +119,11 @@ public class InMemoryRatingServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(RatingServiceBase.NoPermissionException.class, () -> ratingService.ratePizza(pizzaId, rating));
+        Assertions.assertThrows(NoPermissionException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
-    void ratePizza_Pizza_Doesnt_Exist_Should_Not_Rate_Pizza(){
+    void ratePizza_Pizza_Doesnt_Exist_Should_Throw_Exception(){
         //Arrange
         final int rating = 3;
         final long pizzaId = 1;
@@ -155,7 +152,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Lower_Than_Required_Should_Not_Rate_Pizza(){
+    void ratePizza_Rating_Lower_Than_Required_Should_Throw_Exception(){
         //Arrange
         final int rating = 0;
         final long pizzaId = 1;
@@ -179,7 +176,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Lower_Than_Required_Should_Not_Rate_Pizza_2(){
+    void ratePizza_Rating_Lower_Than_Required_Should_Throw_Exception_2(){
         //Arrange
         final int rating = -14;
         final long pizzaId = 1;
@@ -203,7 +200,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Higher_Than_Required_Should_Not_Rate_Pizza(){
+    void ratePizza_Rating_Higher_Than_Required_Should_Throw_Exception(){
         //Arrange
         final int rating = 6;
         final long pizzaId = 1;
@@ -227,7 +224,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Higher_Than_Required_Should_Not_Rate_Pizza_2(){
+    void ratePizza_Rating_Higher_Than_Required_Should_Throw_Exception_2(){
         //Arrange
         final int rating = 13;
         final long pizzaId = 1;
@@ -251,7 +248,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Valid_Lower_Limit_Should_Rate_Pizza(){
+    void ratePizza_Rating_Valid_Lower_Limit_Should_Rate_Pizza() throws NotFoundException {
         //Arrange
         final int rating = 1;
         final long pizzaId = 1;
@@ -278,7 +275,7 @@ public class InMemoryRatingServiceTest {
     }
 
     @Test
-    void ratePizza_Rating_Valid_Upper_Limit_Should_Rate_Pizza(){
+    void ratePizza_Rating_Valid_Upper_Limit_Should_Rate_Pizza() throws NotFoundException {
         //Arrange
         final int rating = 5;
         final long pizzaId = 1;

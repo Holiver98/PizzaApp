@@ -13,7 +13,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     public void login(String emailAddress, String password) throws IncorrectPasswordException, NotRegisteredException {
         super.login(emailAddress, password);
         checkIfAlreadyLoggedIn();
-        User userInfo = getUserIfRegistered(emailAddress);
+        User userInfo = getUserInfoForLogin(emailAddress);
         checkIfPasswordMatches(password, userInfo);
         loggedInUser = userInfo;
     }
@@ -24,7 +24,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     }
 
     @Override
-    public void register(User user) throws InvalidInputException, AlreadyRegisteredException {
+    public void register(User user) throws AlreadyRegisteredException {
         super.register(user);
         checkIfUserInformationAreValid(user);
         checkIfAlreadyRegistered(user);
@@ -74,17 +74,17 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         }
     }
 
-    private void checkIfUserInformationAreValid(User user) throws InvalidUsernameException, InvalidPasswordException, InvalidEmailException {
+    private void checkIfUserInformationAreValid(User user){
         if(!isValidUserName(user.getUsername())) {
-            throw new InvalidUsernameException("invalid username: " + user.getUsername());
+            throw new IllegalArgumentException("invalid username: " + user.getUsername());
         }
 
         if(!isValidPassword(user.getPassword())) {
-            throw new InvalidPasswordException("invalid password: " + user.getPassword());
+            throw new IllegalArgumentException("invalid password: " + user.getPassword());
         }
 
         if(!isValidEmailAddress(user.getEmailAddress())) {
-            throw new InvalidEmailException("invalid email address: " + user.getEmailAddress());
+            throw new IllegalArgumentException("invalid email address: " + user.getEmailAddress());
         }
     }
 
@@ -94,7 +94,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         }
     }
 
-    private User getUserIfRegistered(String emailAddress) throws NotRegisteredException {
+    private User getUserInfoForLogin(String emailAddress) throws NotRegisteredException {
         Optional<User> registeredUser = findByEmailAddress(emailAddress);
         if(!registeredUser.isPresent()){
             throw new NotRegisteredException("The email address (" + emailAddress + ") is not registered!");

@@ -2,8 +2,8 @@ package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryOrderDao;
 import com.github.holiver98.model.*;
-import com.github.holiver98.service.IMailService;
-import com.github.holiver98.service.IUserService;
+import com.github.holiver98.service.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +38,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     }
 
     @Test
-    void addPizzaToCart_Adding_Valid_Pizza_To_Empty_Cart_Should_Add_Pizza(){
+    void addPizzaToCart_Adding_Valid_Pizza_To_Empty_Cart_Should_Add_Pizza() throws CartIsFullException {
         //Arrange
         Pizza validPizza = createValidPizza("pepperoni", 1L);
 
@@ -51,7 +51,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     }
 
     @Test
-    void addPizzaToCart_Adding_Valid_Pizza_To_Full_Cart_Should_Not_Add_Pizza(){
+    void addPizzaToCart_Adding_Valid_Pizza_To_Full_Cart_Should_Throw_Exception(){
         //Arrange
         Pizza validPizza = createValidPizza("pepperoni", 1L);
         for(int i=0; i<15; i++){
@@ -61,45 +61,44 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         Pizza anotherValidPizza = createValidPizza("Bestpizza", 2L);
 
         //Act
-        cartService.addPizzaToCart(anotherValidPizza);
-
         //Assert
+        Assertions.assertThrows(CartIsFullException.class,
+                () -> cartService.addPizzaToCart(anotherValidPizza));
         assertThat(cartService.getCartContent().size()).isEqualTo(15);
         assertThat(cartService.getCartContent().contains(anotherValidPizza)).isEqualTo(false);
     }
 
     @Test
-    void addPizzaToCart_Adding_Pizza_With_Two_Basesauce_Should_Not_Add_Pizza(){
+    void addPizzaToCart_Adding_Pizza_With_Two_Basesauce_Should_Throw_Exception(){
         //Arrange
         Pizza pizza = createPizzaWithTwoBaseSauce();
 
         //Act
-        cartService.addPizzaToCart(pizza);
-
         //Assert
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> cartService.addPizzaToCart(pizza));
         assertThat(cartService.getCartContent().size()).isEqualTo(0);
     }
 
     @Test
-    void addPizzaToCart_Adding_Pizza_With_Missing_Information_Should_Not_Add_Pizza(){
+    void addPizzaToCart_Adding_Pizza_With_Missing_Information_Should_Throw_Exception(){
         //Arrange
         Pizza pizza = new Pizza();
 
         //Act
-        cartService.addPizzaToCart(pizza);
-
         //Assert
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> cartService.addPizzaToCart(pizza));
         assertThat(cartService.getCartContent().size()).isEqualTo(0);
     }
 
     @Test
-    void addPizzaToCart_Passing_Null_Should_Not_Do_Anything(){
+    void addPizzaToCart_Passing_Null_Should_Throw_Exception(){
         //Arrange
-
         //Act
-        cartService.addPizzaToCart(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> cartService.addPizzaToCart(null));
         assertThat(cartService.getCartContent().size()).isEqualTo(0);
     }
 
@@ -148,7 +147,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     }
 
     @Test
-    void removePizzaFromCart_Passing_Null_Should_Not_Do_Anything(){
+    void removePizzaFromCart_Passing_Null_Should_Throw_Exception(){
         //Arrange
         Pizza pizza = createValidPizza("pepperoni pizza", 1L);
         cartService.getCartContent().add(pizza);
@@ -156,14 +155,14 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         cartService.getCartContent().add(pizza);
 
         //Act
-        cartService.removePizzaFromCart(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> cartService.removePizzaFromCart(null));
         assertThat(cartService.getCartContent().size()).isEqualTo(3);
     }
 
     @Test
-    void placeOrder_Placing_Order_With_3_Pizzas_Should_Save_Order_And_Send_Email(){
+    void placeOrder_Placing_Order_With_3_Pizzas_Should_Save_Order_And_Send_Email() throws CartIsEmptyException, MessagingException {
         //Arrange
         Pizza validPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(validPizza);
@@ -182,16 +181,12 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         //Assert
         Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());
         Order savedOrder = orderArgumentCaptor.getValue();
-        try {
-            Mockito.verify(mailService, Mockito.times(1)).sendOrderConfirmationEmail(savedOrder);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        Mockito.verify(mailService, Mockito.times(1)).sendOrderConfirmationEmail(savedOrder);
         Mockito.verify(orderDao, Mockito.times(1)).saveOrder(Mockito.any());
     }
 
     @Test
-    void placeOrder_While_Being_Logged_Out_Should_Not_Place_Order(){
+    void placeOrder_While_Being_Logged_Out_Should_Throw_Exception() throws MessagingException {
         //Arrange
         Pizza validPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(validPizza);
@@ -201,19 +196,15 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         Mockito.when(userService.getLoggedInUser()).thenReturn(null);
 
         //Act
-        cartService.placeOrder();
-
         //Assert
-        try {
-            Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        Assertions.assertThrows(NoPermissionException.class,
+                () -> cartService.placeOrder());
+        Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
 
     @Test
-    void placeOrder_With_Empty_Cart_Should_Not_Place_Order(){
+    void placeOrder_With_Empty_Cart_Should_Throw_Exception() throws MessagingException {
         //Arrange
         User loggedInUser = new User();
         loggedInUser.setEmailAddress("test123@mmm.hu");
@@ -222,19 +213,15 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
-        cartService.placeOrder();
-
         //Assert
-        try {
-            Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        Assertions.assertThrows(CartIsEmptyException.class,
+                () -> cartService.placeOrder());
+        Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
 
     @Test
-    void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information(){
+    void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information() throws CartIsEmptyException {
         //Arrange
         Pizza pepperoniPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(pepperoniPizza);

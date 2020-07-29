@@ -44,9 +44,7 @@ public class UserController {
     private void tryRegister(User user) {
         try {
             userService.register(user);
-        } catch (InvalidInputException e) {
-            e.printStackTrace();
-        } catch (AlreadyRegisteredException e) {
+        }catch (AlreadyRegisteredException e) {
             e.printStackTrace();
         }
     }
