@@ -66,4 +66,11 @@ public class ControllerExceptionHandler {
         exception.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
+
+    @ResponseBody
+    @ExceptionHandler(value = {UnsupportedOperationException.class})
+    public ResponseEntity<?> handleUnsupportedOperationException(UnsupportedOperationException exception){
+        exception.printStackTrace();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
 }
