@@ -47,50 +47,42 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     }
 
     @Test
-    void calculatePrice_Given_3_Ingredients_Some_Have_Invalid_Price(){
+    void calculatePrice_Given_3_Ingredients_Some_Have_Invalid_Price_Should_Throw_Exception(){
         //Arrange
         Pizza pizza = createPizzaWith3IngredientsGivenThePrices(-2.1f, -3.3f, 8.4f);
 
         //Act
-        float price = pizzaService.calculatePrice(pizza);
-
         //Assert
-        assertThat(price).isEqualTo(-1f);
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> pizzaService.calculatePrice(pizza));
     }
 
     @Test
-    void calculatePrice_Given_3_Ingredients_Some_Have_Invalid_Price_2(){
+    void calculatePrice_Given_3_Ingredients_Some_Have_Invalid_Price_Should_Throw_Exception_2(){
         //Arrange
         Pizza pizza = createPizzaWith3IngredientsGivenThePrices(-10.1f, -3.3f, 8.4f);
 
         //Act
-        float price = pizzaService.calculatePrice(pizza);
-
         //Assert
-        assertThat(price).isEqualTo(-1f);
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> pizzaService.calculatePrice(pizza));
     }
 
     @Test
-    void calculatePrice_Passing_Null_Argument(){
-        //Arrange
-
-        //Act
-        float price = pizzaService.calculatePrice(null);
-
-        //Assert
-        assertThat(price).isEqualTo(-1f);
+    void calculatePrice_Passing_Null_Argument_Should_Throw_Exception(){
+        Assertions.assertThrows(NullPointerException.class,
+                () -> pizzaService.calculatePrice(null));
     }
 
     @Test
-    void calculatePrice_Passing_Pizza_With_No_Ingredients(){
+    void calculatePrice_Passing_Pizza_With_No_Ingredients_Should_Throw_Exception(){
         //Arrange
         Pizza pizza = new Pizza();
 
         //Act
-        float price = pizzaService.calculatePrice(pizza);
-
         //Assert
-        assertThat(price).isEqualTo(-1f);
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> pizzaService.calculatePrice(pizza));
     }
 
     @Test

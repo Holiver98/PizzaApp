@@ -36,6 +36,9 @@ public abstract class PizzaServiceBase implements IPizzaService {
         return true;
     }
 
+    /**
+     * Throws exceptions if the pizza is invalid.
+     */
     public static void checkIfPizzaIsValid(Pizza pizza) {
         if(pizza == null){
             throw new NullPointerException("pizza was null");
@@ -49,9 +52,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
 
     @Override
     public float calculatePrice(Pizza pizza) {
-        if(!isValidPizza(pizza)){
-            return -1;
-        }
+        checkIfPizzaIsValid(pizza);
 
         BigDecimal totalPrice = new BigDecimal(0);
         for (Ingredient ingredient: pizza.getIngredients()) {
