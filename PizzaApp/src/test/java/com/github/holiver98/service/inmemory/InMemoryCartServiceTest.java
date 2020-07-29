@@ -221,7 +221,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     }
 
     @Test
-    void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information() throws CartIsEmptyException {
+    void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information() throws CartIsEmptyException, MessagingException {
         //Arrange
         Pizza pepperoniPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(pepperoniPizza);

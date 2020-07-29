@@ -17,36 +17,18 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public void register(@RequestBody User user){
-        tryRegister(user);
+    public void register(@RequestBody User user) throws AlreadyRegisteredException {
+        userService.register(user);
     }
 
     @PostMapping(value = "/login")
-    public void login(@RequestBody LoginInfo loginInfo){
-        tryLogin(loginInfo);
+    public void login(@RequestBody LoginInfo loginInfo) throws IncorrectPasswordException, NotRegisteredException {
+        userService.login(loginInfo.emailAddress, loginInfo.password);
     }
 
     @GetMapping(value = "/logout")
     public void logout(){
         userService.logout();
-    }
-
-    private void tryLogin(LoginInfo loginInfo) {
-        try {
-            userService.login(loginInfo.emailAddress, loginInfo.password);
-        } catch (IncorrectPasswordException e) {
-            e.printStackTrace();
-        } catch (NotRegisteredException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void tryRegister(User user) {
-        try {
-            userService.register(user);
-        }catch (AlreadyRegisteredException e) {
-            e.printStackTrace();
-        }
     }
 
     private static class LoginInfo{

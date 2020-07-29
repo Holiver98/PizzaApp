@@ -2,6 +2,7 @@ package com.github.holiver98.service;
 
 import com.github.holiver98.model.Pizza;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface ICartService {
@@ -32,5 +33,5 @@ public interface ICartService {
      * notifies the user with an email containing the order information.
      * Only logged in users may place an order.
      */
-    void placeOrder() throws CartIsEmptyException;
+    void placeOrder() throws CartIsEmptyException, MessagingException;
 }

@@ -44,7 +44,7 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void placeOrder() throws CartIsEmptyException, NoPermissionException {
+    public void placeOrder() throws CartIsEmptyException, NoPermissionException, MessagingException {
         if(cartContent.isEmpty()){
             throw new CartIsEmptyException("Cart is empty, can't place order!");
         }
@@ -54,7 +54,7 @@ public abstract class CartServiceBase implements ICartService {
         }
         Order order = createOrder(loggedInUser);
         save(order);
-        trySendOrderConfirmationEmail(order);
+        mailService.sendOrderConfirmationEmail(order);
     }
 
     private Order createOrder(User loggedInUser) {
@@ -65,14 +65,6 @@ public abstract class CartServiceBase implements ICartService {
         Date currentTime = new Date();
         order.setDate(currentTime);
         return order;
-    }
-
-    private void trySendOrderConfirmationEmail(Order order) {
-        try {
-            mailService.sendOrderConfirmationEmail(order);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
     }
 
     protected float CalculateTotalPrice(){

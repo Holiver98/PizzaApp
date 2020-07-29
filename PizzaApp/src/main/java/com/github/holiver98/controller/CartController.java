@@ -4,7 +4,7 @@ import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -19,12 +19,8 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public void addPizzaToCart(@RequestBody Pizza pizza){
-        try {
-            cartService.addPizzaToCart(pizza);
-        } catch (CartIsFullException e) {
-            e.printStackTrace();
-        }
+    public void addPizzaToCart(@RequestBody Pizza pizza) throws CartIsFullException {
+        cartService.addPizzaToCart(pizza);
     }
 
     @PostMapping("/remove")
@@ -33,11 +29,7 @@ public class CartController {
     }
 
     @GetMapping("/order")
-    public void placeOrder(){
-        try {
-            cartService.placeOrder();
-        } catch (CartIsEmptyException e) {
-            e.printStackTrace();
-        }
+    public void placeOrder() throws CartIsEmptyException, MessagingException {
+        cartService.placeOrder();
     }
 }

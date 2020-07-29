@@ -16,16 +16,8 @@ public class MailController {
     private IMailService mailService;
 
     @PostMapping("/send")
-    public void sendMail(@RequestBody MailInfo mailinfo){
-        trySendMail(mailinfo);
-    }
-
-    private void trySendMail(@RequestBody MailInfo mailinfo) {
-        try {
-            mailService.sendMailTo(mailinfo.email, mailinfo.content);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+    public void sendMail(@RequestBody MailInfo mailinfo) throws MessagingException {
+        mailService.sendMailTo(mailinfo.email, mailinfo.content);
     }
 
     private static class MailInfo{
