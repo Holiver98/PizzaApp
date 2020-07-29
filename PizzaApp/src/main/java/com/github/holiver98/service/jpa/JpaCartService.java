@@ -17,6 +17,9 @@ public class JpaCartService extends CartServiceBase {
 
     @Override
     protected void save(Order order) {
+        if(order.getId() != null){
+            throw new IllegalArgumentException("order should not have an id, if you want to save it");
+        }
         orderRepository.save(order);
     }
 }

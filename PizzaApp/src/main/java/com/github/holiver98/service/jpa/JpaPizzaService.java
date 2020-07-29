@@ -31,7 +31,7 @@ public class JpaPizzaService extends PizzaServiceBase {
         }
 
         if(pizza.getId() != null){
-            throw new IllegalArgumentException("pizza should not have an id");
+            throw new IllegalArgumentException("pizza should not have an id, if you want to save it");
         }
 
         return pizzaRepository.save(pizza).getId();
@@ -49,12 +49,8 @@ public class JpaPizzaService extends PizzaServiceBase {
 
     @Override
     public Pizza getPizzaById(long pizzaId) throws NotFoundException {
-        if(pizzaId < 0){
-            return null;
-        }else{
-            return pizzaRepository.findById(pizzaId)
-                    .orElseThrow(() -> new NotFoundException("pizza with id (" + pizzaId + ") not found"));
-        }
+        return pizzaRepository.findById(pizzaId)
+                .orElseThrow(() -> new NotFoundException("pizza with id (" + pizzaId + ") not found"));
     }
 
     @Override
@@ -72,10 +68,6 @@ public class JpaPizzaService extends PizzaServiceBase {
 
     @Override
     public void deletePizza(long pizzaId) {
-        if(pizzaId < 0){
-            return;
-        }
-
         pizzaRepository.deleteById(pizzaId);
     }
 }
