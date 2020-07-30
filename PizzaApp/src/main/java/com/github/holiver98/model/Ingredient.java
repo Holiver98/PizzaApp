@@ -6,7 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name = "ingredients")
 @Data
 public class Ingredient {
     @Id

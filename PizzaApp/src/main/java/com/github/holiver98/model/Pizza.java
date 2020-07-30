@@ -4,18 +4,17 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
+@Entity(name = "pizzas")
 @Data
 public class Pizza {
     @Id
     @GeneratedValue
     private Long id;
     private String name;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Ingredient> ingredients;
     @Enumerated(EnumType.STRING)
     private PizzaSize size;
-    @Column(name = "rating_average")
     private float ratingAverage;
     private float price;
     @Column(name = "custom")
