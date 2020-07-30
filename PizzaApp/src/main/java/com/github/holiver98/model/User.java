@@ -2,9 +2,7 @@ package com.github.holiver98.model;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -16,4 +14,7 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "role")
+    @Enumerated(value = EnumType.STRING)
+    private Role role = Role.CUSTOMER;
 }
