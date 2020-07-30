@@ -24,7 +24,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     }
 
     @Override
-    public void register(User user) throws AlreadyRegisteredException {
+    public void register(User user) throws AlreadyExistsException {
         super.register(user);
         checkIfUserInformationAreValid(user);
         checkIfAlreadyRegistered(user);
@@ -68,9 +68,9 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         return registeredUser.isPresent();
     }
 
-    private void checkIfAlreadyRegistered(User user) throws AlreadyRegisteredException {
+    private void checkIfAlreadyRegistered(User user) throws AlreadyExistsException {
         if(isEmailRegistered(user.getEmailAddress())){
-            throw new AlreadyRegisteredException("email already registered: " + user.getEmailAddress());
+            throw new AlreadyExistsException("email already registered: " + user.getEmailAddress());
         }
     }
 

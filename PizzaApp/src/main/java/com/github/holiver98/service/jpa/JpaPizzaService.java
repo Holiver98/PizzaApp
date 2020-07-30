@@ -55,20 +55,17 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public void doUpdatePizza(Pizza pizza) throws NotFoundException {
-        if(!isValidPizza(pizza)){
-            throw new IllegalArgumentException("invalid pizza");
-        }
-
-        if(!pizzaRepository.existsById(pizza.getId())){
-            throw new NotFoundException("pizza with id (" + pizza.getId() + ") not found");
-        }
-
+    public void doUpdatePizza(Pizza pizza){
         pizzaRepository.save(pizza);
     }
 
     @Override
     public void doDeletePizza(long pizzaId) {
         pizzaRepository.deleteById(pizzaId);
+    }
+
+    @Override
+    protected boolean pizzaExists(Pizza pizza) {
+        return pizzaRepository.existsById(pizza.getId());
     }
 }

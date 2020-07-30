@@ -16,6 +16,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
     protected abstract long doSavePizza(Pizza pizza);
     protected abstract void doUpdatePizza(Pizza pizza) throws NotFoundException;
     protected abstract void doDeletePizza(long pizzaId);
+    protected abstract boolean pizzaExists(Pizza pizza);
 
     @Override
     public abstract List<Pizza> getPizzas();
@@ -29,8 +30,11 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public long savePizza(Pizza pizza) {
+    public long savePizza(Pizza pizza) throws AlreadyExistsException {
         checkIfPizzaIsValid(pizza);
+        if(pizzaExists(pizza)){
+            throw new AlreadyExistsException("Pizza already exists!");
+        }
         User user = getLoggedInUserOrThrowException("You have to be logged in to save pizza!");
         ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
         return doSavePizza(pizza);
@@ -39,6 +43,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
     @Override
     public void updatePizza(Pizza pizza) throws NotFoundException {
         checkIfPizzaIsValid(pizza);
+        checkIfPizzaExists(pizza);
         User user = getLoggedInUserOrThrowException("You have to be logged in to update pizza!");
         ifUserIsNotChefThrowException(user, "You have to have Chef role to update pizza!");
         doUpdatePizza(pizza);
@@ -95,6 +100,12 @@ public abstract class PizzaServiceBase implements IPizzaService {
         pizzaToUpdate.setRatingAverage(newRatingAverage);
         doUpdatePizza(pizzaToUpdate);
         return newRatingAverage;
+    }
+
+    private void checkIfPizzaExists(Pizza pizza) throws NotFoundException {
+        if(!pizzaExists(pizza)){
+            throw new NotFoundException("Pizza with id (" + pizza.getId() + ") doesn't exist!");
+        }
     }
 
     private static void checkIfFieldsAreInitialized(Pizza pizza) {

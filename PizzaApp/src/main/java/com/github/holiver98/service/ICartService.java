@@ -14,24 +14,30 @@ public interface ICartService {
     List<Pizza> getCartContent();
 
     /**
-     * Adds the given pizza to the cart, if it is not already full.
+     * Adds the given pizza to the cart.
      *
      * @param pizza The pizza to be added to the cart.
+     * @throws CartIsFullException if the cart is full and no more pizzas can be added.
+     * @throws NullPointerException if the pizza is null.
+     * @throws IllegalArgumentException if the pizza is not valid.
      */
     void addPizzaToCart(Pizza pizza) throws CartIsFullException;
 
     /**
-     * Removes the given pizza from the cart, if it is in the cart.
+     * Removes the given pizza from the cart.
      *
      * @param pizza The pizza to be removed from the cart.
+     * @throws NullPointerException if the pizza is null.
      */
     void removePizzaFromCart(Pizza pizza);
 
     /**
-     * Places an order with the current content of the cart.
-     * If the order can be placed, then it logs the order and
+     * Places an order with the current content of the cart, logs the order and
      * notifies the user with an email containing the order information.
-     * Only logged in users may place an order.
+     *
+     * @throws CartIsEmptyException if the cart is empty.
+     * @throws MessagingException if an error occurred with the order confirmation email.
+     * @throws NoPermissionException if not logged in.
      */
     void placeOrder() throws CartIsEmptyException, MessagingException;
 }

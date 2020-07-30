@@ -111,7 +111,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(AlreadyRegisteredException.class,
+        Assertions.assertThrows(AlreadyExistsException.class,
                 () -> userService.register(bob));
     }
 

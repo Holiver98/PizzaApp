@@ -76,4 +76,14 @@ public class InMemoryPizzaService extends PizzaServiceBase {
 
         pizzaDao.deletePizza(pizzaId);
     }
+
+    @Override
+    protected boolean pizzaExists(Pizza pizza) {
+        Pizza p = pizzaDao.getPizzaById(pizza.getId());
+        if(p == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

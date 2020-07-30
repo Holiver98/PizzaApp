@@ -9,7 +9,9 @@ public interface IPizzaService {
      * Calculates the price of the pizza.
      *
      * @param pizza The pizza, which price will be calculated.
-     * @return The price of the pizza
+     * @return The price of the pizza.
+     * @throws NullPointerException if the pizza is null.
+     * @throws IllegalArgumentException if the pizza is invalid.
      */
     float calculatePrice(Pizza pizza);
 
@@ -18,8 +20,8 @@ public interface IPizzaService {
      * It also updates the pizza in the database with the new value.
      *
      * @param pizzaId The id of the pizza to update.
-     * @return The average rating, or 0 if there are no ratings
-     * @throws NotFoundException - no pizza was found in the database with this id
+     * @return The average rating, or 0 if there are no ratings.
+     * @throws NotFoundException if no pizza was found in the database with this id.
      */
     float recalculateRatingAverage(long pizzaId) throws NotFoundException;
 
@@ -27,9 +29,13 @@ public interface IPizzaService {
      * Saves the pizza into database.
      *
      * @param pizza The pizza to be saved.
-     * @return The id the database generated for the pizza, or -1, if the did not get saved.
+     * @return The id the database generated for the pizza.
+     * @throws NullPointerException if the pizza is null.
+     * @throws IllegalArgumentException if the pizza is invalid.
+     * @throws NoPermissionException if not logged in, or doesn't have Chef role.
+     * @throws AlreadyExistsException if pizza already exists in the database.
      */
-    long savePizza(Pizza pizza);
+    long savePizza(Pizza pizza) throws AlreadyExistsException;
 
     /**
      * Gets all the pizzas from the database.
@@ -43,13 +49,13 @@ public interface IPizzaService {
      *
      * @return A list of the basic pizzas.
      */
-    List<Pizza> getBasicPizzas(); //non custom-made pizzas
+    List<Pizza> getBasicPizzas();
 
     /**
      * Gets a pizza by it's id from the database.
      *
      * @param pizzaId The id of the pizza.
-     * @return The pizza with the given id or null if it is not in the database.
+     * @return The pizza with the given id.
      * @throws NotFoundException - no pizza was found in the database with this id
      */
     Pizza getPizzaById(long pizzaId) throws NotFoundException;
@@ -58,7 +64,10 @@ public interface IPizzaService {
      * Updates the pizza in the database that has the same id, as the pizza argument.
      *
      * @param pizza The pizza to be updated.
-     * @throws NotFoundException - no pizza was found in the database with this id
+     * @throws NullPointerException if the pizza is null.
+     * @throws IllegalArgumentException if the pizza is invalid.
+     * @throws NotFoundException if no pizza was found in the database with this id.
+     * @throws NoPermissionException if not logged in, or doesn't have Chef role.
      */
     void updatePizza(Pizza pizza) throws NotFoundException;
 
@@ -66,6 +75,7 @@ public interface IPizzaService {
      * Deletes the pizza from the database, if it exists.
      *
      * @param pizzaId The id of the pizza to be deleted.
+     * @throws NoPermissionException if not logged in, or doesn't have Chef role.
      */
     void deletePizza(long pizzaId);
 }

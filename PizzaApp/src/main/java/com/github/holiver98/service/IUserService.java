@@ -22,7 +22,7 @@ public interface IUserService {
      *
      * @param user The user we want to register. Contains the user information.
      */
-    void register(User user) throws AlreadyRegisteredException;
+    void register(User user) throws AlreadyExistsException;
 
     /**
      * Gets the currently logged in user.

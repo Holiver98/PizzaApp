@@ -13,7 +13,7 @@ public abstract class UserServiceBaseExceptionHandler implements IUserService {
     }
 
     @Override
-    public void register(User user) throws AlreadyRegisteredException {
+    public void register(User user) throws AlreadyExistsException {
         if(user == null) {
             throw new NullPointerException("user was null");
         }

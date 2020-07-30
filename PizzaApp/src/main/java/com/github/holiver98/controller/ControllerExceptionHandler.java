@@ -37,8 +37,8 @@ public class ControllerExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(value = AlreadyRegisteredException.class)
-    public ResponseEntity<?> handleAlreadyRegisteredException(AlreadyRegisteredException exception){
+    @ExceptionHandler(value = AlreadyExistsException.class)
+    public ResponseEntity<?> handleAlreadyRegisteredException(AlreadyExistsException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 

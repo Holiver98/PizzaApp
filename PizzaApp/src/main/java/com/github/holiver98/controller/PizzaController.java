@@ -1,6 +1,7 @@
 package com.github.holiver98.controller;
 
 import com.github.holiver98.model.Pizza;
+import com.github.holiver98.service.AlreadyExistsException;
 import com.github.holiver98.service.IPizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class PizzaController {
     }
 
     @PostMapping("/add")
-    public void addPizza(@RequestBody Pizza pizza){
+    public void addPizza(@RequestBody Pizza pizza) throws AlreadyExistsException {
         pizzaService.savePizza(pizza);
     }
 }
