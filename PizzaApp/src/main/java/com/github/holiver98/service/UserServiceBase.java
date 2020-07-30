@@ -10,7 +10,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     protected abstract void save(User user);
 
     @Override
-    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotRegisteredException {
+    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         super.login(emailAddress, password);
         checkIfAlreadyLoggedIn();
         User userInfo = getUserInfoForLogin(emailAddress);
@@ -94,10 +94,10 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         }
     }
 
-    private User getUserInfoForLogin(String emailAddress) throws NotRegisteredException {
+    private User getUserInfoForLogin(String emailAddress) throws NotFoundException {
         Optional<User> registeredUser = findByEmailAddress(emailAddress);
         if(!registeredUser.isPresent()){
-            throw new NotRegisteredException("The email address (" + emailAddress + ") is not registered!");
+            throw new NotFoundException("The email address (" + emailAddress + ") is not registered!");
         }else{
             return registeredUser.get();
         }

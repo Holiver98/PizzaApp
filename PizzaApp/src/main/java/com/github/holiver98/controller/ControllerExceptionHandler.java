@@ -49,12 +49,6 @@ public class ControllerExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(value = NotRegisteredException.class)
-    public ResponseEntity<?> handleNotRegisteredException(NotRegisteredException exception){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
-
-    @ResponseBody
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());

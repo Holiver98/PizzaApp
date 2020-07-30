@@ -147,7 +147,7 @@ public class InMemoryUserServiceTest {
 
         //Act
         //Assert
-        Assertions.assertThrows(NotRegisteredException.class,
+        Assertions.assertThrows(NotFoundException.class,
                 () -> userService.login(bob.getEmailAddress(), bob.getPassword()));
         User loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser).isNull();

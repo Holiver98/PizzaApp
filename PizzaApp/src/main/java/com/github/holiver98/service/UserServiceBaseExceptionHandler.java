@@ -4,7 +4,7 @@ import com.github.holiver98.model.User;
 
 public abstract class UserServiceBaseExceptionHandler implements IUserService {
     @Override
-    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotRegisteredException {
+    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         if(password == null){
             throw new NullPointerException("password was null");
         }else if(emailAddress == null){

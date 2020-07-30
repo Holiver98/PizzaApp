@@ -10,10 +10,10 @@ public interface IUserService {
      * @param password The password of the user.
      * @throws NullPointerException if the password or the emailAddress is null.
      * @throws IncorrectPasswordException if the given password does not match.
-     * @throws NotRegisteredException if the given email address is not registered.
+     * @throws NotFoundException if the given email address is not registered.
      * @throws UnsupportedOperationException if the user is already logged in.
      */
-    void login(String emailAddress, String password) throws IncorrectPasswordException, NotRegisteredException;
+    void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
 
     /**
      * Logs the currently logged in user out.

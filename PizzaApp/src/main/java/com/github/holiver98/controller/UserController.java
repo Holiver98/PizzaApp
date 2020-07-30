@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public void login(@RequestBody LoginInfo loginInfo) throws IncorrectPasswordException, NotRegisteredException {
+    public void login(@RequestBody LoginInfo loginInfo) throws IncorrectPasswordException, NotFoundException {
         userService.login(loginInfo.emailAddress, loginInfo.password);
     }
 
