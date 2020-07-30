@@ -5,6 +5,7 @@ import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
 import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
+import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     private IInMemoryIngredientDao ingredientDao;
     private IInMemoryPizzaDao pizzaDao;
     private IInMemoryRatingDao ratingDao;
+    private IUserService userService;
 
     private InMemoryPizzaService pizzaService;
 
@@ -31,7 +33,8 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
         ingredientDao = Mockito.mock(IInMemoryIngredientDao.class);
         pizzaDao = Mockito.mock(IInMemoryPizzaDao.class);
         ratingDao = Mockito.mock(IInMemoryRatingDao.class);
-        pizzaService = new InMemoryPizzaService(pizzaDao, ingredientDao, ratingDao);
+        userService = Mockito.mock(IUserService.class);
+        pizzaService = new InMemoryPizzaService(pizzaDao, ingredientDao, ratingDao, userService);
     }
 
     @Test

@@ -2,8 +2,8 @@ INSERT INTO users (email, username, password, role) VALUES('bobby@gmail.com', 'B
 INSERT INTO users (email, username, password, role) VALUES('admin@gmail.com', 'admin', 'admin', 'CHEF')
 INSERT INTO users (email, username, password, role) VALUES('max@something.com', 'Max', '000000', 'CUSTOMER')
 
-INSERT INTO pizzas (id, name, size, rating_average, price, custom) VALUES(1, 'Pepperoni pizza', 'NORMAL', 4, 34, false)
-INSERT INTO pizzas (id, name, size, rating_average, price, custom) VALUES(2, 'Meat lover', 'SMALL', 3.5, 18.4, false)
+INSERT INTO pizzas (name, size, rating_average, price, custom) VALUES('Pepperoni pizza', 'NORMAL', 4, 34, false)
+INSERT INTO pizzas (name, size, rating_average, price, custom) VALUES('Meat lover', 'SMALL', 3.5, 18.4, false)
 
 INSERT INTO ingredients(name, price, type) VALUES('Onion', 2.4, 'PIZZA_TOPPING')
 INSERT INTO ingredients (name, price, type) VALUES('Tomato', 2.2, 'PIZZA_BASESAUCE')

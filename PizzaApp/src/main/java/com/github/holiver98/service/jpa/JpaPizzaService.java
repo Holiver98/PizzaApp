@@ -5,6 +5,7 @@ import com.github.holiver98.dal.jpa.IPizzaRepository;
 import com.github.holiver98.dal.jpa.IRatingRepository;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
+import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,17 @@ public class JpaPizzaService extends PizzaServiceBase {
     @Autowired
     private IRatingRepository ratingRepository;
 
+    public JpaPizzaService(IUserService userService) {
+        super(userService);
+    }
+
     @Override
     protected List<Rating> getRatingsOfPizza(long pizzaId) {
         return ratingRepository.findByPizzaId(pizzaId);
     }
 
     @Override
-    public long savePizza(Pizza pizza) {
-        if(!isValidPizza(pizza)){
-            throw new IllegalArgumentException("invalid pizza");
-        }
-
+    public long doSavePizza(Pizza pizza) {
         if(pizza.getId() != null){
             throw new IllegalArgumentException("pizza should not have an id, if you want to save it");
         }
@@ -54,7 +55,7 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public void updatePizza(Pizza pizza) throws NotFoundException {
+    public void doUpdatePizza(Pizza pizza) throws NotFoundException {
         if(!isValidPizza(pizza)){
             throw new IllegalArgumentException("invalid pizza");
         }
@@ -67,7 +68,7 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public void deletePizza(long pizzaId) {
+    public void doDeletePizza(long pizzaId) {
         pizzaRepository.deleteById(pizzaId);
     }
 }

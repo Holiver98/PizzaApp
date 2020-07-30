@@ -52,7 +52,8 @@ public class ApplicationConfiguration {
 
     @Bean
     public IPizzaService inMemoryPizzaService(){
-        return new InMemoryPizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(), inMemoryRatingDao());
+        return new InMemoryPizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(),
+                inMemoryRatingDao(), inMemoryUserService());
     }
 
     @Bean
@@ -83,5 +84,5 @@ public class ApplicationConfiguration {
 
     @Bean
     @Primary
-    public IPizzaService jpaPizzaService(){ return new JpaPizzaService(); }
+    public IPizzaService jpaPizzaService(){ return new JpaPizzaService(jpaUserService()); }
 }

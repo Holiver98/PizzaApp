@@ -1,31 +1,55 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.model.Ingredient;
-import com.github.holiver98.model.IngredientType;
-import com.github.holiver98.model.Pizza;
-import com.github.holiver98.model.Rating;
+import com.github.holiver98.model.*;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 public abstract class PizzaServiceBase implements IPizzaService {
+    protected IUserService userService;
     protected static final int minIngredients = 1;
     protected static final int maxIngredients = 5;
     protected static final int maxBaseSauce = 1;
     protected static final int minBaseSauce = 1;
 
     protected abstract List<Rating> getRatingsOfPizza(long pizzaId);
-    @Override
-    public abstract long savePizza(Pizza pizza);
+    protected abstract long doSavePizza(Pizza pizza);
+    protected abstract void doUpdatePizza(Pizza pizza) throws NotFoundException;
+    protected abstract void doDeletePizza(long pizzaId);
+
     @Override
     public abstract List<Pizza> getPizzas();
     @Override
     public abstract List<Pizza> getBasicPizzas();
     @Override
     public abstract Pizza getPizzaById(long pizzaId) throws NotFoundException;
+
+    public PizzaServiceBase(IUserService userService){
+        this.userService = userService;
+    }
+
     @Override
-    public abstract void updatePizza(Pizza pizza) throws NotFoundException;
+    public long savePizza(Pizza pizza) {
+        checkIfPizzaIsValid(pizza);
+        User user = getLoggedInUserOrThrowException("You have to be logged in to save pizza!");
+        ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
+        return doSavePizza(pizza);
+    }
+
     @Override
-    public abstract void deletePizza(long pizzaId);
+    public void updatePizza(Pizza pizza) throws NotFoundException {
+        checkIfPizzaIsValid(pizza);
+        User user = getLoggedInUserOrThrowException("You have to be logged in to update pizza!");
+        ifUserIsNotChefThrowException(user, "You have to have Chef role to update pizza!");
+        doUpdatePizza(pizza);
+    }
+
+    @Override
+    public void deletePizza(long pizzaId) {
+        User user = getLoggedInUserOrThrowException("You have to be logged in to delete pizza!");
+        ifUserIsNotChefThrowException(user, "You have to have Chef role to delete pizza!");
+        doDeletePizza(pizzaId);
+    }
 
     public static boolean isValidPizza(Pizza pizza){
         try {
@@ -69,7 +93,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
         List<Rating> ratings = getRatingsOfPizza(pizzaId);
         float newRatingAverage = calculateNewRatingAverage(ratings);
         pizzaToUpdate.setRatingAverage(newRatingAverage);
-        updatePizza(pizzaToUpdate);
+        doUpdatePizza(pizzaToUpdate);
         return newRatingAverage;
     }
 
@@ -140,5 +164,19 @@ public abstract class PizzaServiceBase implements IPizzaService {
 
         boolean hasValidNumberOfBasesauces = numberOfBaseSauces <= maxBaseSauce && numberOfBaseSauces >= minBaseSauce;
         return hasValidNumberOfBasesauces;
+    }
+
+    private User getLoggedInUserOrThrowException(String exceptionMessage){
+        User user = userService.getLoggedInUser();
+        if(user == null){
+            throw new NoPermissionException(exceptionMessage);
+        }
+        return user;
+    }
+
+    private void ifUserIsNotChefThrowException(User user, String exceptionMessage){
+        if(!user.getRole().equals(Role.CHEF)){
+            throw new NoPermissionException(exceptionMessage);
+        }
     }
 }

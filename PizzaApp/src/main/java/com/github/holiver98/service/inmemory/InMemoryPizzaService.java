@@ -5,6 +5,7 @@ import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
 import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
+import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 
@@ -16,7 +17,9 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     private IInMemoryPizzaDao pizzaDao;
     private IInMemoryRatingDao ratingDao;
 
-    public InMemoryPizzaService(IInMemoryPizzaDao pizzaDao, IInMemoryIngredientDao ingredientDao, IInMemoryRatingDao ratingDao){
+    public InMemoryPizzaService(IInMemoryPizzaDao pizzaDao, IInMemoryIngredientDao ingredientDao
+            , IInMemoryRatingDao ratingDao, IUserService userService){
+        super(userService);
         this.pizzaDao = pizzaDao;
         this.ingredientDao = ingredientDao;
         this.ratingDao = ratingDao;
@@ -28,11 +31,7 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public long savePizza(Pizza pizza) {
-        if(!isValidPizza(pizza)){
-            throw new IllegalArgumentException("invalid pizza");
-        }
-
+    public long doSavePizza(Pizza pizza) {
         return pizzaDao.savePizza(pizza);
     }
 
@@ -61,7 +60,7 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public void updatePizza(Pizza pizza) {
+    public void doUpdatePizza(Pizza pizza) {
         if(!isValidPizza(pizza)){
             return;
         }
@@ -70,7 +69,7 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public void deletePizza(long pizzaId) {
+    public void doDeletePizza(long pizzaId) {
         if(pizzaId < 0){
             return;
         }
