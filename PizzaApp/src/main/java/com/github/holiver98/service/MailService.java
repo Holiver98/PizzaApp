@@ -28,13 +28,24 @@ public class MailService implements IMailService{
                 return new PasswordAuthentication(senderEmailAddress, senderPassword);
             }
         });
-        Message msg = getMessage(content, session);
+        Message msg = getMessage(content, session, emailAddress);
         Transport.send(msg);
     }
 
     @Override
     public void sendOrderConfirmationEmail(Order order) throws MessagingException {
-        sendMailTo(order.getUserEmailAddress(), order.toString());
+        String content = String.format("<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "    <head>\n" +
+                "        <title>Pizza Order</title>\n" +
+                "    </head>\n" +
+                "    <body>\n" +
+                "        <h1>Thank you for your order!</h1>\n" +
+                "        <h2>Order:</h2>\n" +
+                "        <ul><li>Id: %d</li><li>Date: %s</li><li>Total price: %.2f</li></ul>\n" +
+                "    </body>\n" +
+                "</html>", order.getId(), order.getDate(), order.getTotalPrice());
+        sendMailTo(order.getUserEmailAddress(), content);
     }
 
     private void tryLoadEmailAndPasswordFromFile() {
@@ -65,10 +76,10 @@ public class MailService implements IMailService{
         return props;
     }
 
-    private Message getMessage(String content, Session session) throws MessagingException {
+    private Message getMessage(String content, Session session, String toEmail) throws MessagingException {
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(senderEmailAddress, false));
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(senderEmailAddress));
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
         msg.setSubject("Teszt");
         msg.setContent(content, "text/html");
         msg.setSentDate(new Date());
