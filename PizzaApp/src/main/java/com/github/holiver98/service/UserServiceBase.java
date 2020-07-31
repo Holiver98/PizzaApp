@@ -1,10 +1,14 @@
 package com.github.holiver98.service;
 
 import com.github.holiver98.model.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.security.SecureRandom;
 import java.util.Optional;
 
 public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     protected User loggedInUser;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
@@ -14,7 +18,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         super.login(emailAddress, password);
         checkIfAlreadyLoggedIn();
         User userInfo = getUserInfoForLogin(emailAddress);
-        checkIfPasswordMatches(password, userInfo);
+        checkIfPasswordMatches(password, userInfo.getPassword());
         loggedInUser = userInfo;
     }
 
@@ -28,6 +32,7 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         super.register(user);
         checkIfUserInformationAreValid(user);
         checkIfAlreadyRegistered(user);
+        encodeUserPassword(user);
         save(user);
     }
 
@@ -68,6 +73,11 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         return registeredUser.isPresent();
     }
 
+    private void encodeUserPassword(User user) {
+        String plainTextPassword = user.getPassword();
+        user.setPassword(passwordEncoder.encode(plainTextPassword));
+    }
+
     private void checkIfAlreadyRegistered(User user) throws AlreadyExistsException {
         if(isEmailRegistered(user.getEmailAddress())){
             throw new AlreadyExistsException("email already registered: " + user.getEmailAddress());
@@ -103,8 +113,8 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         }
     }
 
-    private void checkIfPasswordMatches(String password, User registeredUser) throws IncorrectPasswordException {
-        if(!password.equals(registeredUser.getPassword())){
+    private void checkIfPasswordMatches(String password, String encodedPassword) throws IncorrectPasswordException {
+        if(!passwordEncoder.matches(password, encodedPassword)){
             throw new IncorrectPasswordException("password incorrect: " + password);
         }
     }
