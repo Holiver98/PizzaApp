@@ -1,0 +1,133 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Oliver" id="create user table">
+        <createTable tableName="users">
+            <column name="email" type="VARCHAR(30)" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Oliver" id="create pizza table">
+        <createTable tableName="pizzas">
+            <column name="id" type="NUMBER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating_average" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="CURRENCY">
+                <constraints nullable="false"/>
+            </column>
+            <column name="custom" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Oliver" id="create rating table">
+        <createTable tableName="ratings">
+            <column name="pizza_id" type="NUMBER" >
+                <constraints primaryKey="true" nullable="false"
+                             references="pizzas(id)"
+                             foreignKeyName="rating_fk_pizza_id"/>
+            </column>
+            <column name="rating" type="NUMBER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Oliver" id="create ingredient table">
+        <createTable tableName="ingredients">
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="CURRENCY">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Oliver" id="create order table">
+        <createTable tableName="orders">
+            <column name="id" type="NUMBER" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"
+                             references="users(email)"
+                             foreignKeyName="order_fk_user_email"/>
+            </column>
+            <column name="date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="CURRENCY">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Oliver" id="create orders_pizzas table">
+        <createTable tableName="orders_pizzas">
+            <column name="order_id" type="NUMBER">
+                <constraints nullable="false"
+                             references="orders(id)"
+                             foreignKeyName="order_pizza_fk_order_id"/>
+            </column>
+            <column name="pizza_id" type="NUMBER">
+                <constraints nullable="false"
+                             references="pizzas(id)"
+                             foreignKeyName="order_pizza_fk_pizza_id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Oliver" id="create pizzas_ingredients table">
+        <createTable tableName="pizzas_ingredients">
+            <column name="pizza_id" type="NUMBER">
+                <constraints nullable="false"
+                             references="pizzas(id)"
+                             foreignKeyName="pizza_ingredient_fk_pizza_id"/>
+            </column>
+            <column name="ingredient_name" type="VARCHAR(255)">
+                <constraints nullable="false"
+                             references="ingredients(name)"
+                             foreignKeyName="pizza_ingredient_fk_ingredient_name"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet author="Oliver" id="insert test data">
+        <sqlFile  path="data.sql"/>
+    </changeSet>
+
+</databaseChangeLog>

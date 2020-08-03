@@ -17,6 +17,13 @@ public class Order {
     private Long id;
     @Column(name = "email")
     private String userEmailAddress;
+    @JoinTable(
+            name="orders_pizzas",
+            joinColumns =
+                @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            inverseJoinColumns =
+                @JoinColumn(name = "pizza_id", referencedColumnName = "id")
+    )
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Pizza> pizzas;
     private Date date;

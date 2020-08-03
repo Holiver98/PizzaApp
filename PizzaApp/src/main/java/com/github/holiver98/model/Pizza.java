@@ -11,6 +11,13 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @JoinTable(
+            name="pizzas_ingredients",
+            joinColumns =
+            @JoinColumn(name = "pizza_id", referencedColumnName = "id"),
+            inverseJoinColumns =
+            @JoinColumn(name = "ingredient_name", referencedColumnName = "name")
+    )
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Ingredient> ingredients;
     @Enumerated(EnumType.STRING)

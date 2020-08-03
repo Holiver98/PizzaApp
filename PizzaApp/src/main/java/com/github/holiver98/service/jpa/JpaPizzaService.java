@@ -66,6 +66,10 @@ public class JpaPizzaService extends PizzaServiceBase {
 
     @Override
     protected boolean pizzaExists(Pizza pizza) {
+        if(pizza.getId() == null){
+            return false;
+        }
+
         return pizzaRepository.existsById(pizza.getId());
     }
 }
