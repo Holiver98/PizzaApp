@@ -13,6 +13,7 @@ public interface IInMemoryOrderDao {
      * @return The id the database generated for the order, or -1 if the operation was
      * unsuccessful (for example the order already exists in the database).
      */
+    //TODO: itt pedig már van mentés esetén visszatérési érték, jó ha azonos módon működnek az egyforma funkciók.
     long saveOrder(Order order);
 
     /**

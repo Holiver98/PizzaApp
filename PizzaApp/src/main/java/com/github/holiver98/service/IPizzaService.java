@@ -23,6 +23,8 @@ public interface IPizzaService {
      * @return The average rating, or 0 if there are no ratings.
      * @throws NotFoundException if no pizza was found in the database with this id.
      */
+    //TODO: ennek biztos publikusnak kell lennie? Csak akkor van használva, amikor valaki értékel, és akkor viszont futnia kell. De csak úgy magába nem igazán
+    // látom a hasznát. Ráadásul inkább a rate-service felelősége lenne szerintem.
     float recalculateRatingAverage(long pizzaId) throws NotFoundException;
 
     /**

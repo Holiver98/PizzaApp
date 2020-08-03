@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Properties;
 
+
+//TODO: A Spring Mail-t esetleg érdemes megnézni, had csináljon meg mindent a Spring, neked meg csak a tényleges e-mail tartalommal kelljen foglalkozni.
 public class MailService implements IMailService{
     private String senderEmailAddress = "";
     private String senderPassword = "";
@@ -48,6 +50,8 @@ public class MailService implements IMailService{
         sendMailTo(order.getUserEmailAddress(), content);
     }
 
+    //TODO: +1, nem rossz gondolat, de talán feleslegesen bonyolult. Egy sima username, password paraméter elég, amit nem kell felvenni a property-kközé, hanem
+    // Hanem indítási paraméterként kapja meg.
     private void tryLoadEmailAndPasswordFromFile() {
         try {
             loadEmailAndPasswordFromFile();

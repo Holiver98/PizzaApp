@@ -50,7 +50,7 @@ public class InMemoryIngredientDaoTest{
 
         //Assert
         assertThat(database.ingredients.size()).isEqualTo(1);
-        assertThat(database.ingredients.contains(ingredient)).isEqualTo(true);
+        assertThat(database.ingredients.contains(ingredient)).isEqualTo(true); //TODO: esetleg lehet a .isTrue() -t használni.
     }
 
     @Test
