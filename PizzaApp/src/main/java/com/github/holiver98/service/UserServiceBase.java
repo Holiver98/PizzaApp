@@ -7,6 +7,9 @@ import java.security.SecureRandom;
 import java.util.Optional;
 
 public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
+
+    //TODO: itt is hasonló a probléma, mint a kosár tartalomnál. User serviceből egy van, bejelentkezett userből meg annyi amennyi épp. Ilyekor kinek kéne
+    // bekerülnie ide?
     protected User loggedInUser;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
 
