@@ -13,5 +13,7 @@ public class Ingredient {
     private String name;
     @Enumerated(EnumType.STRING)
     private IngredientType type;
+
+    //TODO: nyugodtan lehet BigDecimal az érték típusa.
     private float price;
 }

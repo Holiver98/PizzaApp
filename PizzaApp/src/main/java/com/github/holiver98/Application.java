@@ -10,6 +10,7 @@ public class Application {
         ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
     }
 
+    //TODO: Érdemes a már nem használt metódusokat törölni.
     private static void printBeanDefinitions(ApplicationContext applicationContext){
         for (String name : applicationContext.getBeanDefinitionNames()) {
             System.out.println(name);

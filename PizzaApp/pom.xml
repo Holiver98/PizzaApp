@@ -24,6 +24,7 @@
         <spring-version>5.2.7.RELEASE</spring-version>
     </properties>
 
+    <!--  TODO: Érdemes átnézni a feleslegessé vált függőségeket, a tranzitív dependenciák miatt.  -->
     <dependencies>
 
         <dependency>

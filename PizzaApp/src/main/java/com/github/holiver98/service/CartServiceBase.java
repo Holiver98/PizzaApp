@@ -8,7 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class CartServiceBase implements ICartService {
+
+    //TODO: A limit lehetne paraméter, "más és más ügyfélnél lehetne eltérő az igény".
     protected final int cartItemLimit = 15;
+    //TODO: +1, Ha memórába szeretnéd tárolni a kosár tartalmát, az rendben van, viszont a jelen műkés az nem fog jól működi, több felhasználó esetén.
+    // A CartService singleton, tehát csak egy példány van belőle az egész alkamazásban, viszont a lista az minden felhasználónak más és más.
+    // A service az stateless, és valamilyen függőség mentén legyen tárolva a state. A "session scope-nak érdemes kicsit utánaolvasni", ha elakadnál akkor szólj
+    // és átbeszéljük, ez annyira nem triviális.
     protected List<Pizza> cartContent = new ArrayList<Pizza>();
     protected IUserService userService;
     protected IMailService mailService;
