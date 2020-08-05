@@ -2,5 +2,3 @@
 target/
 src/main/resources/emailsender.txt
 PizzaApp.iml
-
-#TODO: az iml fájlt is rakjuk ignore-ra. (Az is auto generált fájl, és user specifikus)
