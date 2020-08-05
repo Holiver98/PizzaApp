@@ -29,7 +29,6 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     @Captor
     private ArgumentCaptor<Order> orderArgumentCaptor;
 
-    //TODO: teljesen jó ez a megoldás is, de ezeket lehet @Mock, @InjectMock-al is használni, ekkora nem kell a set-up rész
     @BeforeEach
     void init(){
         orderDao = Mockito.mock(IInMemoryOrderDao.class);
@@ -63,7 +62,6 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
 
         //Act
         //Assert
-        //TODO: +1
         Assertions.assertThrows(CartIsFullException.class,
                 () -> cartService.addPizzaToCart(anotherValidPizza));
         assertThat(cartService.getCartContent().size()).isEqualTo(15);

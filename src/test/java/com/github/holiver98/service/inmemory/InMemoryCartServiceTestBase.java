@@ -8,7 +8,6 @@ import com.github.holiver98.model.PizzaSize;
 import java.util.HashSet;
 import java.util.Set;
 
-//TODO: +1
 public class InMemoryCartServiceTestBase {
     protected Pizza createValidPizza(String name, Long id){
         Pizza pizza = new Pizza();
