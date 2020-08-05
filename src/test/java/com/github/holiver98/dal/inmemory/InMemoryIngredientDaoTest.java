@@ -50,7 +50,7 @@ public class InMemoryIngredientDaoTest{
 
         //Assert
         assertThat(database.ingredients.size()).isEqualTo(1);
-        assertThat(database.ingredients.contains(ingredient)).isEqualTo(true); //TODO: esetleg lehet a .isTrue() -t használni.
+        assertThat(database.ingredients.contains(ingredient)).isTrue();
     }
 
     @Test
@@ -68,7 +68,7 @@ public class InMemoryIngredientDaoTest{
 
         //Assert
         assertThat(database.ingredients.size()).isEqualTo(1);
-        assertThat(database.ingredients.contains(ingredient)).isEqualTo(true);
+        assertThat(database.ingredients.contains(ingredient)).isTrue();
     }
 
     @Test
@@ -143,8 +143,8 @@ public class InMemoryIngredientDaoTest{
         List<Ingredient> result = ingredientDao.getIngredientsOfType(IngredientType.PIZZA_TOPPING);
 
         //Assert
-        assertThat(result.contains(onion)).isEqualTo(true);
-        assertThat(result.contains(cheese)).isEqualTo(true);
+        assertThat(result.contains(onion)).isTrue();
+        assertThat(result.contains(cheese)).isTrue();
         assertThat(result.size()).isEqualTo(2);
     }
 
@@ -350,9 +350,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.deleteIngredient("Tomato");
 
         //Assert
-        assertThat(database.ingredients.contains(onion)).isEqualTo(true);
+        assertThat(database.ingredients.contains(onion)).isTrue();
         assertThat(database.ingredients.contains(tomato)).isEqualTo(false);
-        assertThat(database.ingredients.contains(cheese)).isEqualTo(true);
+        assertThat(database.ingredients.contains(cheese)).isTrue();
         assertThat(database.ingredients.size()).isEqualTo(2);
     }
 
@@ -382,9 +382,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.deleteIngredient(null);
 
         //Assert
-        assertThat(database.ingredients.contains(onion)).isEqualTo(true);
-        assertThat(database.ingredients.contains(tomato)).isEqualTo(true);
-        assertThat(database.ingredients.contains(cheese)).isEqualTo(true);
+        assertThat(database.ingredients.contains(onion)).isTrue();
+        assertThat(database.ingredients.contains(tomato)).isTrue();
+        assertThat(database.ingredients.contains(cheese)).isTrue();
         assertThat(database.ingredients.size()).isEqualTo(3);
     }
 
@@ -414,9 +414,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.deleteIngredient("Potato");
 
         //Assert
-        assertThat(database.ingredients.contains(onion)).isEqualTo(true);
-        assertThat(database.ingredients.contains(tomato)).isEqualTo(true);
-        assertThat(database.ingredients.contains(cheese)).isEqualTo(true);
+        assertThat(database.ingredients.contains(onion)).isTrue();
+        assertThat(database.ingredients.contains(tomato)).isTrue();
+        assertThat(database.ingredients.contains(cheese)).isTrue();
         assertThat(database.ingredients.size()).isEqualTo(3);
     }
 

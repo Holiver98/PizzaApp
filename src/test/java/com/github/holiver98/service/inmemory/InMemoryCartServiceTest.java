@@ -245,8 +245,8 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
 
         assertThat(savedOrder.getUserEmailAddress()).isEqualTo(loggedInUser.getEmailAddress());
         assertThat(savedOrder.getPizzas().size()).isEqualTo(2);
-        assertThat(savedOrder.getPizzas().contains(pepperoniPizza)).isEqualTo(true);
-        assertThat(savedOrder.getPizzas().contains(cheesePizza)).isEqualTo(true);
+        assertThat(savedOrder.getPizzas().contains(pepperoniPizza)).isTrue();
+        assertThat(savedOrder.getPizzas().contains(cheesePizza)).isTrue();
         assertThat(savedOrder.getTotalPrice()).isEqualTo(pepperoniPizza.getPrice() + cheesePizza.getPrice());
         Date currentTime = new Date();
         assertThat(savedOrder.getDate()).isBeforeOrEqualTo(currentTime);
