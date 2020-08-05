@@ -115,6 +115,7 @@ public class InMemoryUserServiceTest {
                 () -> userService.register(bob));
     }
 
+    //TODO: bejött a BCrypt-es dependency a userservice-be és emiatt ez már nem fut le
     @Test
     void login_registered_user_should_log_user_in(){
         //Arrange
