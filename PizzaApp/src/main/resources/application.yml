@@ -10,5 +10,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+

@@ -49,13 +49,6 @@
         <createSequence sequenceName="pizzas_tb_seq"/>
     </changeSet>
 
-    <changeSet author="Oliver" id="create pizza insert trigger">
-        <sqlFile dbms="oracle"
-                 relativeToChangelogFile="true"
-                 splitStatements="false"
-                 path="createPizzaInsertTrigger.sql"/>
-    </changeSet>
-
     <changeSet author="Oliver" id="create rating table">
         <createTable tableName="ratings">
             <column name="pizza_id" type="NUMBER" >
@@ -107,13 +100,6 @@
 
     <changeSet author="Oliver" id="create sequence for orders table">
         <createSequence sequenceName="orders_tb_seq"/>
-    </changeSet>
-
-    <changeSet author="Oliver" id="create order insert trigger">
-        <sqlFile dbms="oracle"
-                 relativeToChangelogFile="true"
-                 splitStatements="false"
-                 path="createOrderInsertTrigger.sql"/>
     </changeSet>
 
     <changeSet author="Oliver" id="create orders_pizzas table">
@@ -172,6 +158,7 @@
 
     <changeSet author="Oliver" id="insert pizza test data">
         <insert tableName="pizzas">
+            <column name="id" value="1"/>
             <column name="name" value="Pepperoni pizza"/>
             <column name="pizza_size" value="NORMAL"/>
             <column name="rating_average" valueNumeric="4"/>
@@ -179,6 +166,7 @@
             <column name="custom" valueBoolean="false"/>
         </insert>
         <insert tableName="pizzas">
+            <column name="id" value="2"/>
             <column name="name" value="Meat lover"/>
             <column name="pizza_size" value="SMALL"/>
             <column name="rating_average" valueNumeric="3.5"/>

@@ -13,7 +13,9 @@ import java.util.List;
 @Data
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "database_seq")
+    @SequenceGenerator(name="database_seq", sequenceName = "orders_tb_seq",
+    initialValue = 1, allocationSize = 1)
     private Long id;
     @Column(name = "email")
     private String userEmailAddress;
@@ -26,6 +28,8 @@ public class Order {
     )
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Pizza> pizzas;
+    @Column(name = "order_date")
     private Date date;
+    @Column(name = "total_price")
     private float totalPrice;
 }
