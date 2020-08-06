@@ -16,6 +16,10 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
 
+    public BCryptPasswordEncoder getPasswordEncoder(){
+        return passwordEncoder;
+    }
+
     @Override
     public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         super.login(emailAddress, password);

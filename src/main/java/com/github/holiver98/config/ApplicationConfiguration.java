@@ -1,7 +1,6 @@
 package com.github.holiver98.config;
 
 import com.github.holiver98.dal.inmemory.*;
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.service.inmemory.InMemoryCartService;
 import com.github.holiver98.service.inmemory.InMemoryPizzaService;
 import com.github.holiver98.service.inmemory.InMemoryRatingService;

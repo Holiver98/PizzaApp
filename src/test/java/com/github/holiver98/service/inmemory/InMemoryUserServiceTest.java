@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -114,24 +115,21 @@ public class InMemoryUserServiceTest {
         Assertions.assertThrows(AlreadyExistsException.class,
                 () -> userService.register(bob));
     }
-
-    //TODO: bejött a BCrypt-es dependency a userservice-be és emiatt ez már nem fut le
+    
     @Test
-    void login_registered_user_should_log_user_in(){
+    void login_registered_user_should_log_user_in() throws NotFoundException, IncorrectPasswordException {
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
-        bob.setPassword("123hello");
+        String rawPassword = "123hello";
+        String encodedPassword = userService.getPasswordEncoder().encode(rawPassword);
+        bob.setPassword(encodedPassword);
         bob.setEmailAddress("bob123@test.hu");
 
         Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
 
         //Act
-        try {
-            userService.login(bob.getEmailAddress(), bob.getPassword());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        userService.login(bob.getEmailAddress(), rawPassword);
 
         //Assert
         User loggedInUser = userService.getLoggedInUser();
