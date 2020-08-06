@@ -17,30 +17,24 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class ApplicationConfiguration {
-
-    @Bean
-    public InMemoryDatabase inMemoryDatabase(){
-        return new InMemoryDatabase();
-    }
-
     @Bean
     public IInMemoryIngredientDao inMemoryIngredientDao(){
-        return new InMemoryIngredientDao(inMemoryDatabase());
+        return new InMemoryIngredientDao();
     }
 
     @Bean
     public IInMemoryPizzaDao inMemoryPizzaDao(){
-        return new InMemoryPizzaDao(inMemoryDatabase());
+        return new InMemoryPizzaDao();
     }
 
     @Bean
-    public IInMemoryRatingDao inMemoryRatingDao(){return new InMemoryRatingDao(inMemoryDatabase());}
+    public IInMemoryRatingDao inMemoryRatingDao(){return new InMemoryRatingDao();}
 
     @Bean
-    public IInMemoryOrderDao inMemoryOrderDao(){return new InMemoryOrderDao(inMemoryDatabase());}
+    public IInMemoryOrderDao inMemoryOrderDao(){return new InMemoryOrderDao();}
 
     @Bean
-    public IInMemoryUserDao inMemoryUserDao(){return new InMemoryUserDao(inMemoryDatabase());}
+    public IInMemoryUserDao inMemoryUserDao(){return new InMemoryUserDao();}
 
     @Bean
     public IUserService inMemoryUserService(){

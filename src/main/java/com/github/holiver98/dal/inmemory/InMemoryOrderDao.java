@@ -1,18 +1,13 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.Order;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InMemoryOrderDao implements IInMemoryOrderDao {
-    private InMemoryDatabase dbContext;
-
-    public InMemoryOrderDao(InMemoryDatabase context) {
-        dbContext = context;
-    }
+    public List<Order> orders = new ArrayList<Order>();
 
     @Override
     public long saveOrder(Order order) {
@@ -26,25 +21,25 @@ public class InMemoryOrderDao implements IInMemoryOrderDao {
             return -1;
         }
 
-        dbContext.orders.add(order);
-        return dbContext.orders.indexOf(order);
+        orders.add(order);
+        return orders.indexOf(order);
     }
 
     @Override
     public List<Order> getOrders() {
-        return dbContext.orders;
+        return orders;
     }
 
     @Override
     public List<Order> getOrdersOfUser(String emailAddress) {
-        return dbContext.orders.stream()
+        return orders.stream()
                 .filter(o -> o.getUserEmailAddress().equals(emailAddress))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Order> getOrderById(long orderId) {
-        return dbContext.orders.stream()
+        return orders.stream()
                 .filter(o -> o.getId() == orderId)
                 .findFirst();
     }
@@ -62,7 +57,7 @@ public class InMemoryOrderDao implements IInMemoryOrderDao {
     @Override
     public void deleteOrder(long orderId) {
         Optional<Order> dbOrder = getOrderById(orderId);
-        dbOrder.ifPresent(o -> dbContext.orders.remove(o));
+        dbOrder.ifPresent(o -> orders.remove(o));
     }
 
     private void updateOldOrderWithNew(Order oldOrder, Order newOrder){

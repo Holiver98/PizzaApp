@@ -1,14 +1,15 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.User;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class InMemoryUserDao implements IInMemoryUserDao {
-    private InMemoryDatabase dbContext;
+    private List<User> users = new ArrayList<User>();
 
-    public InMemoryUserDao(InMemoryDatabase context) {
-        dbContext = context;
+    public List<User> getUsers(){
+        return users;
     }
 
     @Override
@@ -24,12 +25,12 @@ public class InMemoryUserDao implements IInMemoryUserDao {
             return;
         }
 
-        dbContext.users.add(user);
+        users.add(user);
     }
 
     @Override
     public Optional<User> getUserByEmailAddress(String emailAddress) {
-                return dbContext.users.stream()
+                return users.stream()
                 .filter(u -> u.getEmailAddress().equals(emailAddress))
                 .findFirst();
     }
@@ -48,7 +49,7 @@ public class InMemoryUserDao implements IInMemoryUserDao {
     @Override
     public void deleteUser(String emailAddress) {
         Optional<User> user = getUserByEmailAddress(emailAddress);
-        user.ifPresent(u -> dbContext.users.remove(u));
+        user.ifPresent(u -> users.remove(u));
     }
 
     private void updateOldUser(User oldUser, User newUser){

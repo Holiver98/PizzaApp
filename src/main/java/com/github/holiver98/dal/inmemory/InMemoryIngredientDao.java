@@ -1,20 +1,15 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.IngredientType;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InMemoryIngredientDao implements IInMemoryIngredientDao {
 
-    private InMemoryDatabase dbContext;
-
-    public InMemoryIngredientDao(InMemoryDatabase context){
-        dbContext = context;
-    }
+    private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
     @Override
     public void saveIngredient(Ingredient ingredient) {
@@ -28,24 +23,24 @@ public class InMemoryIngredientDao implements IInMemoryIngredientDao {
             return;
         }
 
-        dbContext.ingredients.add(ingredient);
+        ingredients.add(ingredient);
     }
 
     @Override
     public List<Ingredient> getIngredients() {
-        return dbContext.ingredients;
+        return ingredients;
     }
 
     @Override
     public Optional<Ingredient> getIngredientByName(String name) {
-        return dbContext.ingredients.stream()
+        return ingredients.stream()
                 .filter(i -> i.getName().equals(name))
                 .findFirst();
     }
 
     @Override
     public List<Ingredient> getIngredientsOfType(IngredientType type) {
-        return dbContext.ingredients.stream()
+        return ingredients.stream()
                 .filter(i -> i.getType().equals(type))
                 .collect(Collectors.toList());
     }
@@ -63,7 +58,7 @@ public class InMemoryIngredientDao implements IInMemoryIngredientDao {
     @Override
     public void deleteIngredient(String ingredientName) {
         Optional<Ingredient> dbIngredient = getIngredientByName(ingredientName);
-        dbIngredient.ifPresent(i -> dbContext.ingredients.remove(i));
+        dbIngredient.ifPresent(i -> ingredients.remove(i));
     }
 
     private void updateOldIngredientWithNew(Ingredient oldIngredient, Ingredient newIngredient){

@@ -1,27 +1,22 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.Pizza;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryPizzaDao implements IInMemoryPizzaDao {
-    private InMemoryDatabase dbContext;
-
-    public InMemoryPizzaDao(InMemoryDatabase context) {
-        dbContext = context;
-    }
+    public List<Pizza> pizzas = new ArrayList<Pizza>();
 
     @Override
     public long savePizza(Pizza pizza) {
         System.out.println("Pizza saved: " + pizza);
-        dbContext.pizzas.add(pizza);
+        pizzas.add(pizza);
         return 0;
     }
 
     @Override
     public List<Pizza> getPizzas() {
-        return dbContext.pizzas;
+        return pizzas;
     }
 
     @Override

@@ -1,25 +1,18 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.dal.inmemory.IInMemoryUserDao;
-import com.github.holiver98.dal.inmemory.InMemoryUserDao;
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.User;
 import static org.assertj.core.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 public class InMemoryUserDaoTest {
-
-    private InMemoryDatabase database;
-    private IInMemoryUserDao userDao;
+    private InMemoryUserDao userDao;
 
     @BeforeEach
     void init(){
-        database = new InMemoryDatabase();
-        userDao = new InMemoryUserDao(database);
+        userDao = new InMemoryUserDao();
     }
 
     @Test
@@ -29,19 +22,19 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         //Act
         Optional<User> resultUser = userDao.getUserByEmailAddress("test5465@something.com");
@@ -57,19 +50,19 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         //Act
         Optional<User> resultUser = userDao.getUserByEmailAddress("te11111115@something.com");
@@ -85,19 +78,19 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         //Act
         Optional<User> resultUser = userDao.getUserByEmailAddress(null);
@@ -113,7 +106,7 @@ public class InMemoryUserDaoTest {
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User joe = new User();
         joe.setUsername("Joe");
@@ -124,7 +117,7 @@ public class InMemoryUserDaoTest {
         userDao.saveUser(joe);
 
         //Assert
-        assertThat(database.users).hasSize(2)
+        assertThat(userDao.getUsers()).hasSize(2)
                 .contains(joe, bob);
     }
 
@@ -135,13 +128,13 @@ public class InMemoryUserDaoTest {
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User joe = new User();
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User sam = new User();
         sam.setUsername("Sam");
@@ -152,7 +145,7 @@ public class InMemoryUserDaoTest {
         userDao.saveUser(sam);
 
         //Assert
-        assertThat(database.users).hasSize(2)
+        assertThat(userDao.getUsers()).hasSize(2)
                 .contains(joe, bob);
     }
 
@@ -169,7 +162,7 @@ public class InMemoryUserDaoTest {
         userDao.saveUser(joe);
 
         //Assert
-        assertThat(database.users).hasSize(1);
+        assertThat(userDao.getUsers()).hasSize(1);
     }
 
     @Test
@@ -179,25 +172,25 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         //Act
         userDao.saveUser(null);
 
         //Assert
-        assertThat(database.users).hasSize(3)
+        assertThat(userDao.getUsers()).hasSize(3)
             .contains(max, joe, bob);
     }
 
@@ -208,25 +201,25 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         //Act
         userDao.deleteUser(bob.getEmailAddress());
 
         //Assert
-        assertThat(database.users).hasSize(2)
+        assertThat(userDao.getUsers()).hasSize(2)
                 .contains(max, joe);
     }
 
@@ -237,25 +230,25 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("test5465@something.com");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         //Act
         userDao.deleteUser(null);
 
         //Assert
-        assertThat(database.users).hasSize(3)
+        assertThat(userDao.getUsers()).hasSize(3)
                 .contains(max, joe, bob);
     }
 
@@ -266,19 +259,19 @@ public class InMemoryUserDaoTest {
         joe.setUsername("Joe");
         joe.setEmailAddress("test@something.com");
         joe.setPassword("123hello");
-        database.users.add(joe);
+        userDao.getUsers().add(joe);
 
         User bob = new User();
         bob.setUsername("Bob");
         bob.setEmailAddress("123@test.hu");
         bob.setPassword("123gfhjhello");
-        database.users.add(bob);
+        userDao.getUsers().add(bob);
 
         User max = new User();
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         User newBob = new User();
         newBob.setUsername("Bobby");
@@ -289,7 +282,7 @@ public class InMemoryUserDaoTest {
         userDao.updateUser(newBob);
 
         //Assert
-        assertThat(database.users).hasSize(3);
+        assertThat(userDao.getUsers()).hasSize(3);
         assertThat(bob).isEqualTo(newBob);
     }
 
@@ -300,7 +293,7 @@ public class InMemoryUserDaoTest {
         max.setUsername("Max");
         max.setEmailAddress("anotherthing@something.com");
         max.setPassword("HHHdd3");
-        database.users.add(max);
+        userDao.getUsers().add(max);
 
         User maxInitial = new User();
         maxInitial.setUsername("Max");
@@ -311,7 +304,7 @@ public class InMemoryUserDaoTest {
         userDao.updateUser(null);
 
         //Assert
-        assertThat(database.users).hasSize(1);
+        assertThat(userDao.getUsers()).hasSize(1);
         assertThat(max).isEqualTo(maxInitial);
     }
 }

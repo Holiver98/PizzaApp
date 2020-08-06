@@ -1,29 +1,23 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.dal.inmemory.InMemoryIngredientDao;
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.IngredientType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InMemoryIngredientDaoTest{
 
-    private InMemoryDatabase database;
     private InMemoryIngredientDao ingredientDao;
 
     @BeforeEach
     void init(){
-        database = new InMemoryDatabase();
-        ingredientDao = new InMemoryIngredientDao(database);
+        ingredientDao = new InMemoryIngredientDao();
     }
 
     @Test
@@ -34,7 +28,7 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.saveIngredient(null);
 
         //Assert
-        assertThat(database.ingredients.size()).isEqualTo(0);
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(0);
     }
 
     @Test
@@ -49,8 +43,8 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.saveIngredient(ingredient);
 
         //Assert
-        assertThat(database.ingredients.size()).isEqualTo(1);
-        assertThat(database.ingredients.contains(ingredient)).isTrue();
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(1);
+        assertThat(ingredientDao.getIngredients().contains(ingredient)).isTrue();
     }
 
     @Test
@@ -61,14 +55,14 @@ public class InMemoryIngredientDaoTest{
         ingredient.setPrice(3.14f);
         ingredient.setName("Onion");
 
-        database.ingredients.add(ingredient);
+        ingredientDao.getIngredients().add(ingredient);
 
         //Act
         ingredientDao.saveIngredient(ingredient);
 
         //Assert
-        assertThat(database.ingredients.size()).isEqualTo(1);
-        assertThat(database.ingredients.contains(ingredient)).isTrue();
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(1);
+        assertThat(ingredientDao.getIngredients().contains(ingredient)).isTrue();
     }
 
     @Test
@@ -79,7 +73,7 @@ public class InMemoryIngredientDaoTest{
         ingredient.setPrice(3.14f);
         ingredient.setName("Onion");
 
-        database.ingredients.add(ingredient);
+        ingredientDao.getIngredients().add(ingredient);
 
         //Act
         Optional<Ingredient> result = ingredientDao.getIngredientByName(null);
@@ -106,9 +100,9 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(tomato);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(tomato);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         Optional<Ingredient> result = ingredientDao.getIngredientByName("Tomato");
@@ -135,9 +129,9 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(tomato);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(tomato);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         List<Ingredient> result = ingredientDao.getIngredientsOfType(IngredientType.PIZZA_TOPPING);
@@ -166,9 +160,9 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(tomato);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(tomato);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         List<Ingredient> result = ingredientDao.getIngredientsOfType(null);
@@ -190,8 +184,8 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         List<Ingredient> result = ingredientDao.getIngredientsOfType(IngredientType.PIZZA_BASESAUCE);
@@ -229,13 +223,13 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         ingredientDao.updateIngredient(onion);
 
         //Assert
-        assertThat(database.ingredients.size()).isEqualTo(1);
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(1);
         assertThat(onion).isEqualTo(initialOnion);
     }
 
@@ -252,8 +246,8 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(cheese);
 
         Ingredient newOnion = new Ingredient();
         newOnion.setType(IngredientType.PIZZA_TOPPING);
@@ -264,7 +258,7 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.updateIngredient(newOnion);
 
         //Assert
-        assertThat(database.ingredients.size()).isEqualTo(2);
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(2);
         assertThat(onion).isEqualTo(newOnion);
     }
 
@@ -286,8 +280,8 @@ public class InMemoryIngredientDaoTest{
         initialCheese.setPrice(cheese.getPrice());
         initialCheese.setName(cheese.getName());
 
-        database.ingredients.add(onion);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(cheese);
 
         Ingredient newOnion = new Ingredient();
         newOnion.setType(IngredientType.PIZZA_TOPPING);
@@ -314,13 +308,13 @@ public class InMemoryIngredientDaoTest{
         initialOnion.setPrice(onion.getPrice());
         initialOnion.setName(onion.getName());
 
-        database.ingredients.add(onion);
+        ingredientDao.getIngredients().add(onion);
 
         //Act
         ingredientDao.updateIngredient(null);
 
         //Assert
-        assertThat(database.ingredients.size()).isEqualTo(1);
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(1);
         assertThat(onion).isEqualTo(initialOnion);
     }
 
@@ -342,18 +336,18 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(tomato);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(tomato);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         ingredientDao.deleteIngredient("Tomato");
 
         //Assert
-        assertThat(database.ingredients.contains(onion)).isTrue();
-        assertThat(database.ingredients.contains(tomato)).isEqualTo(false);
-        assertThat(database.ingredients.contains(cheese)).isTrue();
-        assertThat(database.ingredients.size()).isEqualTo(2);
+        assertThat(ingredientDao.getIngredients().contains(onion)).isTrue();
+        assertThat(ingredientDao.getIngredients().contains(tomato)).isEqualTo(false);
+        assertThat(ingredientDao.getIngredients().contains(cheese)).isTrue();
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(2);
     }
 
     @Test
@@ -374,18 +368,18 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(tomato);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(tomato);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         ingredientDao.deleteIngredient(null);
 
         //Assert
-        assertThat(database.ingredients.contains(onion)).isTrue();
-        assertThat(database.ingredients.contains(tomato)).isTrue();
-        assertThat(database.ingredients.contains(cheese)).isTrue();
-        assertThat(database.ingredients.size()).isEqualTo(3);
+        assertThat(ingredientDao.getIngredients().contains(onion)).isTrue();
+        assertThat(ingredientDao.getIngredients().contains(tomato)).isTrue();
+        assertThat(ingredientDao.getIngredients().contains(cheese)).isTrue();
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(3);
     }
 
     @Test
@@ -406,18 +400,18 @@ public class InMemoryIngredientDaoTest{
         cheese.setPrice(4.5f);
         cheese.setName("Cheese");
 
-        database.ingredients.add(onion);
-        database.ingredients.add(tomato);
-        database.ingredients.add(cheese);
+        ingredientDao.getIngredients().add(onion);
+        ingredientDao.getIngredients().add(tomato);
+        ingredientDao.getIngredients().add(cheese);
 
         //Act
         ingredientDao.deleteIngredient("Potato");
 
         //Assert
-        assertThat(database.ingredients.contains(onion)).isTrue();
-        assertThat(database.ingredients.contains(tomato)).isTrue();
-        assertThat(database.ingredients.contains(cheese)).isTrue();
-        assertThat(database.ingredients.size()).isEqualTo(3);
+        assertThat(ingredientDao.getIngredients().contains(onion)).isTrue();
+        assertThat(ingredientDao.getIngredients().contains(tomato)).isTrue();
+        assertThat(ingredientDao.getIngredients().contains(cheese)).isTrue();
+        assertThat(ingredientDao.getIngredients().size()).isEqualTo(3);
     }
 
 }

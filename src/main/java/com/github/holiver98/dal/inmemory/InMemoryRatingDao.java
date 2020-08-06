@@ -1,15 +1,10 @@
 package com.github.holiver98.dal.inmemory;
 
-import com.github.holiver98.database.InMemoryDatabase;
 import com.github.holiver98.model.Rating;
-
+import java.util.ArrayList;
 import java.util.List;
 public class InMemoryRatingDao implements IInMemoryRatingDao {
-    private InMemoryDatabase dbContext;
-
-    public InMemoryRatingDao(InMemoryDatabase context) {
-        dbContext = context;
-    }
+    private List<Rating> ratings = new ArrayList<Rating>();
 
     @Override
     public void saveRating(Rating rating) {
