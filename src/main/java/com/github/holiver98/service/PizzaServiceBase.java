@@ -12,7 +12,6 @@ public abstract class PizzaServiceBase implements IPizzaService {
     protected static final int maxBaseSauce = 1;
     protected static final int minBaseSauce = 1;
 
-    protected abstract List<Rating> getRatingsOfPizza(long pizzaId);
     protected abstract long doSavePizza(Pizza pizza);
     protected abstract void doUpdatePizza(Pizza pizza) throws NotFoundException;
     protected abstract void doDeletePizza(long pizzaId);
@@ -38,6 +37,13 @@ public abstract class PizzaServiceBase implements IPizzaService {
         User user = getLoggedInUserOrThrowException("You have to be logged in to save pizza!");
         ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
         return doSavePizza(pizza);
+    }
+
+    @Override
+    public void updatePizzaWithoutAuthentication(Pizza pizza) throws NotFoundException {
+        checkIfPizzaIsValid(pizza);
+        checkIfPizzaExists(pizza);
+        doUpdatePizza(pizza);
     }
 
     @Override
@@ -92,16 +98,6 @@ public abstract class PizzaServiceBase implements IPizzaService {
         return totalPrice.floatValue();
     }
 
-    @Override
-    public float recalculateRatingAverage(long pizzaId) throws NotFoundException {
-        Pizza pizzaToUpdate = getPizzaById(pizzaId);
-        List<Rating> ratings = getRatingsOfPizza(pizzaId);
-        float newRatingAverage = calculateNewRatingAverage(ratings);
-        pizzaToUpdate.setRatingAverage(newRatingAverage);
-        doUpdatePizza(pizzaToUpdate);
-        return newRatingAverage;
-    }
-
     private void checkIfPizzaExists(Pizza pizza) throws NotFoundException {
         if(!pizzaExists(pizza)){
             throw new NotFoundException("Pizza with id (" + pizza.getId() + ") doesn't exist!");
@@ -141,18 +137,6 @@ public abstract class PizzaServiceBase implements IPizzaService {
         if(pizza.getPrice() < 0.0f){
             throw new IllegalArgumentException("invalid pizza: invalid price");
         }
-    }
-
-    private float calculateNewRatingAverage(List<Rating> ratings) {
-        if(ratings.size() == 0){
-            return 0;
-        }
-
-        int ratingSum = 0;
-        for (Rating rating : ratings) {
-            ratingSum += rating.getRating();
-        }
-        return (float)ratingSum / (float)ratings.size();
     }
 
     private static boolean areIngredientPricesValid(Pizza pizza) {

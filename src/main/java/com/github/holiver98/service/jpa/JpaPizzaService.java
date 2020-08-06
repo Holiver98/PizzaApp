@@ -17,16 +17,9 @@ public class JpaPizzaService extends PizzaServiceBase {
     private IIngredientRepository ingredientRepository;
     @Autowired
     private IPizzaRepository pizzaRepository;
-    @Autowired
-    private IRatingRepository ratingRepository;
 
     public JpaPizzaService(IUserService userService) {
         super(userService);
-    }
-
-    @Override
-    protected List<Rating> getRatingsOfPizza(long pizzaId) {
-        return ratingRepository.findByPizzaId(pizzaId);
     }
 
     @Override

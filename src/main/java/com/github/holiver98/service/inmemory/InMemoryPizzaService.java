@@ -15,19 +15,12 @@ public class InMemoryPizzaService extends PizzaServiceBase {
 
     private IInMemoryIngredientDao ingredientDao;
     private IInMemoryPizzaDao pizzaDao;
-    private IInMemoryRatingDao ratingDao;
 
     public InMemoryPizzaService(IInMemoryPizzaDao pizzaDao, IInMemoryIngredientDao ingredientDao
-            , IInMemoryRatingDao ratingDao, IUserService userService){
+            , IUserService userService){
         super(userService);
         this.pizzaDao = pizzaDao;
         this.ingredientDao = ingredientDao;
-        this.ratingDao = ratingDao;
-    }
-
-    @Override
-    protected List<Rating> getRatingsOfPizza(long pizzaId) {
-        return ratingDao.getRatingsOfPizza(pizzaId);
     }
 
     @Override

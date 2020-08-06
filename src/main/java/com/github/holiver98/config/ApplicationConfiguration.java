@@ -45,8 +45,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public IPizzaService inMemoryPizzaService(){
-        return new InMemoryPizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(),
-                inMemoryRatingDao(), inMemoryUserService());
+        return new InMemoryPizzaService(inMemoryPizzaDao(), inMemoryIngredientDao(), inMemoryUserService());
     }
 
     @Bean

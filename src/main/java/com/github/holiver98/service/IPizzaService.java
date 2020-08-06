@@ -16,18 +16,6 @@ public interface IPizzaService {
     float calculatePrice(Pizza pizza);
 
     /**
-     * Recalculates the rating average for the pizza, using fresh data from the database.
-     * It also updates the pizza in the database with the new value.
-     *
-     * @param pizzaId The id of the pizza to update.
-     * @return The average rating, or 0 if there are no ratings.
-     * @throws NotFoundException if no pizza was found in the database with this id.
-     */
-    //TODO: ennek biztos publikusnak kell lennie? Csak akkor van használva, amikor valaki értékel, és akkor viszont futnia kell. De csak úgy magába nem igazán
-    // látom a hasznát. Ráadásul inkább a rate-service felelősége lenne szerintem.
-    float recalculateRatingAverage(long pizzaId) throws NotFoundException;
-
-    /**
      * Saves the pizza into database.
      *
      * @param pizza The pizza to be saved.
@@ -64,6 +52,7 @@ public interface IPizzaService {
 
     /**
      * Updates the pizza in the database that has the same id, as the pizza argument.
+     * Requires authenticated user with Chef role.
      *
      * @param pizza The pizza to be updated.
      * @throws NullPointerException if the pizza is null.
@@ -72,6 +61,17 @@ public interface IPizzaService {
      * @throws NoPermissionException if not logged in, or doesn't have Chef role.
      */
     void updatePizza(Pizza pizza) throws NotFoundException;
+
+    /**
+     * Updates the pizza in the database that has the same id, as the pizza argument.
+     * Does not require authentication.
+     *
+     * @param pizza The pizza to be updated.
+     * @throws NullPointerException if the pizza is null.
+     * @throws IllegalArgumentException if the pizza is invalid.
+     * @throws NotFoundException if no pizza was found in the database with this id.
+     */
+    void updatePizzaWithoutAuthentication(Pizza pizza) throws NotFoundException;
 
     /**
      * Deletes the pizza from the database, if it exists.

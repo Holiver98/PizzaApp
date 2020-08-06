@@ -27,7 +27,7 @@ public abstract class RatingServiceBase implements IRatingService{
         checkForExceptions(pizzaId, rating, user);
         Rating ratingToGive = createRating(pizzaId, rating, user.getEmailAddress());
         save(ratingToGive);
-        pizzaService.recalculateRatingAverage(pizzaId);
+        recalculateRatingAverage(pizzaId);
     }
 
     @Override
@@ -47,6 +47,27 @@ public abstract class RatingServiceBase implements IRatingService{
 
     protected boolean isRatingValid(int rating) {
         return rating >= 1 && rating <= 5;
+    }
+
+    private float recalculateRatingAverage(long pizzaId) throws NotFoundException {
+        Pizza pizzaToUpdate = pizzaService.getPizzaById(pizzaId);
+        List<Rating> ratings = getRatingsOfPizza(pizzaId);
+        float newRatingAverage = calculateNewRatingAverage(ratings);
+        pizzaToUpdate.setRatingAverage(newRatingAverage);
+        pizzaService.updatePizzaWithoutAuthentication(pizzaToUpdate);
+        return newRatingAverage;
+    }
+
+    private float calculateNewRatingAverage(List<Rating> ratings) {
+        if(ratings.size() == 0){
+            return 0;
+        }
+
+        int ratingSum = 0;
+        for (Rating rating : ratings) {
+            ratingSum += rating.getRating();
+        }
+        return (float)ratingSum / (float)ratings.size();
     }
 
     private Rating createRating(long pizzaId, int rating, String emailAddress) {
