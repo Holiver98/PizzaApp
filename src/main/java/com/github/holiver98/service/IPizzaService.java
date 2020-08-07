@@ -3,6 +3,7 @@ package com.github.holiver98.service;
 import com.github.holiver98.model.Pizza;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IPizzaService {
     /**
@@ -16,22 +17,14 @@ public interface IPizzaService {
     float calculatePrice(Pizza pizza);
 
     /**
-     * Saves the pizza into database.
-     *
      * @param pizza The pizza to be saved.
-     * @return The id the database generated for the pizza.
+     * @return The saved pizza with it's id set. If pizza already exists, null is returned.
      * @throws NullPointerException if the pizza is null.
      * @throws IllegalArgumentException if the pizza is invalid.
      * @throws NoPermissionException if not logged in, or doesn't have Chef role.
-     * @throws AlreadyExistsException if pizza already exists in the database.
      */
-    long savePizza(Pizza pizza) throws AlreadyExistsException;
+    Optional<Pizza> savePizza(Pizza pizza);
 
-    /**
-     * Gets all the pizzas from the database.
-     *
-     * @return A list of all the pizzas.
-     */
     List<Pizza> getPizzas();
 
     /**
@@ -42,42 +35,41 @@ public interface IPizzaService {
     List<Pizza> getBasicPizzas();
 
     /**
-     * Gets a pizza by it's id from the database.
-     *
-     * @param pizzaId The id of the pizza.
-     * @return The pizza with the given id.
-     * @throws NotFoundException - no pizza was found in the database with this id
+     * @return The pizza with the given id or null if it doesn't exist.
      */
-    Pizza getPizzaById(long pizzaId) throws NotFoundException;
+    Optional<Pizza> getPizzaById(long pizzaId);
 
     /**
-     * Updates the pizza in the database that has the same id, as the pizza argument.
+     *Updates the pizza, that has the same id, as the pizza argument, with the values of
+     *the pizza argument.
      * Requires authenticated user with Chef role.
      *
      * @param pizza The pizza to be updated.
+     * @return 1 - success, -1 if pizza doesn't exist.
      * @throws NullPointerException if the pizza is null.
      * @throws IllegalArgumentException if the pizza is invalid.
-     * @throws NotFoundException if no pizza was found in the database with this id.
      * @throws NoPermissionException if not logged in, or doesn't have Chef role.
      */
-    void updatePizza(Pizza pizza) throws NotFoundException;
+    int updatePizza(Pizza pizza);
 
     /**
-     * Updates the pizza in the database that has the same id, as the pizza argument.
+     *Updates the pizza, that has the same id, as the pizza argument, with the values of
+     *the pizza argument.
      * Does not require authentication.
      *
      * @param pizza The pizza to be updated.
+     * @return 1 - success, -1 if pizza doesn't exist.
      * @throws NullPointerException if the pizza is null.
      * @throws IllegalArgumentException if the pizza is invalid.
-     * @throws NotFoundException if no pizza was found in the database with this id.
      */
-    void updatePizzaWithoutAuthentication(Pizza pizza) throws NotFoundException;
+    int updatePizzaWithoutAuthentication(Pizza pizza);
 
     /**
      * Deletes the pizza from the database, if it exists.
      *
      * @param pizzaId The id of the pizza to be deleted.
+     * @return 1 - success, -1 - pizza with this id doesn't exist
      * @throws NoPermissionException if not logged in, or doesn't have Chef role.
      */
-    void deletePizza(long pizzaId);
+    int deletePizza(long pizzaId);
 }

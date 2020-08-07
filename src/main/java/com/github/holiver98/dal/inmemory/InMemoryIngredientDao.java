@@ -12,18 +12,19 @@ public class InMemoryIngredientDao implements IInMemoryIngredientDao {
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
     @Override
-    public void saveIngredient(Ingredient ingredient) {
+    public Optional<Ingredient> saveIngredient(Ingredient ingredient) {
         if(ingredient == null){
-            return;
+            throw new NullPointerException("ingredient is null");
         }
 
         Optional<Ingredient> dbIngredient = getIngredientByName(ingredient.getName());
         if(dbIngredient.isPresent()){
             //Already in database
-            return;
+            return Optional.empty();
         }
 
         ingredients.add(ingredient);
+        return Optional.of(ingredient);
     }
 
     @Override
@@ -33,6 +34,9 @@ public class InMemoryIngredientDao implements IInMemoryIngredientDao {
 
     @Override
     public Optional<Ingredient> getIngredientByName(String name) {
+        if(name == null){
+            throw new NullPointerException("ingredient name is null");
+        }
         return ingredients.stream()
                 .filter(i -> i.getName().equals(name))
                 .findFirst();
@@ -40,25 +44,41 @@ public class InMemoryIngredientDao implements IInMemoryIngredientDao {
 
     @Override
     public List<Ingredient> getIngredientsOfType(IngredientType type) {
+        if(type == null){
+            throw new NullPointerException("ingredient type is null");
+        }
         return ingredients.stream()
                 .filter(i -> i.getType().equals(type))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void updateIngredient(Ingredient ingredient) {
+    public int updateIngredient(Ingredient ingredient) {
         if(ingredient == null){
-            return;
+            throw new NullPointerException("ingredient is null");
         }
 
         Optional<Ingredient> oldIngredient = getIngredientByName(ingredient.getName());
-        oldIngredient.ifPresent(o -> updateOldIngredientWithNew(o, ingredient));
+        if(oldIngredient.isPresent()){
+            updateOldIngredientWithNew(oldIngredient.get(), ingredient);
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     @Override
-    public void deleteIngredient(String ingredientName) {
+    public int deleteIngredient(String ingredientName) {
+        if(ingredientName == null){
+            throw new NullPointerException("ingredientName is null");
+        }
         Optional<Ingredient> dbIngredient = getIngredientByName(ingredientName);
-        dbIngredient.ifPresent(i -> ingredients.remove(i));
+        if(dbIngredient.isPresent()){
+            ingredients.remove(dbIngredient.get());
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     private void updateOldIngredientWithNew(Ingredient oldIngredient, Ingredient newIngredient){

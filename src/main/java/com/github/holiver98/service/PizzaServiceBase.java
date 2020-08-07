@@ -4,6 +4,7 @@ import com.github.holiver98.model.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class PizzaServiceBase implements IPizzaService {
     protected IUserService userService;
@@ -12,9 +13,9 @@ public abstract class PizzaServiceBase implements IPizzaService {
     protected static final int maxBaseSauce = 1;
     protected static final int minBaseSauce = 1;
 
-    protected abstract long doSavePizza(Pizza pizza);
-    protected abstract void doUpdatePizza(Pizza pizza) throws NotFoundException;
-    protected abstract void doDeletePizza(long pizzaId);
+    protected abstract Optional<Pizza> doSavePizza(Pizza pizza);
+    protected abstract int doUpdatePizza(Pizza pizza);
+    protected abstract int doDeletePizza(long pizzaId);
     protected abstract boolean pizzaExists(Pizza pizza);
 
     @Override
@@ -22,17 +23,17 @@ public abstract class PizzaServiceBase implements IPizzaService {
     @Override
     public abstract List<Pizza> getBasicPizzas();
     @Override
-    public abstract Pizza getPizzaById(long pizzaId) throws NotFoundException;
+    public abstract Optional<Pizza> getPizzaById(long pizzaId);
 
     public PizzaServiceBase(IUserService userService){
         this.userService = userService;
     }
 
     @Override
-    public long savePizza(Pizza pizza) throws AlreadyExistsException {
+    public Optional<Pizza> savePizza(Pizza pizza){
         checkIfPizzaIsValid(pizza);
         if(pizzaExists(pizza)){
-            throw new AlreadyExistsException("Pizza already exists!");
+            return Optional.empty();
         }
         User user = getLoggedInUserOrThrowException("You have to be logged in to save pizza!");
         ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
@@ -40,26 +41,30 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public void updatePizzaWithoutAuthentication(Pizza pizza) throws NotFoundException {
+    public int updatePizzaWithoutAuthentication(Pizza pizza){
         checkIfPizzaIsValid(pizza);
-        checkIfPizzaExists(pizza);
-        doUpdatePizza(pizza);
+        if(!pizzaExists(pizza)){
+            return -1;
+        }
+        return doUpdatePizza(pizza);
     }
 
     @Override
-    public void updatePizza(Pizza pizza) throws NotFoundException {
+    public int updatePizza(Pizza pizza){
         checkIfPizzaIsValid(pizza);
-        checkIfPizzaExists(pizza);
+        if(!pizzaExists(pizza)){
+            return -1;
+        }
         User user = getLoggedInUserOrThrowException("You have to be logged in to update pizza!");
         ifUserIsNotChefThrowException(user, "You have to have Chef role to update pizza!");
-        doUpdatePizza(pizza);
+        return doUpdatePizza(pizza);
     }
 
     @Override
-    public void deletePizza(long pizzaId) {
+    public int deletePizza(long pizzaId) {
         User user = getLoggedInUserOrThrowException("You have to be logged in to delete pizza!");
         ifUserIsNotChefThrowException(user, "You have to have Chef role to delete pizza!");
-        doDeletePizza(pizzaId);
+        return doDeletePizza(pizzaId);
     }
 
     public static boolean isValidPizza(Pizza pizza){
@@ -96,12 +101,6 @@ public abstract class PizzaServiceBase implements IPizzaService {
         }
 
         return totalPrice.floatValue();
-    }
-
-    private void checkIfPizzaExists(Pizza pizza) throws NotFoundException {
-        if(!pizzaExists(pizza)){
-            throw new NotFoundException("Pizza with id (" + pizza.getId() + ") doesn't exist!");
-        }
     }
 
     private static void checkIfFieldsAreInitialized(Pizza pizza) {

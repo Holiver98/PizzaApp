@@ -9,52 +9,44 @@ import java.util.Optional;
 //TODO: Interfészbe nem szokás az implementációt feltüntetni. IIngredientDao, aminek vannak bizonyos műveletei, és nem mellesleg készült hozzá egy InMemory
 // implementáció is, de készülhetett volna fájl alapú, vagy akár jdbc is.
 public interface IInMemoryIngredientDao {
-    /**
-     * Saves the ingredient into database.
-     *
-     * @param ingredient The ingredient to be saved.
-     */
     //TODO: általában mindig jó ha van visszatérési érték, akár csak annyi hogy sikeres/sikertelen volt a művelet.
 	//Mivel nincs érdemi "válasz" a kérésre, ezért azt nem lehet kideríteni hogy azért nem volt mentés mert már el van mentve.
 	// A te esetedben miven nem lesz módosítva az eredi objektum, nem annyira érdekes most. De mondjuk
 	// az elképzelhető lenne hogy bemenő paraméter a mentendő alapanyag, visszatérési érték pedig, a mentett alapanyag (kapott egy id-t, esetleg, ha van
 	// collection használva akkor az valamilyen speciális implementációt kapott.
-    void saveIngredient(Ingredient ingredient);
 
     /**
-     * Gets all the ingredients from the database.
-     *
-     * @return A list of all the ingredients.
+     * @return The saved ingredient with it's id set. If ingredient already exists, null is returned.
+     * @throws NullPointerException if ingredient is null.
      */
+    Optional<Ingredient> saveIngredient(Ingredient ingredient);
+
     List<Ingredient> getIngredients();
 
     /**
-     * Gets an ingredient by it's name from the database.
-     *
-     * @param name The name of the ingredient.
-     * @return The ingredient with the given name, or null, if it doesn't exist in the database.
+     * @return The ingredient with the given name, or null, if it doesn't exist.
+     * @throws NullPointerException if name is null.
      */
     Optional<Ingredient> getIngredientByName(String name);
 
-    /**
-     * Gets all the ingredients from the database, that have the given type.
-     *
-     * @param type The type of the ingredient.
-     * @return A list of the ingredients, that have the given type.
-     */
     List<Ingredient> getIngredientsOfType(IngredientType type);
 
     /**
-     * Updates the ingredient in the database that has the same id, as the given ingredient argument.
+     * Updates the ingredient, that has the same id, as the given ingredient argument, with
+     * the values of the ingredient argument.
      *
-     * @param ingredient The ingredient to be updated.
+     * @param ingredient The ingredient to be updated, with the new values.
+     * @return 1 - success, -1 - ingredient doesn't exist.
+     * @throws NullPointerException if ingredient is null.
      */
-    void updateIngredient(Ingredient ingredient);
+    int updateIngredient(Ingredient ingredient);
 
     /**
-     * Deletes the ingredient from the database, if it exists.
+     * Deletes the ingredient.
      *
      * @param ingredientName The name of the ingredient to be deleted.
+     * @return 1 - success, -1 - ingredient doesn't exist with this name.
+     * @throws NullPointerException if ingredientName is null.
      */
-    void deleteIngredient(String ingredientName);
+    int deleteIngredient(String ingredientName);
 }

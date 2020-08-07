@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -62,7 +63,7 @@ public class InMemoryRatingServiceTest {
         ratingOnPizzaByLoggedInUser.setRating(rating);
         ratingOnPizzaByLoggedInUser.setPizzaId(pizza.getId());
 
-        Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
         Mockito.when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
 
@@ -92,7 +93,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setRating(rating);
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
-        Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         List<Rating> listAfterTheRatingHasBeenSaved = new ArrayList<Rating>();
@@ -131,7 +132,7 @@ public class InMemoryRatingServiceTest {
         ratingOnPizzaByLoggedInUser.setRating(rating);
         ratingOnPizzaByLoggedInUser.setPizzaId(pizza.getId());
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.when(userService.getLoggedInUser()).thenReturn(null);
         Mockito.lenient().when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
 
@@ -161,7 +162,7 @@ public class InMemoryRatingServiceTest {
         ratingOnPizzaByLoggedInUser.setRating(rating);
         ratingOnPizzaByLoggedInUser.setPizzaId(pizza.getId());
 
-        Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(null);
+        Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.empty());
         Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
@@ -185,7 +186,7 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
         loggedInUser.setPassword("123123dsa");
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
@@ -209,7 +210,7 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
         loggedInUser.setPassword("123123dsa");
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
@@ -233,7 +234,7 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
         loggedInUser.setPassword("123123dsa");
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
@@ -257,7 +258,7 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setEmailAddress("dsadsa@dsdas.hu");
         loggedInUser.setPassword("123123dsa");
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         //Act
@@ -286,7 +287,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setRating(rating);
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         List<Rating> listAfterTheRatingHasBeenSaved = new ArrayList<Rating>();
@@ -326,7 +327,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setRating(rating);
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         List<Rating> listAfterTheRatingHasBeenSaved = new ArrayList<Rating>();
@@ -366,7 +367,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setRating(rating);
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
-        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(pizza);
+        Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
 
         List<Rating> savedRatings = new ArrayList<Rating>();

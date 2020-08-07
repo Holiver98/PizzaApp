@@ -2,14 +2,13 @@ package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryIngredientDao;
 import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
-import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
-import com.github.holiver98.model.Rating;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 
 import java.util.List;
+import java.util.Optional;
 
 public class InMemoryPizzaService extends PizzaServiceBase {
 
@@ -24,11 +23,6 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public long doSavePizza(Pizza pizza) {
-        return pizzaDao.savePizza(pizza);
-    }
-
-    @Override
     public List<Pizza> getPizzas() {
         return pizzaDao.getPizzas();
     }
@@ -39,41 +33,36 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public Pizza getPizzaById(long pizzaId) throws NotFoundException {
+    public Optional<Pizza> getPizzaById(long pizzaId){
         if(pizzaId < 0){
-            return null;
-        }else{
-            Pizza pizza = pizzaDao.getPizzaById(pizzaId);
-            if(pizza == null){
-                throw new NotFoundException("pizza not found with id: " + pizzaId);
-            }else{
-                return pizza;
-            }
+            return Optional.empty();
         }
+        return pizzaDao.getPizzaById(pizzaId);
     }
 
     @Override
-    public void doUpdatePizza(Pizza pizza) {
-        if(!isValidPizza(pizza)){
-            return;
-        }
-
-        pizzaDao.updatePizza(pizza);
+    protected Optional<Pizza> doSavePizza(Pizza pizza) {
+        return pizzaDao.savePizza(pizza);
     }
 
     @Override
-    public void doDeletePizza(long pizzaId) {
+    protected int doUpdatePizza(Pizza pizza) {
+        return pizzaDao.updatePizza(pizza);
+    }
+
+    @Override
+    protected int doDeletePizza(long pizzaId) {
         if(pizzaId < 0){
-            return;
+            return -1;
         }
 
-        pizzaDao.deletePizza(pizzaId);
+        return pizzaDao.deletePizza(pizzaId);
     }
 
     @Override
     protected boolean pizzaExists(Pizza pizza) {
-        Pizza p = pizzaDao.getPizzaById(pizza.getId());
-        if(p == null){
+        Optional<Pizza> p = pizzaDao.getPizzaById(pizza.getId());
+        if(p.isPresent()){
             return false;
         }else{
             return true;

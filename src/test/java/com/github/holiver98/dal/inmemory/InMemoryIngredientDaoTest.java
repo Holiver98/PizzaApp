@@ -2,6 +2,7 @@ package com.github.holiver98.dal.inmemory;
 
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.IngredientType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +22,13 @@ public class InMemoryIngredientDaoTest{
     }
 
     @Test
-    void saveIngredient_Passing_Null_Should_Not_Save(){
+    void saveIngredient_Passing_Null_Should_Throw_Exception(){
         //Arrange
 
         //Act
-        ingredientDao.saveIngredient(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> ingredientDao.saveIngredient(null));
         assertThat(ingredientDao.getIngredients().size()).isEqualTo(0);
     }
 
@@ -66,7 +67,7 @@ public class InMemoryIngredientDaoTest{
     }
 
     @Test
-    void getIngredientByName_Passing_Null_Should_Return_Empty(){
+    void getIngredientByName_Passing_Null_Should_Throw_Exception(){
         //Arrange
         Ingredient ingredient = new Ingredient();
         ingredient.setType(IngredientType.PIZZA_TOPPING);
@@ -76,10 +77,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.getIngredients().add(ingredient);
 
         //Act
-        Optional<Ingredient> result = ingredientDao.getIngredientByName(null);
-
         //Assert
-        assertThat(result).isEqualTo(Optional.empty());
+        Assertions.assertThrows(NullPointerException.class,
+                () -> ingredientDao.getIngredientByName(null));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class InMemoryIngredientDaoTest{
     }
 
     @Test
-    void getIngredientsOfType_Passing_Null_Should_Return_Empty_List(){
+    void getIngredientsOfType_Passing_Null_Should_Throw_Exception(){
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
@@ -165,10 +165,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.getIngredients().add(cheese);
 
         //Act
-        List<Ingredient> result = ingredientDao.getIngredientsOfType(null);
-
         //Assert
-        assertThat(result.size()).isEqualTo(0);
+        Assertions.assertThrows(NullPointerException.class,
+                () -> ingredientDao.getIngredientsOfType(null));
     }
 
     @Test
@@ -296,7 +295,7 @@ public class InMemoryIngredientDaoTest{
     }
 
     @Test
-    void updateIngredient_Passing_Null_Should_Not_Update_Anything(){
+    void updateIngredient_Passing_Null_Should_Throw_Exception(){
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
@@ -311,9 +310,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.getIngredients().add(onion);
 
         //Act
-        ingredientDao.updateIngredient(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> ingredientDao.updateIngredient(null));
         assertThat(ingredientDao.getIngredients().size()).isEqualTo(1);
         assertThat(onion).isEqualTo(initialOnion);
     }
@@ -351,7 +350,7 @@ public class InMemoryIngredientDaoTest{
     }
 
     @Test
-    void deleteIngredient_Passing_Null_Should_Not_Delete(){
+    void deleteIngredient_Passing_Null_Should_Throw_Exception(){
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
@@ -373,9 +372,9 @@ public class InMemoryIngredientDaoTest{
         ingredientDao.getIngredients().add(cheese);
 
         //Act
-        ingredientDao.deleteIngredient(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> ingredientDao.deleteIngredient(null));
         assertThat(ingredientDao.getIngredients().contains(onion)).isTrue();
         assertThat(ingredientDao.getIngredients().contains(tomato)).isTrue();
         assertThat(ingredientDao.getIngredients().contains(cheese)).isTrue();

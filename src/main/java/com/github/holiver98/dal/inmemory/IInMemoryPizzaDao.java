@@ -3,49 +3,43 @@ package com.github.holiver98.dal.inmemory;
 import com.github.holiver98.model.Pizza;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IInMemoryPizzaDao {
     /**
-     * Saves the pizza into database.
-     *
-     * @param pizza The pizza to be saved.
-     * @return The id the database generated for the pizza.
+     * @return The saved pizza with it's id set. If pizza already exists, null is returned.
+     * @throws NullPointerException if pizza is null.
      */
-    long savePizza(Pizza pizza);
+    Optional<Pizza> savePizza(Pizza pizza);
 
-    /**
-     * Gets all the pizzas from the database.
-     *
-     * @return A list of all the pizzas.
-     */
     List<Pizza> getPizzas();
 
     /**
-     * Gets all the pizzas from the database, that aren't a custom-made pizza.
+     * Gets all the pizzas, that aren't a custom-made pizza.
      *
      * @return A list of the basic pizzas.
      */
-    List<Pizza> getBasicPizzas(); //non custom-made pizzas
+    List<Pizza> getBasicPizzas();
 
     /**
-     * Gets a pizza by it's id from the database.
-     *
-     * @param pizzaId The id of the pizza.
-     * @return The pizza with the given id or null if it is not in the database.
+     * @return The pizza with the given id or null if it doesn't exist.
      */
-    Pizza getPizzaById(long pizzaId);
+    Optional<Pizza> getPizzaById(long pizzaId);
 
     /**
-     * Updates the pizza in the database, that has the same id, as the pizza argument.
+     *Updates the pizza, that has the same id, as the pizza argument, with the values of
+     *the pizza argument.
      *
-     * @param pizza The pizza to be updated.
+     *@return 1 - success, -1 - pizza doesn't exist.
+     * @throws NullPointerException if pizza is null.
      */
-    void updatePizza(Pizza pizza);
+    int updatePizza(Pizza pizza);
 
     /**
-     * Deletes the pizza from the database, if it exists.
+     *Deletes the pizza with the given id, if it exists.
      *
-     * @param pizzaId The id of the pizza to be deleted.
+     *@param pizzaId The id of the order to be deleted.
+     *@return 1 - success, -1 - pizza with this id doesn't exist
      */
-    void deletePizza(long pizzaId);
+    int deletePizza(long pizzaId);
 }

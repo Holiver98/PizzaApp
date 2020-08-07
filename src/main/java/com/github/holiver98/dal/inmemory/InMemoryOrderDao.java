@@ -10,19 +10,21 @@ public class InMemoryOrderDao implements IInMemoryOrderDao {
     public List<Order> orders = new ArrayList<Order>();
 
     @Override
-    public long saveOrder(Order order) {
+    public Optional<Order> saveOrder(Order order) {
         if(order == null){
-            return -1;
+            throw new NullPointerException("order is null");
         }
 
         Optional<Order> dbOrder = getOrderById(order.getId());
         if(dbOrder.isPresent()){
             //already in database
-            return -1;
+            return Optional.empty();
         }
 
         orders.add(order);
-        return orders.indexOf(order);
+        long IndexInList = orders.indexOf(order);
+        order.setId(IndexInList);
+        return Optional.of(order);
     }
 
     @Override
@@ -32,6 +34,9 @@ public class InMemoryOrderDao implements IInMemoryOrderDao {
 
     @Override
     public List<Order> getOrdersOfUser(String emailAddress) {
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
         return orders.stream()
                 .filter(o -> o.getUserEmailAddress().equals(emailAddress))
                 .collect(Collectors.toList());
@@ -45,19 +50,29 @@ public class InMemoryOrderDao implements IInMemoryOrderDao {
     }
 
     @Override
-    public void updateOrder(Order order) {
+    public int updateOrder(Order order) {
         if(order == null){
-            return;
+            throw new NullPointerException("order is null");
         }
 
         Optional<Order> dbOrder = getOrderById(order.getId());
-        dbOrder.ifPresent(o -> updateOldOrderWithNew(o, order));
+        if(dbOrder.isPresent()){
+            updateOldOrderWithNew(dbOrder.get(), order);
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     @Override
-    public void deleteOrder(long orderId) {
+    public int deleteOrder(long orderId) {
         Optional<Order> dbOrder = getOrderById(orderId);
-        dbOrder.ifPresent(o -> orders.remove(o));
+        if(dbOrder.isPresent()){
+            orders.remove(dbOrder.get());
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     private void updateOldOrderWithNew(Order oldOrder, Order newOrder){

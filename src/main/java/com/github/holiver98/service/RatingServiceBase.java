@@ -5,6 +5,7 @@ import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class RatingServiceBase implements IRatingService{
     protected IUserService userService;
@@ -50,7 +51,7 @@ public abstract class RatingServiceBase implements IRatingService{
     }
 
     private float recalculateRatingAverage(long pizzaId) throws NotFoundException {
-        Pizza pizzaToUpdate = pizzaService.getPizzaById(pizzaId);
+        Pizza pizzaToUpdate = pizzaService.getPizzaById(pizzaId).orElseThrow(() -> new NotFoundException("No pizza exists with this id (" + pizzaId +")!"));
         List<Rating> ratings = getRatingsOfPizza(pizzaId);
         float newRatingAverage = calculateNewRatingAverage(ratings);
         pizzaToUpdate.setRatingAverage(newRatingAverage);
@@ -99,10 +100,7 @@ public abstract class RatingServiceBase implements IRatingService{
     }
 
     private void checkIfPizzaExists(long pizzaId) throws NotFoundException {
-        Pizza pizza = pizzaService.getPizzaById(pizzaId);
-        if(pizza == null){
-            throw new NotFoundException("No pizza exists with this id!");
-        }
+        pizzaService.getPizzaById(pizzaId).orElseThrow(() -> new NotFoundException("No pizza exists with this id (" + pizzaId +")!"));
     }
 
     private void checkIfUserAlreadyRatedThisPizza(long pizzaId, User user) {
