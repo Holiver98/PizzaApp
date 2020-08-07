@@ -19,9 +19,4 @@ public class PizzaController {
     public List<Pizza> getPizzas(){
         return pizzaService.getPizzas();
     }
-
-    @PostMapping("/add")
-    public void addPizza(@RequestBody Pizza pizza) throws AlreadyExistsException {
-        pizzaService.savePizza(pizza);
-    }
 }

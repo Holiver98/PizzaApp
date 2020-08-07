@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.mail.MessagingException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -163,7 +164,7 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     }
 
     @Test
-    void placeOrder_Placing_Order_With_3_Pizzas_Should_Save_Order_And_Send_Email() throws CartIsEmptyException, MessagingException {
+    void placeOrder_Placing_Order_With_3_Pizzas_Should_Save_Order_And_Send_Email() throws CartIsEmptyException, MessagingException, NotFoundException {
         //Arrange
         Pizza validPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(validPizza);
@@ -174,10 +175,10 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         loggedInUser.setEmailAddress("test123@mmm.hu");
         loggedInUser.setUsername("Bobby");
         loggedInUser.setPassword("asdassa123");
-        Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
 
         //Act
-        cartService.placeOrder();
+        cartService.placeOrder(loggedInUser.getEmailAddress());
 
         //Assert
         Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());
@@ -187,42 +188,42 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
     }
 
     @Test
-    void placeOrder_While_Being_Logged_Out_Should_Throw_Exception() throws MessagingException {
+    void placeOrder_While_Being_Logged_Out_Should_Throw_Exception() throws MessagingException, NotFoundException {
         //Arrange
         Pizza validPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
 
-        Mockito.when(userService.getLoggedInUser()).thenReturn(null);
+        Mockito.when(userService.getLoggedInUser(Mockito.anyString())).thenReturn(Optional.empty());
 
         //Act
         //Assert
         Assertions.assertThrows(NoPermissionException.class,
-                () -> cartService.placeOrder());
+                () -> cartService.placeOrder(Mockito.anyString()));
         Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
 
     @Test
-    void placeOrder_With_Empty_Cart_Should_Throw_Exception() throws MessagingException {
+    void placeOrder_With_Empty_Cart_Should_Throw_Exception() throws MessagingException, NotFoundException {
         //Arrange
         User loggedInUser = new User();
         loggedInUser.setEmailAddress("test123@mmm.hu");
         loggedInUser.setUsername("Bobby");
         loggedInUser.setPassword("asdassa123");
-        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
         Assertions.assertThrows(CartIsEmptyException.class,
-                () -> cartService.placeOrder());
+                () -> cartService.placeOrder(loggedInUser.getEmailAddress()));
         Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
 
     @Test
-    void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information() throws CartIsEmptyException, MessagingException {
+    void placeOrder_Placing_Valid_Order_Should_Save_Correct_Order_Information() throws CartIsEmptyException, MessagingException, NotFoundException {
         //Arrange
         Pizza pepperoniPizza = createValidPizza("Pepperoni pizza", 1L);
         cartService.getCartContent().add(pepperoniPizza);
@@ -233,10 +234,10 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         loggedInUser.setEmailAddress("test123@mmm.hu");
         loggedInUser.setUsername("Bobby");
         loggedInUser.setPassword("asdassa123");
-        Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
 
         //Act
-        cartService.placeOrder();
+        cartService.placeOrder(loggedInUser.getEmailAddress());
 
         //Assert
         Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());

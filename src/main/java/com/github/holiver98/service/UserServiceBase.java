@@ -7,14 +7,21 @@ import java.security.SecureRandom;
 import java.util.Optional;
 
 public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
-
-    //TODO: itt is hasonló a probléma, mint a kosár tartalomnál. User serviceből egy van, bejelentkezett userből meg annyi amennyi épp. Ilyekor kinek kéne
-    // bekerülnie ide?
-    protected User loggedInUser;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
+    protected abstract void update(User user);
+
+    @Override
+    public Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException{
+        User user = tryGetUser(emailAddress);
+        if(user.isLoggedIn()){
+            return Optional.of(user);
+        }else{
+            return Optional.empty();
+        }
+    }
 
     public BCryptPasswordEncoder getPasswordEncoder(){
         return passwordEncoder;
@@ -23,15 +30,17 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     @Override
     public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         super.login(emailAddress, password);
-        checkIfAlreadyLoggedIn();
-        User userInfo = getUserInfoForLogin(emailAddress);
+        checkIfAlreadyLoggedIn(emailAddress);
+        User userInfo = tryGetUser(emailAddress);
         checkIfPasswordMatches(password, userInfo.getPassword());
-        loggedInUser = userInfo;
+        userInfo.setLoggedIn(true);
+        update(userInfo);
     }
 
     @Override
     public void logout() {
-        loggedInUser = null;
+        //TODO: implement logout
+        throw new UnsupportedOperationException("Not implemented yet!");
     }
 
     @Override
@@ -41,11 +50,6 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         checkIfAlreadyRegistered(user);
         encodeUserPassword(user);
         save(user);
-    }
-
-    @Override
-    public User getLoggedInUser() {
-        return loggedInUser;
     }
 
     protected boolean isValidUserName(String username) {
@@ -105,13 +109,14 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         }
     }
 
-    private void checkIfAlreadyLoggedIn() {
-        if(loggedInUser != null){
+    private void checkIfAlreadyLoggedIn(String emailAddress) throws NotFoundException {
+        Optional<User> loggedInUser = getLoggedInUser(emailAddress);
+        if(loggedInUser.isPresent()){
             throw new UnsupportedOperationException("Already logged in!");
         }
     }
 
-    private User getUserInfoForLogin(String emailAddress) throws NotFoundException {
+    private User tryGetUser(String emailAddress) throws NotFoundException {
         Optional<User> registeredUser = findByEmailAddress(emailAddress);
         if(!registeredUser.isPresent()){
             throw new NotFoundException("The email address (" + emailAddress + ") is not registered!");

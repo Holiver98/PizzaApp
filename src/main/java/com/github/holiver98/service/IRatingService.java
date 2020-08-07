@@ -11,12 +11,14 @@ public interface IRatingService {
      *
      * @param pizzaId The id of the pizza to be rated.
      * @param rating A rating of 1-5 to give the pizza.
+     * @param userEmailAddress The user's email address who is rating the pizza.
      * @throws NoPermissionException if not logged in.
+     * @throws NullPointerException if userEmailAddress is null.
      * @throws IllegalArgumentException if rating is invalid.
-     * @throws NotFoundException if the pizza to be rated does not exist.
+     * @throws NotFoundException if the pizza to be rated does not exist, or the userEmailAddress is not registered.
      * @throws UnsupportedOperationException if the user already rated the given pizza.
      */
-    void ratePizza(long pizzaId, int rating) throws NotFoundException;
+    void ratePizza(long pizzaId, int rating, String userEmailAddress) throws NotFoundException;
 
     /**
      * Gets all the ratings from the database.

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class CartServiceBase implements ICartService {
 
@@ -51,14 +52,12 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void placeOrder() throws CartIsEmptyException, NoPermissionException, MessagingException {
+    public void placeOrder(String userEmailAddress) throws CartIsEmptyException, NoPermissionException, MessagingException, NotFoundException {
         if(cartContent.isEmpty()){
             throw new CartIsEmptyException("Cart is empty, can't place order!");
         }
-        User loggedInUser = userService.getLoggedInUser();
-        if(loggedInUser == null){
-            throw new NoPermissionException("The user has to be logged in to place order!");
-        }
+        User loggedInUser = userService.getLoggedInUser(userEmailAddress).orElseThrow(
+                () -> new NoPermissionException("The user has to be logged in to place order!"));
         Order order = createOrder(loggedInUser);
         save(order);
         mailService.sendOrderConfirmationEmail(order);

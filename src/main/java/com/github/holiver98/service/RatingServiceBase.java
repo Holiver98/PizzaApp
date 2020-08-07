@@ -25,8 +25,8 @@ public abstract class RatingServiceBase implements IRatingService{
     protected abstract List<Rating> findByUserEmailAddress(String emailAddress);
 
     @Override
-    public void ratePizza(long pizzaId, int rating) throws NoPermissionException, NotFoundException {
-        User user = tryGetLoggedInUser();
+    public void ratePizza(long pizzaId, int rating, String userEmailAddress) throws NoPermissionException, NotFoundException {
+        User user = tryGetLoggedInUser(userEmailAddress);
         checkForExceptions(pizzaId, rating, user);
         Rating ratingToGive = createRating(pizzaId, rating, user.getEmailAddress());
         save(ratingToGive);
@@ -81,12 +81,9 @@ public abstract class RatingServiceBase implements IRatingService{
         return newRating;
     }
 
-    private User tryGetLoggedInUser() throws NoPermissionException {
-        User user = userService.getLoggedInUser();
-        if(user == null){
-            throw new NoPermissionException("Only logged in users may rate pizzas.");
-        }
-        return user;
+    private User tryGetLoggedInUser(String userEmailAddress) throws NoPermissionException, NotFoundException {
+        Optional<User> user = userService.getLoggedInUser(userEmailAddress);
+        return user.orElseThrow(() -> new NoPermissionException("Only logged in users may rate pizzas."));
     }
 
     private void checkForExceptions(long pizzaId, int rating, User user) throws NotFoundException {

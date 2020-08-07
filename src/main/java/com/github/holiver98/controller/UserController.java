@@ -11,11 +11,6 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping
-    public User getLoggedInUser(){
-        return userService.getLoggedInUser();
-    }
-
     @PostMapping(value = "/register")
     public void register(@RequestBody User user) throws AlreadyExistsException {
         userService.register(user);

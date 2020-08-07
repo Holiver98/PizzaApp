@@ -19,6 +19,9 @@
             <column name="role" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="is_logged_in" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -139,6 +142,7 @@
             <!-- 123456 -->
             <column name="user_password" value="$2a$12$M4WFeyXI94voe3NsddyOpuQrMFiRg0zg3iHOv5VoB523jMmEt5swC"/>
             <column name="role" value="CUSTOMER"/>
+            <column name="is_logged_in" valueBoolean="false"/>
         </insert>
         <insert tableName="users">
             <column name="email" value="admin@test.com"/>
@@ -146,6 +150,7 @@
             <!-- admin -->
             <column name="user_password" value="$2a$12$TvYoGSprDQ8S0.9HQII0NOxWJiSVsMx128zUVn9zV7mWviB51qZGK"/>
             <column name="role" value="CHEF"/>
+            <column name="is_logged_in" valueBoolean="false"/>
         </insert>
         <insert tableName="users">
             <column name="email" value="rovicon558@in4mail.net"/>
@@ -153,6 +158,7 @@
             <!-- 000000 -->
             <column name="user_password" value="$2a$12$QX6UaD9jA1DrrNXxKYUX.u9up58/GHi/zjHa4./Pr5Asab5a4xYT6"/>
             <column name="role" value="CUSTOMER"/>
+            <column name="is_logged_in" valueBoolean="false"/>
         </insert>
     </changeSet>
 

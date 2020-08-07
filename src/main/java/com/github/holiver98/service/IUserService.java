@@ -2,6 +2,8 @@ package com.github.holiver98.service;
 
 import com.github.holiver98.model.User;
 
+import java.util.Optional;
+
 public interface IUserService {
     /**
      * Logs in the user, that is identified by the emailAddress.
@@ -31,9 +33,9 @@ public interface IUserService {
     void register(User user) throws AlreadyExistsException;
 
     /**
-     * Gets the currently logged in user.
-     *
-     * @return The currently logged in user, or null, if no user is logged in.
+     * @return The logged in user (identified by emailAddress) or null if the user is not logged in.
+     * @throws NotFoundException if the given email address is not registered.
+     * @throws NullPointerException if emailAddress is null.
      */
-    User getLoggedInUser();
+    Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException;
 }

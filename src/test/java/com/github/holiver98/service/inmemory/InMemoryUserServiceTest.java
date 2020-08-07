@@ -3,6 +3,7 @@ package com.github.holiver98.service.inmemory;
 import com.github.holiver98.dal.inmemory.IInMemoryUserDao;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.*;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -126,18 +129,18 @@ public class InMemoryUserServiceTest {
         bob.setPassword(encodedPassword);
         bob.setEmailAddress("bob123@test.hu");
 
-        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(java.util.Optional.of(bob));
+        Mockito.when(userDao.getUserByEmailAddress("bob123@test.hu")).thenReturn(Optional.of(bob));
 
         //Act
         userService.login(bob.getEmailAddress(), rawPassword);
 
         //Assert
-        User loggedInUser = userService.getLoggedInUser();
-        assertThat(loggedInUser).isEqualTo(bob);
+        Optional<User> loggedInUser = userService.getLoggedInUser(bob.getEmailAddress());
+        assertThat(loggedInUser.get()).isEqualTo(bob);
     }
 
     @Test
-    void login_unregistered_user_should_not_log_user_in_and_should_throw_exception(){
+    void login_unregistered_user_should_not_log_user_in_and_should_throw_exception() throws NotFoundException {
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -148,12 +151,10 @@ public class InMemoryUserServiceTest {
         //Assert
         Assertions.assertThrows(NotFoundException.class,
                 () -> userService.login(bob.getEmailAddress(), bob.getPassword()));
-        User loggedInUser = userService.getLoggedInUser();
-        assertThat(loggedInUser).isNull();
     }
 
     @Test
-    void login_user_password_null_should_not_log_user_in_and_should_throw_exception(){
+    void login_user_password_null_should_not_log_user_in_and_should_throw_exception() throws NotFoundException {
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -166,12 +167,12 @@ public class InMemoryUserServiceTest {
         //Assert
         Assertions.assertThrows(NullPointerException.class,
                 () -> userService.login(bob.getEmailAddress(), null));
-        User loggedInUser = userService.getLoggedInUser();
-        assertThat(loggedInUser).isNull();
+        Optional<User> loggedInUser = userService.getLoggedInUser(bob.getEmailAddress());
+        assertThat(loggedInUser.isPresent()).isFalse();
     }
 
     @Test
-    void login_user_email_null_should_not_log_user_in_and_should_throw_exception(){
+    void login_user_email_null_should_not_log_user_in_and_should_throw_exception() throws NotFoundException {
         //Arrange
         User bob = new User();
         bob.setUsername("Bob");
@@ -184,7 +185,7 @@ public class InMemoryUserServiceTest {
         //Assert
         Assertions.assertThrows(NullPointerException.class,
                 () -> userService.login(null, bob.getPassword()));
-        User loggedInUser = userService.getLoggedInUser();
-        assertThat(loggedInUser).isNull();
+        Optional<User> loggedInUser = userService.getLoggedInUser(bob.getEmailAddress());
+        assertThat(loggedInUser.isPresent()).isFalse();
     }
 }

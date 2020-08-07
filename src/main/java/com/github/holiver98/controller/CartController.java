@@ -28,8 +28,8 @@ public class CartController {
         cartService.removePizzaFromCart(pizza);
     }
 
-    @GetMapping("/order")
-    public void placeOrder() throws CartIsEmptyException, MessagingException {
-        cartService.placeOrder();
+    @PostMapping("/order")
+    public void placeOrder(@RequestBody String userEmailAddress) throws CartIsEmptyException, MessagingException, NotFoundException {
+        cartService.placeOrder(userEmailAddress);
     }
 }

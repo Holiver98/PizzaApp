@@ -25,4 +25,9 @@ public class InMemoryUserService extends UserServiceBase {
     protected void save(User user) {
         userDao.saveUser(user);
     }
+
+    @Override
+    protected void update(User user) {
+        userDao.updateUser(user);
+    }
 }

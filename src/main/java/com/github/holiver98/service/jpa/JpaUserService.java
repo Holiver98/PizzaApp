@@ -20,4 +20,9 @@ public class JpaUserService extends UserServiceBase {
     protected void save(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    protected void update(User user) {
+        userRepository.save(user);
+    }
 }
