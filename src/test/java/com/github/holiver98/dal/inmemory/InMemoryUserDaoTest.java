@@ -2,8 +2,11 @@ package com.github.holiver98.dal.inmemory;
 
 import com.github.holiver98.model.User;
 import static org.assertj.core.api.Assertions.*;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Null;
 
 import java.util.Optional;
 
@@ -72,7 +75,7 @@ public class InMemoryUserDaoTest {
     }
 
     @Test
-    void getUserByEmailAddress_Passing_Null_Argument_Should_Return_Null() {
+    void getUserByEmailAddress_Passing_Null_Argument_Should_Throw_Exception() {
         //Arrange
         User joe = new User();
         joe.setUsername("Joe");
@@ -93,10 +96,9 @@ public class InMemoryUserDaoTest {
         userDao.getUsers().add(max);
 
         //Act
-        Optional<User> resultUser = userDao.getUserByEmailAddress(null);
-
         //Assert
-        assertThat(resultUser.isPresent()).isEqualTo(false);
+        Assertions.assertThrows(NullPointerException.class,
+                () -> userDao.getUserByEmailAddress(null));
     }
 
     @Test
@@ -166,7 +168,7 @@ public class InMemoryUserDaoTest {
     }
 
     @Test
-    void saveUser_Passing_Null_Argument_Should_Not_Change_Anything(){
+    void saveUser_Passing_Null_Argument_Should_Throw_Exception(){
         //Arrange
         User joe = new User();
         joe.setUsername("Joe");
@@ -187,9 +189,9 @@ public class InMemoryUserDaoTest {
         userDao.getUsers().add(max);
 
         //Act
-        userDao.saveUser(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> userDao.saveUser(null));
         assertThat(userDao.getUsers()).hasSize(3)
             .contains(max, joe, bob);
     }
@@ -224,7 +226,7 @@ public class InMemoryUserDaoTest {
     }
 
     @Test
-    void deleteUser_Passing_Null_Argument_Should_Not_Change_Anything(){
+    void deleteUser_Passing_Null_Argument_Should_Throw_Exception(){
         //Arrange
         User joe = new User();
         joe.setUsername("Joe");
@@ -245,9 +247,9 @@ public class InMemoryUserDaoTest {
         userDao.getUsers().add(max);
 
         //Act
-        userDao.deleteUser(null);
-
         //Assert
+        Assertions.assertThrows(NullPointerException.class,
+                () -> userDao.deleteUser(null));
         assertThat(userDao.getUsers()).hasSize(3)
                 .contains(max, joe, bob);
     }
@@ -287,7 +289,7 @@ public class InMemoryUserDaoTest {
     }
 
     @Test
-    void updateUser_Passing_Null_Argument_Should_Not_Change_Anything(){
+    void updateUser_Passing_Null_Argument_Should_Throw_Exception(){
         //Arrange
         User max = new User();
         max.setUsername("Max");
@@ -301,10 +303,9 @@ public class InMemoryUserDaoTest {
         maxInitial.setPassword("HHHdd3");
 
         //Act
-        userDao.updateUser(null);
-
         //Assert
-        assertThat(userDao.getUsers()).hasSize(1);
+        Assertions.assertThrows(NullPointerException.class,
+                () -> userDao.updateUser(null));
         assertThat(max).isEqualTo(maxInitial);
     }
 }

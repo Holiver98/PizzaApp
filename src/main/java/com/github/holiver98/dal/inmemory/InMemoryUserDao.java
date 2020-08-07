@@ -13,46 +13,63 @@ public class InMemoryUserDao implements IInMemoryUserDao {
     }
 
     @Override
-    public void saveUser(User user) {
-        if(user == null)
-        {
-            return;
+    public Optional<User> saveUser(User user) {
+        if(user == null) {
+            throw new NullPointerException("user is null");
         }
 
         Optional<User> dbUser = getUserByEmailAddress(user.getEmailAddress());
         if(dbUser.isPresent()){
             //Email already registered
-            return;
+            return Optional.empty();
         }
 
         users.add(user);
+        return Optional.of(user);
     }
 
     @Override
     public Optional<User> getUserByEmailAddress(String emailAddress) {
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
                 return users.stream()
                 .filter(u -> u.getEmailAddress().equals(emailAddress))
                 .findFirst();
     }
 
     @Override
-    public void updateUser(User user) {
-        if(user == null)
-        {
-            return;
+    public int updateUser(User user) {
+        if(user == null) {
+            throw new NullPointerException("user is null");
         }
 
         Optional<User> oldUser = getUserByEmailAddress(user.getEmailAddress());
-        oldUser.ifPresent(o -> updateOldUser(o, user));
+        if(oldUser.isPresent()){
+            updateOldUser(oldUser.get(), user);
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     @Override
-    public void deleteUser(String emailAddress) {
+    public int deleteUser(String emailAddress) {
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
         Optional<User> user = getUserByEmailAddress(emailAddress);
-        user.ifPresent(u -> users.remove(u));
+        if(user.isPresent()){
+            users.remove(user.get());
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     private void updateOldUser(User oldUser, User newUser){
+        oldUser.setEmailAddress(newUser.getEmailAddress());
+        oldUser.setRole(newUser.getRole());
         oldUser.setUsername(newUser.getUsername());
         oldUser.setPassword(newUser.getPassword());
     }

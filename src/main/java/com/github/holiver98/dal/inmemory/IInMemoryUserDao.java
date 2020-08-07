@@ -6,33 +6,34 @@ import java.util.Optional;
 
 public interface IInMemoryUserDao {
     /**
-     * Saves the user into database.
-     * It does not return the generated id, because the email address already
-     * identifies the user.
-     *
-     * @param user The user to be saved.
+     * @return The saved user. If user already exists, null is returned.
+     * @throws NullPointerException if user is null.
      */
-    void saveUser(User user);
+    Optional<User> saveUser(User user);
 
     /**
-     * Gets the user by email address from the database.
-     *
      * @param emailAddress The email address, that identifies the user.
-     * @return The user identified by the given email address, or null, if it doesn't exist in the database.
+     * @return The user identified by the given email address, or null, if it doesn't exist.
+     * @throws NullPointerException if emailAddress is null.
      */
     Optional<User> getUserByEmailAddress(String emailAddress);
 
     /**
-     * Updates the user in the database, that has the same id, as the user argument.
+     * Updates the user, that has the same id, as the given user argument, with
+     * the values of the user argument.
      *
-     * @param user The user to be updated.
+     * @param user The user to be updated, with the new values.
+     * @return 1 - success, -1 - user doesn't exist.
+     * @throws NullPointerException if user is null.
      */
-    void updateUser(User user);
+    int updateUser(User user);
 
     /**
-     * Deletes the user with the given emailAddress from the database, if it exists.
+     * Deletes the user.
      *
-     * @param emailAddress The email address of the user.
+     * @param emailAddress The email address of the user to be deleted.
+     * @return 1 - success, -1 - user doesn't exist with this emailAddress.
+     * @throws NullPointerException if emailAddress is null.
      */
-    void deleteUser(String emailAddress);
+    int deleteUser(String emailAddress);
 }
