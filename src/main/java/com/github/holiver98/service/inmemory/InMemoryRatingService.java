@@ -21,7 +21,7 @@ public class InMemoryRatingService extends RatingServiceBase {
 
     @Override
     protected Rating findByUserEmailAddressAndPizzaId(String email, long pizzaId) {
-        return ratingDao.getRatingOfUserForPizza(email, pizzaId);
+        return ratingDao.getRatingOfUserForPizza(email, pizzaId).orElse(null);
     }
 
     @Override

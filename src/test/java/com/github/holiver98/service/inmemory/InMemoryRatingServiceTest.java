@@ -65,7 +65,7 @@ public class InMemoryRatingServiceTest {
 
         Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.when(userService.getLoggedInUser()).thenReturn(loggedInUser);
-        Mockito.when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
+        Mockito.when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(Optional.of(ratingOnPizzaByLoggedInUser));
 
         //Act
         //Assert
@@ -134,7 +134,7 @@ public class InMemoryRatingServiceTest {
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
         Mockito.when(userService.getLoggedInUser()).thenReturn(null);
-        Mockito.lenient().when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(ratingOnPizzaByLoggedInUser);
+        Mockito.lenient().when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(Optional.of(ratingOnPizzaByLoggedInUser));
 
         //Act
         //Assert

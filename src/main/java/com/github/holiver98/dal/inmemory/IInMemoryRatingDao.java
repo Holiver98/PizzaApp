@@ -3,30 +3,24 @@ package com.github.holiver98.dal.inmemory;
 import com.github.holiver98.model.Rating;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IInMemoryRatingDao {
     /**
-     * Saves the rating into database.
-     * It does not return the generated id, because the rating contains the user's
-     * email address, which identifies every rating, because each user can rate each pizza
-     * only once.
+     * Saves the rating. Each user can have only 1 rating on 1 pizza.
      *
-     * @param rating The rating to be saved.
+     * @return The saved rating. If rating already exists, null is returned.
+     * @throws NullPointerException if rating is null.
      */
-    void saveRating(Rating rating);
+    Optional<Rating> saveRating(Rating rating);
 
-    /**
-     * Gets all the ratings from the database.
-     *
-     * @return A list of all the ratings.
-     */
     List<Rating> getRatings();
 
     /**
-     * Gets all the ratings from the database, of a given pizza.
+     * Gets all the ratings on the given pizza.
      *
      * @param pizzaId The id of the pizza, which ratings we want to know.
-     * @return A list of all the ratings of the given pizza.
+     * @return A list of all the ratings on the given pizza.
      */
     List<Rating> getRatingsOfPizza(long pizzaId);
 
@@ -45,23 +39,28 @@ public interface IInMemoryRatingDao {
      * @param userEmailAddress The email address of the user.
      * @param pizzaId The pizza we want the rating of.
      * @return The rating the user made on this pizza, or null if the user didn't rate the pizza.
+     * @throws NullPointerException if userEmailAddress is null.
      */
-    Rating getRatingOfUserForPizza(String userEmailAddress, long pizzaId);
+    Optional<Rating> getRatingOfUserForPizza(String userEmailAddress, long pizzaId);
 
     /**
-     * Updates the ratings in the database, that ahs the same id, as the rating argument.
+     * Updates the rating, that has the same id, as the given rating argument, with
+     * the values of the rating argument.
      *
-     * @param rating The rating to be updated.
+     * @param rating The rating to be updated, with the new values.
+     * @return 1 - success, -1 - rating doesn't exist.
+     * @throws NullPointerException if rating is null.
      */
-    void updateRating(Rating rating);
+    int updateRating(Rating rating);
 
     /**
-     * Deletes the rating from the database, if it exists.
-     * The pizzaId and the userEmailAddress identifies the rating, because each user can
-     * only rate a pizza once.
+     * Deletes the rating.
      *
      * @param pizzaId The id of the pizza, which was rated.
      * @param userEmailAddress The email address of the user, who rated the pizza.
+     * @return 1 - success, -1 - if no rating exists on the pizza (with this pizzaId)
+     * by the user (identified by this userEmailAddress).
+     * @throws NullPointerException if userEmailAddress is null.
      */
-    void deleteRating(long pizzaId, String userEmailAddress);
+    int deleteRating(long pizzaId, String userEmailAddress);
 }
