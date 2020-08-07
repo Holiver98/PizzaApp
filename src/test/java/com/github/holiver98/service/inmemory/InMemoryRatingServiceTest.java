@@ -15,6 +15,7 @@ import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -108,7 +109,10 @@ public class InMemoryRatingServiceTest {
         Mockito.verify(pizzaService, Mockito.times(1)).updatePizzaWithoutAuthentication(pizzaArgumentCaptor.capture());
         Pizza pizzaUpdateData = pizzaArgumentCaptor.getValue();
         assertThat(pizzaUpdateData.getId()).isEqualTo(pizza.getId());
-        assertThat(pizzaUpdateData.getRatingAverage()).isEqualTo(3);
+
+        BigDecimal actualRatingAverage = pizzaUpdateData.getRatingAverage().stripTrailingZeros();
+        BigDecimal expectedRatingAverage = BigDecimal.valueOf(3).stripTrailingZeros();
+        assertThat(actualRatingAverage).isEqualTo(expectedRatingAverage);
     }
 
     @Test
@@ -303,7 +307,11 @@ public class InMemoryRatingServiceTest {
         Mockito.verify(pizzaService, Mockito.times(1)).updatePizzaWithoutAuthentication(pizzaArgumentCaptor.capture());
         Pizza pizzaUpdateData = pizzaArgumentCaptor.getValue();
         assertThat(pizzaUpdateData.getId()).isEqualTo(pizza.getId());
-        assertThat(pizzaUpdateData.getRatingAverage()).isEqualTo(1);
+
+
+        BigDecimal actualRatingAverage = pizzaUpdateData.getRatingAverage().stripTrailingZeros();
+        BigDecimal expectedRatingAverage = BigDecimal.valueOf(1).stripTrailingZeros();
+        assertThat(actualRatingAverage).isEqualTo(expectedRatingAverage);
     }
 
     @Test
@@ -343,7 +351,10 @@ public class InMemoryRatingServiceTest {
         Mockito.verify(pizzaService, Mockito.times(1)).updatePizzaWithoutAuthentication(pizzaArgumentCaptor.capture());
         Pizza pizzaUpdateData = pizzaArgumentCaptor.getValue();
         assertThat(pizzaUpdateData.getId()).isEqualTo(pizza.getId());
-        assertThat(pizzaUpdateData.getRatingAverage()).isEqualTo(5);
+
+        BigDecimal actualRatingAverage = pizzaUpdateData.getRatingAverage().stripTrailingZeros();
+        BigDecimal expectedRatingAverage = BigDecimal.valueOf(5).stripTrailingZeros();
+        assertThat(actualRatingAverage).isEqualTo(expectedRatingAverage);
     }
 
     @Test
@@ -403,6 +414,9 @@ public class InMemoryRatingServiceTest {
         Mockito.verify(pizzaService, Mockito.times(1)).updatePizzaWithoutAuthentication(pizzaArgumentCaptor.capture());
         Pizza pizzaUpdateData = pizzaArgumentCaptor.getValue();
         assertThat(pizzaUpdateData.getId()).isEqualTo(pizza.getId());
-        assertThat(pizzaUpdateData.getRatingAverage()).isEqualTo(2.5f);
+
+        BigDecimal actualRatingAverage = pizzaUpdateData.getRatingAverage().stripTrailingZeros();
+        BigDecimal expectedRatingAverage = BigDecimal.valueOf(2.5).stripTrailingZeros();
+        assertThat(actualRatingAverage).isEqualTo(expectedRatingAverage);
     }
 }

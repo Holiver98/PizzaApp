@@ -5,13 +5,14 @@ import com.github.holiver98.model.IngredientType;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.PizzaSize;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 public class InMemoryPizzaServiceTestBase {
-    protected Pizza createPizzaWith3IngredientsGivenThePrices(float ingredientPrice1,
-                                                              float ingredientPrice2,
-                                                              float ingredientPrice3){
+    protected Pizza createPizzaWith3IngredientsGivenThePrices(BigDecimal ingredientPrice1,
+                                                              BigDecimal ingredientPrice2,
+                                                              BigDecimal ingredientPrice3){
         Pizza pizza = new Pizza();
         pizza.setId(1L);
         pizza.setName("tesztPizza");

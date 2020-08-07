@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
@@ -37,7 +39,7 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient ingredient = new Ingredient();
         ingredient.setType(IngredientType.PIZZA_TOPPING);
-        ingredient.setPrice(3.14f);
+        ingredient.setPrice(BigDecimal.valueOf(3.14));
         ingredient.setName("Onion");
 
         //Act
@@ -53,7 +55,7 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient ingredient = new Ingredient();
         ingredient.setType(IngredientType.PIZZA_TOPPING);
-        ingredient.setPrice(3.14f);
+        ingredient.setPrice(BigDecimal.valueOf(3.14));
         ingredient.setName("Onion");
 
         ingredientDao.getIngredients().add(ingredient);
@@ -71,7 +73,7 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient ingredient = new Ingredient();
         ingredient.setType(IngredientType.PIZZA_TOPPING);
-        ingredient.setPrice(3.14f);
+        ingredient.setPrice(BigDecimal.valueOf(3.14));
         ingredient.setName("Onion");
 
         ingredientDao.getIngredients().add(ingredient);
@@ -87,17 +89,17 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient tomato = new Ingredient();
         tomato.setType(IngredientType.PIZZA_BASESAUCE);
-        tomato.setPrice(2.1f);
+        tomato.setPrice(BigDecimal.valueOf(2.1));
         tomato.setName("Tomato");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -116,17 +118,17 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient tomato = new Ingredient();
         tomato.setType(IngredientType.PIZZA_BASESAUCE);
-        tomato.setPrice(2.1f);
+        tomato.setPrice(BigDecimal.valueOf(2.1));
         tomato.setName("Tomato");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -147,17 +149,17 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient tomato = new Ingredient();
         tomato.setType(IngredientType.PIZZA_BASESAUCE);
-        tomato.setPrice(2.1f);
+        tomato.setPrice(BigDecimal.valueOf(2.1));
         tomato.setName("Tomato");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -175,12 +177,12 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -209,7 +211,7 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient initialOnion = new Ingredient();
@@ -219,7 +221,7 @@ public class InMemoryIngredientDaoTest{
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(cheese);
@@ -237,12 +239,12 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -250,7 +252,7 @@ public class InMemoryIngredientDaoTest{
 
         Ingredient newOnion = new Ingredient();
         newOnion.setType(IngredientType.PIZZA_TOPPING);
-        newOnion.setPrice(4.14f);
+        newOnion.setPrice(BigDecimal.valueOf(4.14));
         newOnion.setName("Onion");
 
         //Act
@@ -266,12 +268,12 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         Ingredient initialCheese = new Ingredient();
@@ -284,7 +286,7 @@ public class InMemoryIngredientDaoTest{
 
         Ingredient newOnion = new Ingredient();
         newOnion.setType(IngredientType.PIZZA_TOPPING);
-        newOnion.setPrice(4.14f);
+        newOnion.setPrice(BigDecimal.valueOf(4.14));
         newOnion.setName("Onion");
 
         //Act
@@ -299,7 +301,7 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient initialOnion = new Ingredient();
@@ -322,17 +324,17 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient tomato = new Ingredient();
         tomato.setType(IngredientType.PIZZA_BASESAUCE);
-        tomato.setPrice(2.1f);
+        tomato.setPrice(BigDecimal.valueOf(2.1));
         tomato.setName("Tomato");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -354,17 +356,17 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient tomato = new Ingredient();
         tomato.setType(IngredientType.PIZZA_BASESAUCE);
-        tomato.setPrice(2.1f);
+        tomato.setPrice(BigDecimal.valueOf(2.1));
         tomato.setName("Tomato");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);
@@ -386,17 +388,17 @@ public class InMemoryIngredientDaoTest{
         //Arrange
         Ingredient onion = new Ingredient();
         onion.setType(IngredientType.PIZZA_TOPPING);
-        onion.setPrice(3.14f);
+        onion.setPrice(BigDecimal.valueOf(3.14));
         onion.setName("Onion");
 
         Ingredient tomato = new Ingredient();
         tomato.setType(IngredientType.PIZZA_BASESAUCE);
-        tomato.setPrice(2.1f);
+        tomato.setPrice(BigDecimal.valueOf(2.1));
         tomato.setName("Tomato");
 
         Ingredient cheese = new Ingredient();
         cheese.setType(IngredientType.PIZZA_TOPPING);
-        cheese.setPrice(4.5f);
+        cheese.setPrice(BigDecimal.valueOf(4.5));
         cheese.setName("Cheese");
 
         ingredientDao.getIngredients().add(onion);

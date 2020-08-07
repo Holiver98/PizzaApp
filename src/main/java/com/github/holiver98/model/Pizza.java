@@ -2,6 +2,7 @@ package com.github.holiver98.model;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity(name = "pizzas")
@@ -26,8 +27,8 @@ public class Pizza {
     @Column(name = "pizza_size")
     private PizzaSize size;
     @Column(name = "rating_average")
-    private float ratingAverage;
-    private float price;
+    private BigDecimal ratingAverage = BigDecimal.valueOf(0);
+    private BigDecimal price = BigDecimal.valueOf(0);
     @Column(name = "custom")
     private boolean isCustom;
 }

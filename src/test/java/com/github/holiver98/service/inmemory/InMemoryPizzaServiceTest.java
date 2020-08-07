@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +39,19 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     @Test
     void calculatePrice_Given_3_Ingredients_With_Valid_Prices(){
         //Arrange
-        Pizza pizza = createPizzaWith3IngredientsGivenThePrices(8.2f, 2.0f, 3.6f);
+        Pizza pizza = createPizzaWith3IngredientsGivenThePrices(BigDecimal.valueOf(8.2), BigDecimal.valueOf(2.0), BigDecimal.valueOf(3.6));
 
         //Act
-        float price = pizzaService.calculatePrice(pizza);
+        BigDecimal price = pizzaService.calculatePrice(pizza);
 
         //Assert
-        assertThat(price).isEqualTo(13.8f);
+        assertThat(price).isEqualTo(BigDecimal.valueOf(13.8));
     }
 
     @Test
     void calculatePrice_Given_3_Ingredients_Some_Have_Invalid_Price_Should_Throw_Exception(){
         //Arrange
-        Pizza pizza = createPizzaWith3IngredientsGivenThePrices(-2.1f, -3.3f, 8.4f);
+        Pizza pizza = createPizzaWith3IngredientsGivenThePrices(BigDecimal.valueOf(-2.1), BigDecimal.valueOf(-3.3), BigDecimal.valueOf(8.4));
 
         //Act
         //Assert
@@ -61,7 +62,7 @@ public class InMemoryPizzaServiceTest extends InMemoryPizzaServiceTestBase {
     @Test
     void calculatePrice_Given_3_Ingredients_Some_Have_Invalid_Price_Should_Throw_Exception_2(){
         //Arrange
-        Pizza pizza = createPizzaWith3IngredientsGivenThePrices(-10.1f, -3.3f, 8.4f);
+        Pizza pizza = createPizzaWith3IngredientsGivenThePrices(BigDecimal.valueOf(-10.1), BigDecimal.valueOf(-3.3), BigDecimal.valueOf(8.4));
 
         //Act
         //Assert

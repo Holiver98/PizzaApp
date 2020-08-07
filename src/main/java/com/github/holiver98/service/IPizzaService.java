@@ -2,6 +2,7 @@ package com.github.holiver98.service;
 
 import com.github.holiver98.model.Pizza;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public interface IPizzaService {
      * @throws NullPointerException if the pizza is null.
      * @throws IllegalArgumentException if the pizza is invalid.
      */
-    float calculatePrice(Pizza pizza);
+    BigDecimal calculatePrice(Pizza pizza);
 
     /**
      * @param pizza The pizza to be saved.

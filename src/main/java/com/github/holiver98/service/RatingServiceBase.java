@@ -4,6 +4,8 @@ import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Rating;
 import com.github.holiver98.model.User;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,25 +52,25 @@ public abstract class RatingServiceBase implements IRatingService{
         return rating >= 1 && rating <= 5;
     }
 
-    private float recalculateRatingAverage(long pizzaId) throws NotFoundException {
+    private BigDecimal recalculateRatingAverage(long pizzaId) throws NotFoundException {
         Pizza pizzaToUpdate = pizzaService.getPizzaById(pizzaId).orElseThrow(() -> new NotFoundException("No pizza exists with this id (" + pizzaId +")!"));
         List<Rating> ratings = getRatingsOfPizza(pizzaId);
-        float newRatingAverage = calculateNewRatingAverage(ratings);
+        BigDecimal newRatingAverage = calculateNewRatingAverage(ratings);
         pizzaToUpdate.setRatingAverage(newRatingAverage);
         pizzaService.updatePizzaWithoutAuthentication(pizzaToUpdate);
         return newRatingAverage;
     }
 
-    private float calculateNewRatingAverage(List<Rating> ratings) {
+    private BigDecimal calculateNewRatingAverage(List<Rating> ratings) {
         if(ratings.size() == 0){
-            return 0;
+            return BigDecimal.valueOf(0);
         }
 
-        int ratingSum = 0;
+        BigDecimal ratingSum = BigDecimal.valueOf(0);
         for (Rating rating : ratings) {
-            ratingSum += rating.getRating();
+            ratingSum = ratingSum.add(BigDecimal.valueOf(rating.getRating()));
         }
-        return (float)ratingSum / (float)ratings.size();
+        return ratingSum.divide(BigDecimal.valueOf(ratings.size()), 2, RoundingMode.HALF_UP);
     }
 
     private Rating createRating(long pizzaId, int rating, String emailAddress) {

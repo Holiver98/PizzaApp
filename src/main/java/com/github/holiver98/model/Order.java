@@ -3,6 +3,7 @@ package com.github.holiver98.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,5 +32,5 @@ public class Order {
     @Column(name = "order_date")
     private Date date;
     @Column(name = "total_price")
-    private float totalPrice;
+    private BigDecimal totalPrice = BigDecimal.valueOf(0);
 }

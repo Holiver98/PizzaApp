@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.mail.MessagingException;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.*;
@@ -245,7 +246,8 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         assertThat(savedOrder.getPizzas().size()).isEqualTo(2);
         assertThat(savedOrder.getPizzas().contains(pepperoniPizza)).isTrue();
         assertThat(savedOrder.getPizzas().contains(cheesePizza)).isTrue();
-        assertThat(savedOrder.getTotalPrice()).isEqualTo(pepperoniPizza.getPrice() + cheesePizza.getPrice());
+        BigDecimal expectedTotalPrice = pepperoniPizza.getPrice().add(cheesePizza.getPrice());
+        assertThat(savedOrder.getTotalPrice()).isEqualTo(expectedTotalPrice);
         Date currentTime = new Date();
         assertThat(savedOrder.getDate()).isBeforeOrEqualTo(currentTime);
     }

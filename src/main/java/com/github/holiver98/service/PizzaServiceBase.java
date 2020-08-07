@@ -91,16 +91,15 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public float calculatePrice(Pizza pizza) {
+    public BigDecimal calculatePrice(Pizza pizza) {
         checkIfPizzaIsValid(pizza);
 
         BigDecimal totalPrice = new BigDecimal(0);
         for (Ingredient ingredient: pizza.getIngredients()) {
-            BigDecimal ingredientPrice = new BigDecimal(Float.toString(ingredient.getPrice()));
-            totalPrice = totalPrice.add(ingredientPrice);
+            totalPrice = totalPrice.add(ingredient.getPrice());
         }
 
-        return totalPrice.floatValue();
+        return totalPrice;
     }
 
     private static void checkIfFieldsAreInitialized(Pizza pizza) {
@@ -133,14 +132,16 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     private static void checkIfPizzaPriceIsNotNegative(Pizza pizza) {
-        if(pizza.getPrice() < 0.0f){
+        boolean pizzaPriceSmallerThan0 = pizza.getPrice().compareTo(BigDecimal.valueOf(0)) < 0;
+        if(pizzaPriceSmallerThan0){
             throw new IllegalArgumentException("invalid pizza: invalid price");
         }
     }
 
     private static boolean areIngredientPricesValid(Pizza pizza) {
         for (Ingredient i: pizza.getIngredients()) {
-            if(i.getPrice() < 0f){
+            boolean ingredientPriceSmallerThan0 = i.getPrice().compareTo(BigDecimal.valueOf(0)) < 0;
+            if(ingredientPriceSmallerThan0){
                 return false;
             }
         }

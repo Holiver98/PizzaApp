@@ -3,6 +3,7 @@ package com.github.holiver98.service;
 import com.github.holiver98.model.*;
 
 import javax.mail.MessagingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,11 +74,11 @@ public abstract class CartServiceBase implements ICartService {
         return order;
     }
 
-    protected float CalculateTotalPrice(){
-        float totalPrice = 0f;
+    protected BigDecimal CalculateTotalPrice(){
+        BigDecimal totalPrice = BigDecimal.valueOf(0);
 
         for (Pizza pizza: cartContent) {
-            totalPrice += pizza.getPrice();
+            totalPrice = totalPrice.add(pizza.getPrice());
         }
 
         return totalPrice;
