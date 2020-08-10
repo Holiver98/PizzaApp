@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Order Email</title>
+</head>
+<body>
+<h1>Thank you for your order!</h1>
+<table>
+    <tbody>
+    <tr>
+        <td>Order id: <span th:text="${order.id}"></span></td>
+    </tr>
+    <tr>
+        <td>Date of order: <span th:text="${order.date}"></span></td>
+    </tr>
+    <tr>
+        <td>
+            Items:
+            <ul th:each="pizza: ${order.pizzas}">
+               <li><span th:text="${pizza.name}"></span> - <span th:text="${pizza.price}"></span></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>Total price: <span th:text="${order.totalPrice}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

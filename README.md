@@ -61,13 +61,13 @@ ID | Leírás
 
 ### Use-case diagram
 
-![](usecase_diagram.png)
+![](docs/usecase_diagram.png)
 
 ### Osztály diagram
 
-![](class_diagram.PNG)
+![](docs/class_diagram.PNG)
 
 ### Szekvencia diagram
 
 #### Megrendelés leadása
-![](seq_dia_Cart-PlaceOrder.PNG)
+![](docs/seq_dia_Cart-PlaceOrder.PNG)

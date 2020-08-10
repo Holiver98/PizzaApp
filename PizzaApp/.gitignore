@@ -1,5 +1,0 @@
-.idea/
-target/
-src/main/resources/emailsender.txt
-
-#TODO: az iml fájlt is rakjuk ignore-ra. (Az is auto generált fájl, és user specifikus)
