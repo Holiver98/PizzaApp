@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.github.holiver98.service.*;
 import org.springframework.context.annotation.Primary;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -77,4 +79,26 @@ public class ApplicationConfiguration {
     @Bean
     @Primary
     public IPizzaService jpaPizzaService(){ return new JpaPizzaService(jpaUserService()); }
+
+    @Bean
+    public ClassLoaderTemplateResolver htmlTemplateResolver() {
+
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+
+        templateResolver.setCacheable(false);
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCharacterEncoding("UTF-8");
+
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine htmlTemplateEngine() {
+
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(htmlTemplateResolver());
+
+        return templateEngine;
+    }
 }

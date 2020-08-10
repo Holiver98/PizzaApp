@@ -1,6 +1,9 @@
 package com.github.holiver98.service;
 
 import com.github.holiver98.model.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -16,7 +19,11 @@ import java.util.Properties;
 public class MailService implements IMailService{
     private String senderEmailAddress = "";
     private String senderPassword = "";
-    private final String senderInformationFilePath = "src/main/resources/emailsender.txt";
+    private static final String senderInformationFilePath = "src/main/resources/emailsender.txt";
+    private static final boolean debug_SendToSelf = true;
+
+    @Autowired
+    TemplateEngine templateEngine;
 
     public MailService(){
         tryLoadEmailAndPasswordFromFile();
@@ -30,24 +37,22 @@ public class MailService implements IMailService{
                 return new PasswordAuthentication(senderEmailAddress, senderPassword);
             }
         });
-        Message msg = getMessage(content, session, emailAddress);
+
+        String recipientEmail = emailAddress;
+        if(debug_SendToSelf){
+            recipientEmail = senderEmailAddress;
+        }
+
+        Message msg = getMessage(content, session, recipientEmail);
         Transport.send(msg);
     }
 
     @Override
     public void sendOrderConfirmationEmail(Order order) throws MessagingException {
-        String content = String.format("<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
-                "    <head>\n" +
-                "        <title>Pizza Order</title>\n" +
-                "    </head>\n" +
-                "    <body>\n" +
-                "        <h1>Thank you for your order!</h1>\n" +
-                "        <h2>Order:</h2>\n" +
-                "        <ul><li>Id: %d</li><li>Date: %s</li><li>Total price: %.2f</li></ul>\n" +
-                "    </body>\n" +
-                "</html>", order.getId(), order.getDate(), order.getTotalPrice());
-        sendMailTo(order.getUserEmailAddress(), content);
+        final Context context = new Context();
+        context.setVariable("order", order);
+        String body = templateEngine.process("email/order-email-template", context);
+        sendMailTo(order.getUserEmailAddress(), body);
     }
 
     //TODO: +1, nem rossz gondolat, de talán feleslegesen bonyolult. Egy sima username, password paraméter elég, amit nem kell felvenni a property-kközé, hanem
