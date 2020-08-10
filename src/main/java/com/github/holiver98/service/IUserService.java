@@ -18,13 +18,13 @@ public interface IUserService {
     void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
 
     /**
-     * Logs the currently logged in user out.
+     * @throws NullPointerException if emailAddress is null.
+     * @throws NotFoundException if the emailAddress isn't registered.
+     * @throws UnsupportedOperationException if the user isn't logged in.
      */
-    void logout();
+    void logout(String emailAddress) throws NotFoundException;
 
     /**
-     * Registers the given user.
-     *
      * @param user The user we want to register. Contains the user information.
      * @throws NullPointerException if the user is null.
      * @throws IllegalArgumentException if the user information are invalid.

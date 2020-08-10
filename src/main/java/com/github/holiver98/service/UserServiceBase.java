@@ -30,17 +30,24 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     @Override
     public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         super.login(emailAddress, password);
-        checkIfAlreadyLoggedIn(emailAddress);
         User userInfo = tryGetUser(emailAddress);
+        if(userInfo.isLoggedIn()){
+            throw new UnsupportedOperationException("Already logged in!");
+        }
         checkIfPasswordMatches(password, userInfo.getPassword());
         userInfo.setLoggedIn(true);
         update(userInfo);
     }
 
     @Override
-    public void logout() {
-        //TODO: implement logout
-        throw new UnsupportedOperationException("Not implemented yet!");
+    public void logout(String emailAddress) throws NotFoundException {
+        super.logout(emailAddress);
+        User user = tryGetUser(emailAddress);
+        if(!user.isLoggedIn()){
+            throw new UnsupportedOperationException("Not logged in!");
+        }
+        user.setLoggedIn(false);
+        update(user);
     }
 
     @Override
@@ -106,13 +113,6 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
 
         if(!isValidEmailAddress(user.getEmailAddress())) {
             throw new IllegalArgumentException("invalid email address: " + user.getEmailAddress());
-        }
-    }
-
-    private void checkIfAlreadyLoggedIn(String emailAddress) throws NotFoundException {
-        Optional<User> loggedInUser = getLoggedInUser(emailAddress);
-        if(loggedInUser.isPresent()){
-            throw new UnsupportedOperationException("Already logged in!");
         }
     }
 
