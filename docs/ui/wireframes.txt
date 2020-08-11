@@ -1,0 +1,6 @@
+https://wireframe.cc/4gSjyQ	- Home
+https://wireframe.cc/0SBvlp	- Register
+https://wireframe.cc/Tf7TDj	- Login
+https://wireframe.cc/Gcbelu	- CustomPizza
+https://wireframe.cc/KlRKzN	- Cart
+https://wireframe.cc/9LIKsC	- Order
