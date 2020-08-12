@@ -9,5 +9,25 @@ import com.vaadin.ui.VerticalLayout;
 public class FooView extends VerticalLayout implements View {
     public FooView(){
         addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
+        addComponent(new Label("Foo Boi"));
     }
 }

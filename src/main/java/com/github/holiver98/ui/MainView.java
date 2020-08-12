@@ -1,26 +1,35 @@
 package com.github.holiver98.ui;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
+@Theme("mytheme")
 @Title("My UI")
 @SpringUI(path = "")
 public class MainView extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        // Create the content root layout for the UI
-        VerticalLayout content = new FooView();
+        VerticalLayout content = new VerticalLayout();
+        content.setStyleName("main");
+        //content.setSizeFull();
         setContent(content);
 
-        // Display the greeting
-        content.addComponent(new Label("Hello World!"));
+        content.addComponent(new Footer());
 
-        // Have a clickable button
-        content.addComponent(new Button("Push Me!",
-                click -> Notification.show("Pushed!")));
+        VerticalLayout body = new VerticalLayout();
+        for(int i=0; i<40; i++){
+            body.addComponent(new Label("Lorem ipsum"));
+
+        }
+        content.addComponent(body);
+
+        Footer footer = new Footer();
+        content.addComponent(footer);
+        content.setComponentAlignment(footer, Alignment.BOTTOM_CENTER);
     }
 
 }
