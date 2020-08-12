@@ -34,21 +34,10 @@
 @mixin mytheme {
   @include valo;
 
-  // Insert your own theme rules here
-  .v-button {
-      color: blue;
-      background: red;
-    }
-
-  .main {
-        border: solid;
-        border-color:red;
-  }
-
   .footer {
       &[width-range~="0-700px"] {
         flex-direction: column;
-        .hl{
+        .supportInfoContainer{
             flex-direction: column;
         }
       }
@@ -60,7 +49,7 @@
       color: rgb(235, 235, 235);
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       background: rgb(194, 76, 87);
-      .hl{
+      .supportInfoContainer{
           display: flex;
           flex-wrap: wrap;
       }

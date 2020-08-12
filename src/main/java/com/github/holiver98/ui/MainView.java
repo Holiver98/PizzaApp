@@ -7,7 +7,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
 @Theme("mytheme")
-@Title("My UI")
+@Title("PizzaApp")
 @SpringUI(path = "")
 public class MainView extends UI {
 
@@ -15,13 +15,12 @@ public class MainView extends UI {
     protected void init(VaadinRequest request) {
         VerticalLayout content = new VerticalLayout();
         content.setStyleName("main");
-        //content.setSizeFull();
         setContent(content);
 
         content.addComponent(new Footer());
 
         VerticalLayout body = new VerticalLayout();
-        for(int i=0; i<40; i++){
+        for(int i=0; i<15; i++){
             body.addComponent(new Label("Lorem ipsum"));
 
         }
@@ -29,7 +28,6 @@ public class MainView extends UI {
 
         Footer footer = new Footer();
         content.addComponent(footer);
-        content.setComponentAlignment(footer, Alignment.BOTTOM_CENTER);
     }
 
 }

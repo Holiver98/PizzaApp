@@ -15,15 +15,12 @@ public class Footer extends CssLayout implements View {
         Label copyrightLabel = new Label("© 2020 - PizzaApp");
         addComponent(copyrightLabel);
 
-        HorizontalLayout hl = new HorizontalLayout();
-        hl.setStyleName("hl");
+        HorizontalLayout supportInfoContainer = new HorizontalLayout();
+        supportInfoContainer.setStyleName("supportInfoContainer");
         Label emailLabel = new Label("email: support@pizzaapp.com");
-        //emailLabel.setSizeUndefined();
         Label phoneLabel = new Label("phone: +77 77 777 7777");
-
-        //phoneLabel.setSizeUndefined();
-        hl.addComponent(emailLabel);
-        hl.addComponent(phoneLabel);
-        addComponent(hl);
+        supportInfoContainer.addComponent(emailLabel);
+        supportInfoContainer.addComponent(phoneLabel);
+        addComponent(supportInfoContainer);
     }
 }
