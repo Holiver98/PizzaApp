@@ -31,10 +31,26 @@
 
 @import "../valo/valo.scss";
 
+@mixin basicbar{
+    border-radius: 5px;
+    color: rgb(235, 235, 235);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background: rgb(194, 76, 87);
+    padding: 3px;
+}
+
 @mixin mytheme {
   @include valo;
 
+  .main{
+    .title{
+        font-size: 56px;
+    }
+  }
+
   .footer {
+      @include basicbar;
+
       &[width-range~="0-700px"] {
         flex-direction: column;
         .supportInfoContainer{
@@ -44,14 +60,58 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      padding: 3px;
-      border-radius: 5px;
-      color: rgb(235, 235, 235);
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-      background: rgb(194, 76, 87);
       .supportInfoContainer{
           display: flex;
           flex-wrap: wrap;
       }
+  }
+
+  .header {
+    @include basicbar;
+
+     &[width-range~="0-700px"] {
+            flex-direction: column;
+            .leftcontainer{
+                flex-direction: column;
+            }
+            .leftcontainer > .v-button{
+                width: 100%;
+            }
+            .rightcontainer{
+                flex-direction: column;
+            }
+            .rightcontainer > .v-button{
+                width: 100%;
+            }
+          }
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+
+    .leftcontainer{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .rightcontainer{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+  }
+
+  .pizzacard{
+
+  }
+
+  .pizzalist{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

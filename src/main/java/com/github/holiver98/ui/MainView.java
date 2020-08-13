@@ -2,32 +2,38 @@ package com.github.holiver98.ui;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.*;
 
 @Theme("mytheme")
 @Title("PizzaApp")
-@SpringUI(path = "")
-public class MainView extends UI {
+@SpringUI
+@SpringViewDisplay
+public class MainView extends UI implements ViewDisplay {
+
+    private Panel body = new Panel();
 
     @Override
-    protected void init(VaadinRequest request) {
+    protected void init(VaadinRequest request){
         VerticalLayout content = new VerticalLayout();
         content.setStyleName("main");
         setContent(content);
 
-        content.addComponent(new Footer());
+        Header header = new Header();
+        content.addComponent(header);
 
-        VerticalLayout body = new VerticalLayout();
-        for(int i=0; i<15; i++){
-            body.addComponent(new Label("Lorem ipsum"));
-
-        }
         content.addComponent(body);
 
         Footer footer = new Footer();
         content.addComponent(footer);
     }
 
+    @Override
+    public void showView(View view) {
+        body.setContent(view.getViewComponent());
+    }
 }
