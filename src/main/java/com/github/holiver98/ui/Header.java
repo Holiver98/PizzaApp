@@ -42,5 +42,6 @@ public class Header extends CssLayout implements View {
         loginBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("login"));
         registerBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("register"));
         customPizzaBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("custom"));
+        cartBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("cart"));
     }
 }

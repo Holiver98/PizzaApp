@@ -21,7 +21,7 @@ public class Pizza {
             inverseJoinColumns =
             @JoinColumn(name = "ingredient_name", referencedColumnName = "name")
     )
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Ingredient> ingredients;
     @Enumerated(EnumType.STRING)
     @Column(name = "pizza_size")
