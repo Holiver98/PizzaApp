@@ -13,6 +13,8 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.teemu.ratingstars.RatingStars;
+
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -29,6 +31,7 @@ public class PizzaDetails extends VerticalLayout implements View {
     private VerticalLayout ingredientsVL;
     private Label pizzaPriceL;
     private Label pizzaRatingL;
+    private RatingStars ratingStars;
 
     private static final String ratingLabelBaseText = "Rating: ";
     private static final String nameLabelBaseText = "Name: ";
@@ -49,6 +52,10 @@ public class PizzaDetails extends VerticalLayout implements View {
         Button addToCartBtn = new Button("Add to cart");
 
         addComponent(pizzaRatingL);
+        ratingStars = new RatingStars();
+        ratingStars.setAnimated(false);
+        ratingStars.setReadOnly(true);
+        addComponent(ratingStars);
         addComponent(pizzaNameL);
         addComponent(ingredientsVL);
         addComponent(pizzaSizeCB);
@@ -68,6 +75,7 @@ public class PizzaDetails extends VerticalLayout implements View {
 
     private void updateUiWithModel(Pizza pizza, int numberOfRatingsOnPizza){
         pizzaRatingL.setValue(ratingLabelBaseText + pizza.getRatingAverage() + " (" + numberOfRatingsOnPizza + ")");
+        ratingStars.setValue(pizza.getRatingAverage().doubleValue());
         pizzaNameL.setValue(nameLabelBaseText + pizza.getName());
         for(Ingredient ingredient : pizza.getIngredients()){
             ingredientsVL.addComponent(new Label(ingredient.getName()));
