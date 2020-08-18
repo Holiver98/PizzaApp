@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Data
 public class Rating {
     @Id
-    @ManyToOne(targetEntity = Pizza.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "pizza_id", referencedColumnName = "id")
     private Long pizzaId;
     @Id
