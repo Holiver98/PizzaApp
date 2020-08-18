@@ -1,9 +1,10 @@
 package com.github.holiver98.ui;
 
-import com.github.holiver98.dal.jpa.IPizzaRepository;
-import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.PizzaSize;
+import com.github.holiver98.viewmodel.PizzaDetailsViewModel;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ReadOnlyHasValue;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
@@ -17,8 +18,12 @@ import java.util.EnumSet;
 
 @SpringView(name = "pizza")
 public class PizzaDetails extends VerticalLayout implements View {
+    public interface PizzaDetailsViewListener{
+        void newPizzaSelected(Long pizzaId);
+    }
+
     @Autowired
-    IPizzaRepository pizzaRepo;
+    private PizzaDetailsViewModel viewModel;
 
     private Label pizzaNameL;
     private ComboBox<String> pizzaSizeCB;
@@ -26,9 +31,15 @@ public class PizzaDetails extends VerticalLayout implements View {
     private Label pizzaPriceL;
     private Label pizzaRatingL;
 
+    private Binder<Pizza> binder = new Binder<>();
+
     public PizzaDetails(){
-        pizzaRatingL = new Label("Rating: 0.0 (0)");
-        pizzaNameL = new Label("Name: Pepperoni pizza");
+        ReadOnlyHasValue<Pizza> nameLabelText = new ReadOnlyHasValue<>(
+                pizza -> pizzaNameL.setValue(pizza.getName()));
+        binder.forField(nameLabelText).bind(pizza -> pizza, null);
+
+        pizzaRatingL = new Label("Rating: -");
+        pizzaNameL = new Label("Name: -");
         ingredientsVL = new VerticalLayout();
         ingredientsVL.setCaption("Ingredients:");
         pizzaSizeCB = new ComboBox<>();
@@ -37,7 +48,7 @@ public class PizzaDetails extends VerticalLayout implements View {
         pizzaSizeCB.setTextInputAllowed(false);
         pizzaSizeCB.setItems((Collection)EnumSet.allOf(PizzaSize.class));
         pizzaSizeCB.setValue("NORMAL");
-        pizzaPriceL = new Label("Price: 0.00$");
+        pizzaPriceL = new Label("Price: -");
         Button addToCartBtn = new Button("Add to cart");
 
         addComponent(pizzaRatingL);
@@ -50,6 +61,16 @@ public class PizzaDetails extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        if (event.getParameters() != null) {
+            String id = event.getParameters();
+            viewModel.newPizzaSelected(Long.valueOf(id));
+            binder.readBean(viewModel.getPizza()); //Read pizza values from viewModel
+        }
+    }
+
+    /*
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
         if(event.getParameters() != null) {
             String id = event.getParameters();
             Pizza pizza = pizzaRepo.findById(Long.valueOf(id)).orElse(null);
@@ -60,5 +81,5 @@ public class PizzaDetails extends VerticalLayout implements View {
             }
             pizzaPriceL.setValue("Price: " + pizza.getPrice() + "$");
         }
-    }
+    }*/
 }
