@@ -5,11 +5,12 @@ import com.github.holiver98.model.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class PizzaServiceBase implements IPizzaService {
     protected IUserService userService;
-    protected static final int minIngredients = 1;
-    protected static final int maxIngredients = 5;
+    protected static final int minToppings = 1;
+    protected static final int maxToppings = 5;
     protected static final int maxBaseSauce = 1;
     protected static final int minBaseSauce = 1;
 
@@ -113,7 +114,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
         }
         checkIfFieldsAreInitialized(pizza);
         checkIfHasValidNumberOfBasesauces(pizza);
-        checkIfHasValidNumberOfIngredients(pizza);
+        checkIfHasValidNumberOfToppings(pizza);
         checkIfHasValidIngredientPrices(pizza);
         checkIfPizzaPriceIsNotNegative(pizza);
     }
@@ -145,11 +146,14 @@ public abstract class PizzaServiceBase implements IPizzaService {
         }
     }
 
-    private static void checkIfHasValidNumberOfIngredients(Pizza pizza) {
-        boolean hasInvalidNumberOfIngredients = pizza.getIngredients().size() < minIngredients ||
-                pizza.getIngredients().size() > maxIngredients;
-        if(hasInvalidNumberOfIngredients){
-            throw new IllegalArgumentException("invalid pizza: invalid number of ingredients");
+    private static void checkIfHasValidNumberOfToppings(Pizza pizza) {
+        List<Ingredient> toppings = pizza.getIngredients().stream()
+                .filter(i -> i.getType().equals(IngredientType.PIZZA_TOPPING))
+                .collect(Collectors.toList());
+        boolean hasInvalidNumberOfToppings = toppings.size() < minToppings ||
+                toppings.size() > maxToppings;
+        if(hasInvalidNumberOfToppings){
+            throw new IllegalArgumentException("invalid pizza: invalid number of toppings");
         }
     }
 
