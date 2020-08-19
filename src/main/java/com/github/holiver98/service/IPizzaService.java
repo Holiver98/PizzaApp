@@ -1,5 +1,6 @@
 package com.github.holiver98.service;
 
+import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 
 import java.math.BigDecimal;
@@ -80,4 +81,11 @@ public interface IPizzaService {
      * @throws NoPermissionException if not logged in, or doesn't have Chef role.
      */
     int deletePizza(long pizzaId, String userEmailAddress);
+
+    List<Ingredient> getIngredients();
+
+    /**
+     * @return The ingredient with the given name or null if it doesn't exist.
+     */
+    Optional<Ingredient> getPizzaIngredientByName(String ingredientName);
 }

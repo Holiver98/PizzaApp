@@ -207,6 +207,11 @@
             <column name="price" valueNumeric="16.2"/>
             <column name="type" value="PIZZA_TOPPING"/>
         </insert>
+        <insert tableName="ingredients">
+            <column name="name" value="Sour cream"/>
+            <column name="price" valueNumeric="0.8"/>
+            <column name="type" value="PIZZA_BASESAUCE"/>
+        </insert>
     </changeSet>
 
     <changeSet author="Oliver" id="insert pizzas_ingredients test data">

@@ -2,6 +2,7 @@ package com.github.holiver98.service.jpa;
 
 import com.github.holiver98.dal.jpa.IIngredientRepository;
 import com.github.holiver98.dal.jpa.IPizzaRepository;
+import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.NotFoundException;
@@ -34,6 +35,16 @@ public class JpaPizzaService extends PizzaServiceBase {
     @Override
     public Optional<Pizza> getPizzaById(long pizzaId){
         return pizzaRepository.findById(pizzaId);
+    }
+
+    @Override
+    public List<Ingredient> getIngredients() {
+        return ingredientRepository.findAll();
+    }
+
+    @Override
+    public Optional<Ingredient> getPizzaIngredientByName(String ingredientName) {
+        return ingredientRepository.findById(ingredientName);
     }
 
     @Override

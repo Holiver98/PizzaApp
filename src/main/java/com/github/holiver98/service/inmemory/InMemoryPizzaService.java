@@ -2,6 +2,7 @@ package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryIngredientDao;
 import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
+import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.NotFoundException;
@@ -38,6 +39,16 @@ public class InMemoryPizzaService extends PizzaServiceBase {
             return Optional.empty();
         }
         return pizzaDao.getPizzaById(pizzaId);
+    }
+
+    @Override
+    public List<Ingredient> getIngredients() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public Optional<Ingredient> getPizzaIngredientByName(String ingredientName) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override

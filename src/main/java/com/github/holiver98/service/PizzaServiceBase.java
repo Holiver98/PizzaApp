@@ -24,6 +24,10 @@ public abstract class PizzaServiceBase implements IPizzaService {
     public abstract List<Pizza> getBasicPizzas();
     @Override
     public abstract Optional<Pizza> getPizzaById(long pizzaId);
+    @Override
+    public abstract List<Ingredient> getIngredients();
+    @Override
+    public abstract Optional<Ingredient> getPizzaIngredientByName(String ingredientName);
 
     public PizzaServiceBase(IUserService userService){
         this.userService = userService;
