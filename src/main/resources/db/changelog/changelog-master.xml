@@ -208,6 +208,16 @@
             <column name="type" value="PIZZA_TOPPING"/>
         </insert>
         <insert tableName="ingredients">
+            <column name="name" value="Mushroom"/>
+            <column name="price" valueNumeric="23.11"/>
+            <column name="type" value="PIZZA_TOPPING"/>
+        </insert>
+        <insert tableName="ingredients">
+            <column name="name" value="Pineapple"/>
+            <column name="price" valueNumeric="8.34"/>
+            <column name="type" value="PIZZA_TOPPING"/>
+        </insert>
+        <insert tableName="ingredients">
             <column name="name" value="Sour cream"/>
             <column name="price" valueNumeric="0.8"/>
             <column name="type" value="PIZZA_BASESAUCE"/>

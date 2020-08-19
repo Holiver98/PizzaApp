@@ -7,6 +7,7 @@ import com.github.holiver98.model.PizzaSize;
 import com.github.holiver98.service.CartIsFullException;
 import com.github.holiver98.service.ICartService;
 import com.github.holiver98.service.IPizzaService;
+import com.github.holiver98.util.ObservableHashSet;
 import com.vaadin.navigator.View;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringView;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @SpringView(name = "custom")
-public class Custom extends HorizontalLayout implements View {
+public class Custom extends HorizontalLayout implements View, ObservableHashSet.ObservableHashSetListener {
     private static final String totalPriceLabelBaseText = "Total price: ";
 
     @Autowired
@@ -30,10 +31,15 @@ public class Custom extends HorizontalLayout implements View {
     private ComboBox<PizzaSize> pizzaSizeCB;
     private VerticalLayout selectedToppingsVL;
     private Label totalPriceLabel;
+    private Button addToCartBtn;
 
-    private Set<Ingredient> selectedToppings = new HashSet<>();
+    private Set<Ingredient> selectedToppings;
 
     public Custom(){
+        ObservableHashSet<Ingredient> list = new ObservableHashSet<>();
+        list.setListener(this);
+        selectedToppings = list;
+
         VerticalLayout leftLayout = new VerticalLayout();
         Panel rightPanel = new Panel();
         rightPanel.setHeight("400");
@@ -59,7 +65,8 @@ public class Custom extends HorizontalLayout implements View {
         selectedToppingsVL = new VerticalLayout();
         selectedToppingsVL.setCaption("Toppings");
         totalPriceLabel = new Label(totalPriceLabelBaseText + "0.00$");
-        Button addToCartBtn = new Button("Add to cart");
+        addToCartBtn = new Button("Add to cart");
+        addToCartBtn.setEnabled(false);
         addToCartBtn.addClickListener(clickEvent -> createCustomPizzaAndAddToCart());
 
         leftLayout.addComponent(basesauceCB);
@@ -145,5 +152,31 @@ public class Custom extends HorizontalLayout implements View {
         Optional<Ingredient> optionalIngredient = pizzaService.getPizzaIngredientByName(selectedBaseSauceName);
         return optionalIngredient
                 .orElseThrow(() -> new NullPointerException("No Ingredient exists with such name, there might have been a typo in the base sauce comboBox!"));
+    }
+
+    @Override
+    public void onItemAdded(Object item) {
+        if(hasValidAmountOfToppings()){
+            addToCartBtn.setEnabled(true);
+        }else{
+            addToCartBtn.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onItemRemoved(Object item) {
+        if(hasValidAmountOfToppings()){
+            addToCartBtn.setEnabled(true);
+        }else{
+            addToCartBtn.setEnabled(false);
+        }
+    }
+
+    private boolean hasValidAmountOfToppings(){
+        if(selectedToppings.size() < 1 || selectedToppings.size() > 5){
+            return false;
+        }else{
+            return true;
+        }
     }
 }
