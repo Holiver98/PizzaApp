@@ -8,6 +8,7 @@ import com.github.holiver98.service.CartIsFullException;
 import com.github.holiver98.service.ICartService;
 import com.github.holiver98.service.IPizzaService;
 import com.github.holiver98.util.ObservableHashSet;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringView;
@@ -121,7 +122,16 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     private void addToSelectedToppings(Ingredient ingredient) {
         boolean didntContain = selectedToppings.add(ingredient);
         if(didntContain){
-            selectedToppingsVL.addComponent(new Label(ingredient.getName()));
+            CssLayout container = new CssLayout();
+            container.addComponent(new Label(ingredient.getName()));
+            Button removeBtn = new Button();
+            removeBtn.setIcon(VaadinIcons.DEL);
+            removeBtn.addClickListener(clickEvent -> {
+                selectedToppingsVL.removeComponent(container);
+                selectedToppings.remove(ingredient);
+                calculateAndUpdateTotalPriceOnUi();});
+            container.addComponent(removeBtn);
+            selectedToppingsVL.addComponent(container);
             calculateAndUpdateTotalPriceOnUi();
         }
     }
