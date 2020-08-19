@@ -2,6 +2,9 @@ package com.github.holiver98.ui;
 
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.IngredientType;
+import com.github.holiver98.model.Pizza;
+import com.github.holiver98.model.PizzaSize;
+import com.github.holiver98.service.CartIsFullException;
 import com.github.holiver98.service.ICartService;
 import com.github.holiver98.service.IPizzaService;
 import com.vaadin.navigator.View;
@@ -11,10 +14,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @SpringView(name = "custom")
 public class Custom extends HorizontalLayout implements View {
@@ -27,6 +27,7 @@ public class Custom extends HorizontalLayout implements View {
 
     private VerticalLayout ingredientList;
     private ComboBox<String> basesauceCB;
+    private ComboBox<PizzaSize> pizzaSizeCB;
     private VerticalLayout selectedToppingsVL;
     private Label totalPriceLabel;
 
@@ -42,6 +43,13 @@ public class Custom extends HorizontalLayout implements View {
         addComponent(leftLayout);
         addComponent(rightPanel);
 
+        pizzaSizeCB = new ComboBox<>();
+        pizzaSizeCB.setCaption("Size:");
+        pizzaSizeCB.setEmptySelectionAllowed(false);
+        pizzaSizeCB.setTextInputAllowed(false);
+        pizzaSizeCB.setItems(EnumSet.allOf(PizzaSize.class));
+        pizzaSizeCB.setValue(PizzaSize.NORMAL);
+
         basesauceCB = new ComboBox<>("Base sauce");
         basesauceCB.setEmptySelectionAllowed(false);
         basesauceCB.setTextInputAllowed(false);
@@ -52,44 +60,37 @@ public class Custom extends HorizontalLayout implements View {
         selectedToppingsVL.setCaption("Toppings");
         totalPriceLabel = new Label(totalPriceLabelBaseText + "0.00$");
         Button addToCartBtn = new Button("Add to cart");
-        addToCartBtn.addClickListener(clickEvent -> createCustomPizzaAndAddtoCart());
+        addToCartBtn.addClickListener(clickEvent -> createCustomPizzaAndAddToCart());
 
         leftLayout.addComponent(basesauceCB);
+        leftLayout.addComponent(pizzaSizeCB);
         leftLayout.addComponent(selectedToppingsVL);
         leftLayout.addComponent(totalPriceLabel);
         leftLayout.addComponent(addToCartBtn);
     }
 
-    private void createCustomPizzaAndAddtoCart() {
-        /*Pizza pizza = new Pizza();
-        pizza.setName("Not Implemented");
+    private void createCustomPizzaAndAddToCart() {
+        Pizza pizza = new Pizza();
+        pizza.setName("Custom pizza");
         pizza.setCustom(true);
-        Set<Ingredient> ing = new HashSet<>();
-        Ingredient i = new Ingredient();
-        i.setName("nifdsd");
-        i.setType(IngredientType.PIZZA_BASESAUCE);
-        ing.add(i);
-        Ingredient i2 = new Ingredient();
-        i2.setName("dsafds");
-        i2.setType(IngredientType.PIZZA_TOPPING);
-        ing.add(i2);
-        pizza.setIngredients(ing);
-        pizza.setPrice(BigDecimal.valueOf(22.1));
-        pizza.setSize(PizzaSize.NORMAL);
-        pizza.setRatingAverage(BigDecimal.valueOf(3.2));
+        HashSet<Ingredient> ingredients = new HashSet<>(selectedToppings);
+        ingredients.add(getSelectedBaseSauce());
+        pizza.setIngredients(ingredients);
+        pizza.setSize(pizzaSizeCB.getValue());
+        pizza.setPrice(calculateTotalPrice());
+        pizza.setRatingAverage(BigDecimal.valueOf(0));
 
         try {
             cartService.addPizzaToCart(pizza);
         } catch (CartIsFullException e) {
-            e.printStackTrace();
-            Notification.show("full");
-        }*/
+            Notification.show("The cart is full!", Notification.Type.WARNING_MESSAGE);
+        }
     }
 
     @PostConstruct
     private void afterInit(){
-        basesauceCB.addValueChangeListener(valueChangeEvent -> recalculateTotalPrice());
-        recalculateTotalPrice();
+        basesauceCB.addValueChangeListener(valueChangeEvent -> calculateAndUpdateTotalPriceOnUi());
+        calculateAndUpdateTotalPriceOnUi();
         loadIngredients();
     }
 
@@ -114,11 +115,11 @@ public class Custom extends HorizontalLayout implements View {
         boolean didntContain = selectedToppings.add(ingredient);
         if(didntContain){
             selectedToppingsVL.addComponent(new Label(ingredient.getName()));
-            recalculateTotalPrice();
+            calculateAndUpdateTotalPriceOnUi();
         }
     }
 
-    private void recalculateTotalPrice() {
+    private BigDecimal calculateTotalPrice() {
         BigDecimal totalPrice = BigDecimal.valueOf(0);
         for(Ingredient ingredient : selectedToppings){
             boolean isBaseSauce = ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE);
@@ -129,12 +130,20 @@ public class Custom extends HorizontalLayout implements View {
             totalPrice = totalPrice.add(ingredient.getPrice());
         }
 
+        totalPrice = totalPrice.add(getSelectedBaseSauce().getPrice());
+
+        return totalPrice;
+    }
+
+    private void calculateAndUpdateTotalPriceOnUi(){
+        BigDecimal totalPrice = calculateTotalPrice();
+        totalPriceLabel.setValue(totalPriceLabelBaseText + totalPrice.toString() + "$");
+    }
+
+    private Ingredient getSelectedBaseSauce(){
         String selectedBaseSauceName = basesauceCB.getValue();
         Optional<Ingredient> optionalIngredient = pizzaService.getPizzaIngredientByName(selectedBaseSauceName);
-        Ingredient selectedBaseSauce = optionalIngredient
+        return optionalIngredient
                 .orElseThrow(() -> new NullPointerException("No Ingredient exists with such name, there might have been a typo in the base sauce comboBox!"));
-        totalPrice = totalPrice.add(selectedBaseSauce.getPrice());
-
-        totalPriceLabel.setValue(totalPriceLabelBaseText + totalPrice.toString() + "$");
     }
 }
