@@ -8,6 +8,8 @@ import com.vaadin.ui.*;
 
 @SpringView
 public class PizzaCartItem extends HorizontalLayout implements View {
+    private Button removeBtn;
+
     public PizzaCartItem(Pizza pizza){
         HorizontalLayout leftLayout = new HorizontalLayout();
 
@@ -22,9 +24,13 @@ public class PizzaCartItem extends HorizontalLayout implements View {
         pizzaInfoVL.addComponent(new Label(pizza.getPrice().toString() + "$"));
         leftLayout.addComponent(pizzaInfoVL);
 
-        Button removeBtn = new Button("Remove");
+        removeBtn = new Button("Remove");
 
         addComponent(leftLayout);
         addComponent(removeBtn);
+    }
+
+    public Button getRemoveBtn(){
+        return removeBtn;
     }
 }

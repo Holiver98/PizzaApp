@@ -28,7 +28,12 @@ public class Cart extends VerticalLayout implements View {
     @PostConstruct
     public void afterInit(){
         for(Pizza pizza : cartService.getCartContent()){
-            contentVL.addComponent(new PizzaCartItem(pizza));
+            PizzaCartItem pizzaUi = new PizzaCartItem(pizza);
+            pizzaUi.getRemoveBtn().addClickListener(clickEvent -> {
+                cartService.removePizzaFromCart(pizza);
+                contentVL.removeComponent(pizzaUi);
+            });
+            contentVL.addComponent(pizzaUi);
         }
     }
 }
