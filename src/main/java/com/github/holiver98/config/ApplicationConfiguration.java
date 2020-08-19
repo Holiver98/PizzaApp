@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.github.holiver98.service.*;
 import org.springframework.context.annotation.Primary;
+import org.springframework.web.context.annotation.SessionScope;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
@@ -51,6 +52,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    @SessionScope
     public ICartService inMemoryCartService(){
         return new InMemoryCartService(inMemoryUserService(), inMemoryOrderDao(), mailService());
     }
@@ -73,6 +75,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    @SessionScope
     @Primary
     public ICartService jpaCartService() { return new JpaCartService(jpaUserService(), mailService()); }
 

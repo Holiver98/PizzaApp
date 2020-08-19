@@ -3,15 +3,14 @@ package com.github.holiver98.ui;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.PizzaSize;
+import com.github.holiver98.service.CartIsFullException;
+import com.github.holiver98.service.ICartService;
 import com.github.holiver98.service.IPizzaService;
 import com.github.holiver98.service.IRatingService;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemu.ratingstars.RatingStars;
 
@@ -25,6 +24,10 @@ public class PizzaDetails extends VerticalLayout implements View {
     IPizzaService pizzaService;
     @Autowired
     IRatingService ratingService;
+    @Autowired
+    ICartService cartService;
+
+    private Pizza item;
 
     private Label pizzaNameL;
     private ComboBox<String> pizzaSizeCB;
@@ -50,6 +53,13 @@ public class PizzaDetails extends VerticalLayout implements View {
         pizzaSizeCB.setValue("NORMAL");
         pizzaPriceL = new Label(priceLabelBaseText);
         Button addToCartBtn = new Button("Add to cart");
+        addToCartBtn.addClickListener(clickEvent -> {
+            try {
+                cartService.addPizzaToCart(item);
+            } catch (CartIsFullException e) {
+                Notification.show(e.getMessage(), Notification.Type.WARNING_MESSAGE);
+            }
+        });
 
         addComponent(pizzaRatingL);
         ratingStars = new RatingStars();
@@ -68,6 +78,7 @@ public class PizzaDetails extends VerticalLayout implements View {
         if(event.getParameters() != null) {
             String id = event.getParameters();
             Optional<Pizza> pizza = pizzaService.getPizzaById(Long.parseLong(id));
+            item = pizza.get();
             int numberOfRatingsOnPizza = ratingService.getRatingsOfPizza(Long.parseLong(id)).size();
             pizza.ifPresent(p -> updateUiWithModel(p, numberOfRatingsOnPizza));
         }
