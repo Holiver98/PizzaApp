@@ -135,7 +135,7 @@ public class InMemoryUserServiceTest {
         userService.login(bob.getEmailAddress(), rawPassword);
 
         //Assert
-        Optional<User> loggedInUser = userService.getLoggedInUser(bob.getEmailAddress());
+        Optional<User> loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser.get()).isEqualTo(bob);
     }
 
@@ -167,7 +167,7 @@ public class InMemoryUserServiceTest {
         //Assert
         Assertions.assertThrows(NullPointerException.class,
                 () -> userService.login(bob.getEmailAddress(), null));
-        Optional<User> loggedInUser = userService.getLoggedInUser(bob.getEmailAddress());
+        Optional<User> loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser.isPresent()).isFalse();
     }
 
@@ -185,7 +185,7 @@ public class InMemoryUserServiceTest {
         //Assert
         Assertions.assertThrows(NullPointerException.class,
                 () -> userService.login(null, bob.getPassword()));
-        Optional<User> loggedInUser = userService.getLoggedInUser(bob.getEmailAddress());
+        Optional<User> loggedInUser = userService.getLoggedInUser();
         assertThat(loggedInUser.isPresent()).isFalse();
     }
 }

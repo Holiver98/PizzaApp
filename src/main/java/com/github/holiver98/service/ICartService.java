@@ -35,11 +35,9 @@ public interface ICartService {
      * Places an order with the current content of the cart, logs the order and
      * notifies the user with an email containing the order information.
      *
-     * @param userEmailAddress The email address, that identifies the user.
      * @throws CartIsEmptyException if the cart is empty.
      * @throws MessagingException if an error occurred with the order confirmation email.
      * @throws NoPermissionException if user is not logged in.
-     * @throws NotFoundException if this userEmailAddress is not registered.
      */
-    void placeOrder(String userEmailAddress) throws CartIsEmptyException, MessagingException, NotFoundException;
+    void placeOrder() throws CartIsEmptyException, MessagingException, NotFoundException;
 }

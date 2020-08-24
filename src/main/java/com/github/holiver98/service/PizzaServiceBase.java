@@ -35,19 +35,16 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public Optional<Pizza> savePizza(Pizza pizza, String userEmailAddress){
+    public Optional<Pizza> savePizza(Pizza pizza){
         checkIfPizzaIsValid(pizza);
         if(pizzaExists(pizza)){
             return Optional.empty();
         }
         User user;
         try{
-            user = tryGetLoggedInUser(userEmailAddress);
+            user = tryGetLoggedInUser();
         }catch (NoPermissionException e){
             throw new NoPermissionException("You have to be logged in to save pizza!");
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-            return Optional.empty();
         }
         ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
         return doSavePizza(pizza);
@@ -63,34 +60,28 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public int updatePizza(Pizza pizza, String userEmailAddress){
+    public int updatePizza(Pizza pizza){
         checkIfPizzaIsValid(pizza);
         if(!pizzaExists(pizza)){
             return -1;
         }
         User user;
         try{
-            user = tryGetLoggedInUser(userEmailAddress);
+            user = tryGetLoggedInUser();
         }catch (NoPermissionException e){
             throw new NoPermissionException("You have to be logged in to update pizza!");
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-            return -1;
         }
         ifUserIsNotChefThrowException(user, "You have to have Chef role to update pizza!");
         return doUpdatePizza(pizza);
     }
 
     @Override
-    public int deletePizza(long pizzaId, String userEmailAddress) {
+    public int deletePizza(long pizzaId) {
         User user;
         try{
-            user = tryGetLoggedInUser(userEmailAddress);
+            user = tryGetLoggedInUser();
         }catch (NoPermissionException e){
             throw new NoPermissionException("You have to be logged in to delete pizza!");
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-            return -1;
         }
         ifUserIsNotChefThrowException(user, "You have to have Chef role to delete pizza!");
         return doDeletePizza(pizzaId);
@@ -193,8 +184,8 @@ public abstract class PizzaServiceBase implements IPizzaService {
         return hasValidNumberOfBasesauces;
     }
 
-    private User tryGetLoggedInUser(String userEmailAddress) throws NotFoundException {
-        Optional<User> user = userService.getLoggedInUser(userEmailAddress);
+    private User tryGetLoggedInUser() {
+        Optional<User> user = userService.getLoggedInUser();
         return user.orElseThrow(() -> new NoPermissionException(""));
     }
 

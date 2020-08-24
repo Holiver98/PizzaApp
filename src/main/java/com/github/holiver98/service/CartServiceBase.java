@@ -49,11 +49,11 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void placeOrder(String userEmailAddress) throws CartIsEmptyException, NoPermissionException, MessagingException, NotFoundException {
+    public void placeOrder() throws CartIsEmptyException, NoPermissionException, MessagingException, NotFoundException {
         if(cartContent.isEmpty()){
             throw new CartIsEmptyException("Cart is empty, can't place order!");
         }
-        User loggedInUser = userService.getLoggedInUser(userEmailAddress).orElseThrow(
+        User loggedInUser = userService.getLoggedInUser().orElseThrow(
                 () -> new NoPermissionException("The user has to be logged in to place order!"));
         Order order = createOrder(loggedInUser);
         save(order);

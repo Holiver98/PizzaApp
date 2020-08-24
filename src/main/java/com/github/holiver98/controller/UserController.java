@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/logout")
-    public void logout(@RequestBody String emailAddress) throws NotFoundException {
-        userService.logout(emailAddress);
+    public void logout(){
+        userService.logout();
     }
 
     private static class LoginInfo{

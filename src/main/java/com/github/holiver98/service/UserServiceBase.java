@@ -19,16 +19,6 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         return Optional.ofNullable(loggedInUser);
     }
 
-    @Override
-    public Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException{
-        User user = tryGetUser(emailAddress);
-        if(user.isLoggedIn()){
-            return Optional.of(user);
-        }else{
-            return Optional.empty();
-        }
-    }
-
     public BCryptPasswordEncoder getPasswordEncoder(){
         return passwordEncoder;
     }
@@ -37,25 +27,9 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         super.login(emailAddress, password);
         User userInfo = tryGetUser(emailAddress);
-
+        IfAlreadyLoggedInThrowException();
         checkIfPasswordMatches(password, userInfo.getPassword());
-        userInfo.setLoggedIn(true);
-        update(userInfo);
-
         loggedInUser = userInfo;
-    }
-
-    @Override
-    public void logout(String emailAddress) throws NotFoundException {
-        super.logout(emailAddress);
-        /*User user = tryGetUser(emailAddress);
-        if(!user.isLoggedIn()){
-            throw new UnsupportedOperationException("Not logged in!");
-        }
-        user.setLoggedIn(false);
-        update(user);*/
-
-        loggedInUser = null;
     }
 
     @Override
@@ -141,6 +115,12 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     private void checkIfPasswordMatches(String password, String encodedPassword) throws IncorrectPasswordException {
         if(!passwordEncoder.matches(password, encodedPassword)){
             throw new IncorrectPasswordException("password incorrect: " + password);
+        }
+    }
+
+    private void IfAlreadyLoggedInThrowException() {
+        if(loggedInUser != null){
+            throw new UnsupportedOperationException("Already logged in with an account!");
         }
     }
 }

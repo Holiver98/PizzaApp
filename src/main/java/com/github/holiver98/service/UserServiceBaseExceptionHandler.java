@@ -14,13 +14,6 @@ public abstract class UserServiceBaseExceptionHandler implements IUserService {
     }
 
     @Override
-    public void logout(String emailAddress) throws NotFoundException{
-        if(emailAddress == null){
-            throw new NullPointerException("emailAddress was null");
-        }
-    }
-
-    @Override
     public void register(User user) throws AlreadyExistsException {
         if(user == null) {
             throw new NullPointerException("user was null");

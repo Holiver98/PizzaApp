@@ -13,16 +13,11 @@ public interface IUserService {
      * @throws NullPointerException if the password or the emailAddress is null.
      * @throws IncorrectPasswordException if the given password does not match.
      * @throws NotFoundException if the given email address is not registered.
-     * @throws UnsupportedOperationException if the user is already logged in.
+     * @throws UnsupportedOperationException if already logged in with an account.
      */
     void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
 
-    /**
-     * @throws NullPointerException if emailAddress is null.
-     * @throws NotFoundException if the emailAddress isn't registered.
-     * @throws UnsupportedOperationException if the user isn't logged in.
-     */
-    void logout(String emailAddress) throws NotFoundException;
+    void logout();
 
     /**
      * @param user The user we want to register. Contains the user information.
@@ -33,13 +28,7 @@ public interface IUserService {
     void register(User user) throws AlreadyExistsException;
 
     /**
-     * @return The logged in user (identified by emailAddress) or null if the user is not logged in.
-     * @throws NotFoundException if the given email address is not registered.
-     * @throws NullPointerException if emailAddress is null.
+     * @return The logged in user or null if the user is not logged in.
      */
-    Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException;
-
     Optional<User> getLoggedInUser();
-
-    void logout();
 }

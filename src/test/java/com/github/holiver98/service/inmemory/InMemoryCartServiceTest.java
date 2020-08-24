@@ -175,10 +175,10 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         loggedInUser.setEmailAddress("test123@mmm.hu");
         loggedInUser.setUsername("Bobby");
         loggedInUser.setPassword("asdassa123");
-        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
-        cartService.placeOrder(loggedInUser.getEmailAddress());
+        cartService.placeOrder();
 
         //Assert
         Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());
@@ -195,12 +195,12 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         cartService.getCartContent().add(validPizza);
         cartService.getCartContent().add(validPizza);
 
-        Mockito.when(userService.getLoggedInUser(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.empty());
 
         //Act
         //Assert
         Assertions.assertThrows(NoPermissionException.class,
-                () -> cartService.placeOrder(Mockito.anyString()));
+                () -> cartService.placeOrder());
         Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
@@ -212,12 +212,12 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         loggedInUser.setEmailAddress("test123@mmm.hu");
         loggedInUser.setUsername("Bobby");
         loggedInUser.setPassword("asdassa123");
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
         Assertions.assertThrows(CartIsEmptyException.class,
-                () -> cartService.placeOrder(loggedInUser.getEmailAddress()));
+                () -> cartService.placeOrder());
         Mockito.verify(mailService, Mockito.times(0)).sendMailTo(Mockito.anyString(), Mockito.anyString());
         Mockito.verify(orderDao, Mockito.times(0)).saveOrder(Mockito.any());
     }
@@ -234,10 +234,10 @@ public class InMemoryCartServiceTest extends InMemoryCartServiceTestBase {
         loggedInUser.setEmailAddress("test123@mmm.hu");
         loggedInUser.setUsername("Bobby");
         loggedInUser.setPassword("asdassa123");
-        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
-        cartService.placeOrder(loggedInUser.getEmailAddress());
+        cartService.placeOrder();
 
         //Assert
         Mockito.verify(orderDao).saveOrder(orderArgumentCaptor.capture());

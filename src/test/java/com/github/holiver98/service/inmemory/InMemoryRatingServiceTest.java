@@ -65,12 +65,12 @@ public class InMemoryRatingServiceTest {
         ratingOnPizzaByLoggedInUser.setPizzaId(pizza.getId());
 
         Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
         Mockito.when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(Optional.of(ratingOnPizzaByLoggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -95,14 +95,14 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
         Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         List<Rating> listAfterTheRatingHasBeenSaved = new ArrayList<Rating>();
         listAfterTheRatingHasBeenSaved.add(ratingTheUserShouldGive);
         Mockito.when(ratingService.getRatingsOfPizza(pizza.getId()))
                 .thenReturn(listAfterTheRatingHasBeenSaved);
         //Act
-        ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress());
+        ratingService.ratePizza(pizzaId, rating);
 
         //Assert
         Mockito.verify(ratingDao, Mockito.times(1)).saveRating(ratingTheUserShouldGive);
@@ -137,12 +137,12 @@ public class InMemoryRatingServiceTest {
         ratingOnPizzaByLoggedInUser.setPizzaId(pizza.getId());
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.empty());
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.empty());
         Mockito.lenient().when(ratingDao.getRatingOfUserForPizza(loggedInUser.getEmailAddress(), pizzaId)).thenReturn(Optional.of(ratingOnPizzaByLoggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(NoPermissionException.class, () -> ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(NoPermissionException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -167,11 +167,11 @@ public class InMemoryRatingServiceTest {
         ratingOnPizzaByLoggedInUser.setPizzaId(pizza.getId());
 
         Mockito.when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.empty());
-        Mockito.when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(NotFoundException.class, () ->  ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(NotFoundException.class, () ->  ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -191,11 +191,11 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setPassword("123123dsa");
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -215,11 +215,11 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setPassword("123123dsa");
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -239,11 +239,11 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setPassword("123123dsa");
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -263,11 +263,11 @@ public class InMemoryRatingServiceTest {
         loggedInUser.setPassword("123123dsa");
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         //Act
         //Assert
-        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress()));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ratingService.ratePizza(pizzaId, rating));
     }
 
     @Test
@@ -292,7 +292,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         List<Rating> listAfterTheRatingHasBeenSaved = new ArrayList<Rating>();
         listAfterTheRatingHasBeenSaved.add(ratingTheUserShouldGive);
@@ -300,7 +300,7 @@ public class InMemoryRatingServiceTest {
                 .thenReturn(listAfterTheRatingHasBeenSaved);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress());
+        ratingService.ratePizza(pizzaId, rating);
 
         //Assert
         Mockito.verify(ratingDao, Mockito.times(1)).saveRating(ratingTheUserShouldGive);
@@ -336,7 +336,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         List<Rating> listAfterTheRatingHasBeenSaved = new ArrayList<Rating>();
         listAfterTheRatingHasBeenSaved.add(ratingTheUserShouldGive);
@@ -344,7 +344,7 @@ public class InMemoryRatingServiceTest {
                 .thenReturn(listAfterTheRatingHasBeenSaved);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress());
+        ratingService.ratePizza(pizzaId, rating);
 
         //Assert
         Mockito.verify(ratingDao, Mockito.times(1)).saveRating(Mockito.any());
@@ -379,7 +379,7 @@ public class InMemoryRatingServiceTest {
         ratingTheUserShouldGive.setUserEmailAddress(loggedInUser.getEmailAddress());
 
         Mockito.lenient().when(pizzaService.getPizzaById(pizzaId)).thenReturn(Optional.of(pizza));
-        Mockito.lenient().when(userService.getLoggedInUser(loggedInUser.getEmailAddress())).thenReturn(Optional.of(loggedInUser));
+        Mockito.lenient().when(userService.getLoggedInUser()).thenReturn(Optional.of(loggedInUser));
 
         List<Rating> savedRatings = new ArrayList<Rating>();
         Rating ratingOfBob = new Rating();
@@ -407,7 +407,7 @@ public class InMemoryRatingServiceTest {
                 .thenReturn(listAfterTheRatingHasBeenSaved);
 
         //Act
-        ratingService.ratePizza(pizzaId, rating, loggedInUser.getEmailAddress());
+        ratingService.ratePizza(pizzaId, rating);
 
         //Assert
         Mockito.verify(ratingDao, Mockito.times(1)).saveRating(ratingTheUserShouldGive);
