@@ -11,7 +11,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Optional;
 
 @SpringView(name = "login")
 public class Login extends VerticalLayout implements View {
@@ -19,8 +18,6 @@ public class Login extends VerticalLayout implements View {
     private IUserService userService;
 
     public Login(){
-        this.addAttachListener(attachEvent -> OnAttach(attachEvent));
-
         TextField emailTF = new TextField("Email");
         PasswordField passwordPF = new PasswordField("Password");
         Button loginBtn = new Button("Login");
@@ -45,11 +42,6 @@ public class Login extends VerticalLayout implements View {
             BinderValidationStatus<User> result = binder.validate(); if(result.isOk() && !result.hasErrors()){login(user);}});
     }
 
-    private void OnAttach(AttachEvent attachEvent){
-        Optional<User> loggedInUser = userService.getLoggedInUser();
-        loggedInUser.ifPresent(u -> updateHeader(u));
-    }
-
     private void login(User user){
         try {
             userService.login(user.getEmailAddress(), user.getPassword());
@@ -60,13 +52,5 @@ public class Login extends VerticalLayout implements View {
             //Invalid email
             Notification.show("Invalid email or password.", Notification.Type.WARNING_MESSAGE);
         }
-
-        User loggedInUser = userService.getLoggedInUser().orElseThrow(() -> new NullPointerException("userService.getLoggedInUser() returned null"));
-        updateHeader(loggedInUser);
-    }
-
-    private void updateHeader(User user){
-        MainView ui = (MainView)getUI();
-        ui.getHeader().login(user.getUsername());
     }
 }

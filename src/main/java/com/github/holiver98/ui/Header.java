@@ -1,6 +1,8 @@
 package com.github.holiver98.ui;
 
+import com.github.holiver98.model.User;
 import com.github.holiver98.service.IUserService;
+import com.github.holiver98.service.IUserServiceListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Responsive;
@@ -10,10 +12,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @UIScope
 @SpringView(name = "header")
-public class Header extends CssLayout implements View {
+public class Header extends CssLayout implements View, IUserServiceListener {
     @Autowired
     private IUserService userService;
 
@@ -62,14 +65,20 @@ public class Header extends CssLayout implements View {
 
     @PostConstruct
     public void afterInit(){
+        userService.addListener(this);
         setLogoutBtnClickListener();
+        updateHeaderIfUserIsLoggedIn();
     }
 
     private void setLogoutBtnClickListener(){
         logoutBtn.addClickListener(clickEvent -> {
             userService.logout();
-            logout();
         });
+    }
+
+    private void updateHeaderIfUserIsLoggedIn(){
+        Optional<User> loggedInUser = userService.getLoggedInUser();
+        loggedInUser.ifPresent(u -> login(u.getUsername()));
     }
 
     public void login(String username) {
@@ -86,5 +95,15 @@ public class Header extends CssLayout implements View {
         rightContainer.removeComponent(logoutBtn);
         rightContainer.addComponent(registerBtn, 0);
         rightContainer.addComponent(loginBtn, 1);
+    }
+
+    @Override
+    public void OnLoggedIn(User user) {
+        login(user.getUsername());
+    }
+
+    @Override
+    public void OnLoggedOut() {
+        logout();
     }
 }

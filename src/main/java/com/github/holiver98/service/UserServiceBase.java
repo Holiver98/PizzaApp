@@ -4,11 +4,14 @@ import com.github.holiver98.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
     private User loggedInUser;
+    private List<IUserServiceListener> listeners = new ArrayList<>();
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
@@ -30,11 +33,13 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         IfAlreadyLoggedInThrowException();
         checkIfPasswordMatches(password, userInfo.getPassword());
         loggedInUser = userInfo;
+        listeners.forEach(listener -> listener.OnLoggedIn(loggedInUser));
     }
 
     @Override
     public void logout(){
         loggedInUser = null;
+        listeners.forEach(listener -> listener.OnLoggedOut());
     }
 
     @Override
@@ -44,6 +49,16 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
         checkIfAlreadyRegistered(user);
         encodeUserPassword(user);
         save(user);
+    }
+
+    @Override
+    public void addListener(IUserServiceListener listener){
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(IUserServiceListener listener){
+        listeners.remove(listener);
     }
 
     protected boolean isValidUserName(String username) {

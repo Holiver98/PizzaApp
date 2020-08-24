@@ -4,7 +4,7 @@ import com.github.holiver98.model.User;
 
 import java.util.Optional;
 
-public interface IUserService {
+public interface IUserService{
     /**
      * Logs in the user, that is identified by the emailAddress.
      *
@@ -31,4 +31,8 @@ public interface IUserService {
      * @return The logged in user or null if the user is not logged in.
      */
     Optional<User> getLoggedInUser();
+
+    void addListener(IUserServiceListener listener);
+
+    void removeListener(IUserServiceListener listener);
 }
