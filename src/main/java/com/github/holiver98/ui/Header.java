@@ -82,11 +82,12 @@ public class Header extends CssLayout implements View, IUserServiceListener {
     }
 
     public void login(String username) {
-        usernameLabel.setValue(username);
+        usernameLabel.setValue("Hello, " + username + "!");
         rightContainer.removeComponent(registerBtn);
         rightContainer.removeComponent(loginBtn);
         rightContainer.addComponent(usernameLabel, 0);
         rightContainer.addComponent(logoutBtn, 1);
+        getUI().getNavigator().navigateTo("");
     }
 
     public void logout() {
