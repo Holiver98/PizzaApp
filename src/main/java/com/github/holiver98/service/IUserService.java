@@ -38,4 +38,8 @@ public interface IUserService {
      * @throws NullPointerException if emailAddress is null.
      */
     Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException;
+
+    Optional<User> getLoggedInUser();
+
+    void logout();
 }

@@ -9,6 +9,9 @@ import com.github.holiver98.service.jpa.JpaCartService;
 import com.github.holiver98.service.jpa.JpaPizzaService;
 import com.github.holiver98.service.jpa.JpaRatingService;
 import com.github.holiver98.service.jpa.JpaUserService;
+import com.github.holiver98.ui.Header;
+import com.vaadin.spring.annotation.EnableVaadin;
+import liquibase.pro.packaged.B;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.github.holiver98.service.*;
@@ -39,6 +42,7 @@ public class ApplicationConfiguration {
     public IInMemoryUserDao inMemoryUserDao(){return new InMemoryUserDao();}
 
     @Bean
+    @SessionScope
     public IUserService inMemoryUserService(){
         return new InMemoryUserService(inMemoryUserDao());
     }
@@ -63,6 +67,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    @SessionScope
     @Primary
     public IUserService jpaUserService(){
         return new JpaUserService();

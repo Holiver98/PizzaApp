@@ -8,10 +8,16 @@ import java.util.Optional;
 
 public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
+    private User loggedInUser;
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
     protected abstract void update(User user);
+
+    @Override
+    public Optional<User> getLoggedInUser(){
+        return Optional.ofNullable(loggedInUser);
+    }
 
     @Override
     public Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException{
@@ -31,23 +37,30 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
         super.login(emailAddress, password);
         User userInfo = tryGetUser(emailAddress);
-        if(userInfo.isLoggedIn()){
-            throw new UnsupportedOperationException("Already logged in!");
-        }
+
         checkIfPasswordMatches(password, userInfo.getPassword());
         userInfo.setLoggedIn(true);
         update(userInfo);
+
+        loggedInUser = userInfo;
     }
 
     @Override
     public void logout(String emailAddress) throws NotFoundException {
         super.logout(emailAddress);
-        User user = tryGetUser(emailAddress);
+        /*User user = tryGetUser(emailAddress);
         if(!user.isLoggedIn()){
             throw new UnsupportedOperationException("Not logged in!");
         }
         user.setLoggedIn(false);
-        update(user);
+        update(user);*/
+
+        loggedInUser = null;
+    }
+
+    @Override
+    public void logout(){
+        loggedInUser = null;
     }
 
     @Override
