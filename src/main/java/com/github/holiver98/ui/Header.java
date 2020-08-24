@@ -8,8 +8,6 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 
@@ -24,8 +22,6 @@ public class Header extends CssLayout implements View {
     private Button registerBtn;
     private Button loginBtn;
     private Button logoutBtn;
-
-    Logger logger = LoggerFactory.getLogger(Header.class);
 
     public Header(){
         setStyleName("header");
@@ -66,7 +62,6 @@ public class Header extends CssLayout implements View {
 
     @PostConstruct
     public void afterInit(){
-        logger.warn("afterInit Header");
         setLogoutBtnClickListener();
     }
 
@@ -78,7 +73,6 @@ public class Header extends CssLayout implements View {
     }
 
     public void login(String username) {
-        logger.warn("login");
         usernameLabel.setValue(username);
         rightContainer.removeComponent(registerBtn);
         rightContainer.removeComponent(loginBtn);

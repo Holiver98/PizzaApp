@@ -10,8 +10,6 @@ import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
@@ -19,7 +17,6 @@ import java.util.Optional;
 public class Login extends VerticalLayout implements View {
     @Autowired
     private IUserService userService;
-    Logger logger = LoggerFactory.getLogger(Login.class);
 
     public Login(){
         this.addAttachListener(attachEvent -> OnAttach(attachEvent));
@@ -51,7 +48,6 @@ public class Login extends VerticalLayout implements View {
     private void OnAttach(AttachEvent attachEvent){
         Optional<User> loggedInUser = userService.getLoggedInUser();
         loggedInUser.ifPresent(u -> updateHeader(u));
-        logger.warn(loggedInUser.toString());
     }
 
     private void login(User user){
