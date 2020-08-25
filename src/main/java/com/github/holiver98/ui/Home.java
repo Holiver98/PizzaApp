@@ -24,6 +24,10 @@ public class Home extends VerticalLayout implements View {
         title.setStyleName("title");
         addComponent(title);
         setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        Label motto = new Label("Insert some cheesy, inspirational or funny motto here.");
+        motto.setStyleName("motto");
+        addComponent(motto);
+        setComponentAlignment(motto, Alignment.MIDDLE_CENTER);
 
         Label separator =  new Label("<hr />", ContentMode.HTML);
         addComponent(separator);
