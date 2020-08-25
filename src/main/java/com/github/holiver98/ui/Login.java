@@ -6,6 +6,7 @@ import com.github.holiver98.service.IncorrectPasswordException;
 import com.github.holiver98.service.NotFoundException;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -39,7 +40,16 @@ public class Login extends VerticalLayout implements View {
         binder.setBean(user);
 
         loginBtn.addClickListener(clickEvent -> {
-            BinderValidationStatus<User> result = binder.validate(); if(result.isOk() && !result.hasErrors()){login(user);}});
+            BinderValidationStatus<User> result = binder.validate();
+            if(result.isOk() && !result.hasErrors()){
+                try {
+                    binder.writeBean(user);
+                } catch (ValidationException e) {
+                    e.printStackTrace();
+                }
+                login(user);
+            }
+        });
     }
 
     private void login(User user){
