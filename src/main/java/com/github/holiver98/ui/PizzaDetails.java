@@ -56,7 +56,7 @@ public class PizzaDetails extends VerticalLayout implements View {
         pizzaSizeCB.setCaption("Size:");
         pizzaSizeCB.setEmptySelectionAllowed(false);
         pizzaSizeCB.setTextInputAllowed(false);
-        pizzaSizeCB.setItems((Collection)EnumSet.allOf(PizzaSize.class));
+        pizzaSizeCB.setItems((Collection)EnumSet.allOf(PizzaSize.class));//TODO: fix combobox (lásd: editpizzasdetails.class)
         pizzaSizeCB.setValue("NORMAL");
 
         Button addToCartBtn = new Button("Add to cart");

@@ -60,7 +60,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         basesauceCB = new ComboBox<>("Base sauce");
         basesauceCB.setEmptySelectionAllowed(false);
         basesauceCB.setTextInputAllowed(false);
-        basesauceCB.setItems("Tomato", "Sour cream");
+        basesauceCB.setItems("Tomato", "Sour cream");//TODO: beégetett érték
         basesauceCB.setValue("Tomato");
 
         selectedToppingsVL = new VerticalLayout();
