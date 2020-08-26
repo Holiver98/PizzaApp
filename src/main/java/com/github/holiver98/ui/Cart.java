@@ -61,6 +61,11 @@ public class Cart extends VerticalLayout implements View {
     }
 
     private void goToOrderView(){
+        if(cartService.getCartContent().size() == 0){
+            Notification.show("The cart is empty.", Notification.Type.WARNING_MESSAGE);
+            return;
+        }
+
         Optional<User> loggedInUser = userService.getLoggedInUser();
         if(loggedInUser.isPresent()){
             getUI().getNavigator().navigateTo("order");
