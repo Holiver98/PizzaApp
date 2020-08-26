@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class CartServiceBase implements ICartService {
-
-    //TODO: A limit lehetne paraméter, "más és más ügyfélnél lehetne eltérő az igény".
     protected final int cartItemLimit = 15;
     protected List<Pizza> cartContent = new ArrayList<Pizza>();
     protected IUserService userService;
