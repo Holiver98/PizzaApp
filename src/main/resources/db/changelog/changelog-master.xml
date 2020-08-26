@@ -167,7 +167,7 @@
             <column name="id" value="1"/>
             <column name="name" value="Pepperoni pizza"/>
             <column name="pizza_size" value="NORMAL"/>
-            <column name="rating_average" valueNumeric="4"/>
+            <column name="rating_average" valueNumeric="3.5"/>
             <column name="price" valueNumeric="34"/>
             <column name="custom" valueBoolean="false"/>
         </insert>
@@ -175,7 +175,7 @@
             <column name="id" value="2"/>
             <column name="name" value="Meat lover"/>
             <column name="pizza_size" value="SMALL"/>
-            <column name="rating_average" valueNumeric="3.5"/>
+            <column name="rating_average" valueNumeric="4"/>
             <column name="price" valueNumeric="18.4"/>
             <column name="custom" valueBoolean="false"/>
         </insert>
