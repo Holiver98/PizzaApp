@@ -3,17 +3,16 @@ package com.github.holiver98.ui;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.PizzaSize;
-import com.github.holiver98.service.CartIsFullException;
-import com.github.holiver98.service.ICartService;
-import com.github.holiver98.service.IPizzaService;
-import com.github.holiver98.service.IRatingService;
+import com.github.holiver98.model.User;
+import com.github.holiver98.service.*;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemu.ratingstars.RatingStars;
-
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -26,6 +25,8 @@ public class PizzaDetails extends VerticalLayout implements View {
     IRatingService ratingService;
     @Autowired
     ICartService cartService;
+    @Autowired
+    IUserService userService;
 
     private Pizza item;
 
@@ -34,7 +35,10 @@ public class PizzaDetails extends VerticalLayout implements View {
     private VerticalLayout ingredientsVL;
     private Label pizzaPriceL;
     private Label pizzaRatingL;
+
     private RatingStars ratingStars;
+    private Button ratingButton;
+    private Button confirmRating;
 
     private static final String ratingLabelBaseText = "Rating: ";
     private static final String nameLabelBaseText = "Name: ";
@@ -43,34 +47,108 @@ public class PizzaDetails extends VerticalLayout implements View {
     public PizzaDetails(){
         pizzaRatingL = new Label(ratingLabelBaseText);
         pizzaNameL = new Label(nameLabelBaseText);
+        pizzaPriceL = new Label(priceLabelBaseText);
+
         ingredientsVL = new VerticalLayout();
         ingredientsVL.setCaption("Ingredients:");
+
         pizzaSizeCB = new ComboBox<>();
         pizzaSizeCB.setCaption("Size:");
         pizzaSizeCB.setEmptySelectionAllowed(false);
         pizzaSizeCB.setTextInputAllowed(false);
         pizzaSizeCB.setItems((Collection)EnumSet.allOf(PizzaSize.class));
         pizzaSizeCB.setValue("NORMAL");
-        pizzaPriceL = new Label(priceLabelBaseText);
-        Button addToCartBtn = new Button("Add to cart");
-        addToCartBtn.addClickListener(clickEvent -> {
-            try {
-                cartService.addPizzaToCart(item);
-            } catch (CartIsFullException e) {
-                Notification.show(e.getMessage(), Notification.Type.WARNING_MESSAGE);
-            }
-        });
 
-        addComponent(pizzaRatingL);
+        Button addToCartBtn = new Button("Add to cart");
+        addToCartBtn.addClickListener(this::onCartButtonPressed);
+
+        ratingButton = new Button("Rate");
+        ratingButton.addClickListener(this::onRatingButtonPressed);
+        confirmRating = new Button("Confirm");
+        confirmRating.addClickListener(this::OnConfirmRatingButtonPressed);
+        confirmRating.setVisible(false);
+
         ratingStars = new RatingStars();
         ratingStars.setAnimated(false);
         ratingStars.setReadOnly(true);
-        addComponent(ratingStars);
+
+        HorizontalLayout ratingContainer = new HorizontalLayout();
+        ratingContainer.addComponent(ratingStars);
+        ratingContainer.addComponent(ratingButton);
+        ratingContainer.addComponent(confirmRating);
+
+        addComponent(pizzaRatingL);
+        addComponent(ratingContainer);
         addComponent(pizzaNameL);
         addComponent(ingredientsVL);
         addComponent(pizzaSizeCB);
         addComponent(pizzaPriceL);
         addComponent(addToCartBtn);
+    }
+
+    private void OnConfirmRatingButtonPressed(Button.ClickEvent clickEvent){
+        int rating = ratingStars.getValue().intValue();
+
+        try {
+            ratingService.ratePizza(item.getId(), rating);
+        } catch (NotFoundException e) {
+            Notification.show("Internal server error: No pizza was found in the database with id: " + item.getId(), Notification.Type.ERROR_MESSAGE);
+            exitRatingMode();
+            ratingStars.setValue(item.getRatingAverage().doubleValue());
+            return;
+        } catch (UnsupportedOperationException e){
+            Notification.show("You already rated this pizza!", Notification.Type.WARNING_MESSAGE);
+            exitRatingMode();
+            ratingStars.setValue(item.getRatingAverage().doubleValue());
+            return;
+        }
+
+        updateRatingOnUiAndPizza();
+        exitRatingMode();
+    }
+
+    private void exitRatingMode() {
+        ratingStars.setReadOnly(true);
+        ratingButton.setVisible(true);
+        confirmRating.setVisible(false);
+    }
+
+    private void enterRatingMode() {
+        ratingStars.setReadOnly(false);
+        ratingButton.setVisible(false);
+        confirmRating.setVisible(true);
+    }
+
+    private void updateRatingOnUiAndPizza() {
+        Optional<Pizza> pizza = pizzaService.getPizzaById(item.getId());
+        if(!pizza.isPresent()){
+            Notification.show("Internal server error: No pizza was found in the database with id: " + item.getId(), Notification.Type.ERROR_MESSAGE);
+            return;
+        }else{
+            item = pizza.get();
+        }
+
+        ratingStars.setValue(item.getRatingAverage().doubleValue());
+        int numberOfRatingsOnPizza = ratingService.getRatingsOfPizza(item.getId()).size();
+        pizzaRatingL.setValue(ratingLabelBaseText + item.getRatingAverage() + " (" + numberOfRatingsOnPizza + ")");
+    }
+
+    private void onRatingButtonPressed(Button.ClickEvent clickEvent) {
+        Optional<User> loggedInUser = userService.getLoggedInUser();
+        if(!loggedInUser.isPresent()){
+            Notification.show("Have to be logged in.", Notification.Type.WARNING_MESSAGE);
+            return;
+        }
+
+        enterRatingMode();
+    }
+
+    private void onCartButtonPressed(Button.ClickEvent clickEvent) {
+        try {
+            cartService.addPizzaToCart(item);
+        } catch (CartIsFullException e) {
+            Notification.show(e.getMessage(), Notification.Type.WARNING_MESSAGE);
+        }
     }
 
     @Override
