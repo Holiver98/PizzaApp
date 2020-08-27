@@ -9,11 +9,9 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemu.ratingstars.RatingStars;
-import java.util.Collection;
+
 import java.util.EnumSet;
 import java.util.Optional;
 
@@ -31,7 +29,7 @@ public class PizzaDetails extends VerticalLayout implements View {
     private Pizza item;
 
     private Label pizzaNameL;
-    private ComboBox<String> pizzaSizeCB;
+    private ComboBox<PizzaSize> pizzaSizeCB;
     private VerticalLayout ingredientsVL;
     private Label pizzaPriceL;
     private Label pizzaRatingL;
@@ -56,8 +54,8 @@ public class PizzaDetails extends VerticalLayout implements View {
         pizzaSizeCB.setCaption("Size:");
         pizzaSizeCB.setEmptySelectionAllowed(false);
         pizzaSizeCB.setTextInputAllowed(false);
-        pizzaSizeCB.setItems((Collection)EnumSet.allOf(PizzaSize.class));//TODO: fix combobox (lásd: editpizzasdetails.class)
-        pizzaSizeCB.setValue("NORMAL");
+        pizzaSizeCB.setItems(EnumSet.allOf(PizzaSize.class));
+        pizzaSizeCB.setValue(PizzaSize.NORMAL);
 
         Button addToCartBtn = new Button("Add to cart");
         addToCartBtn.addClickListener(this::onCartButtonPressed);
@@ -145,6 +143,7 @@ public class PizzaDetails extends VerticalLayout implements View {
 
     private void onCartButtonPressed(Button.ClickEvent clickEvent) {
         try {
+            item.setSize(pizzaSizeCB.getValue());
             cartService.addPizzaToCart(item);
         } catch (CartIsFullException e) {
             Notification.show(e.getMessage(), Notification.Type.WARNING_MESSAGE);

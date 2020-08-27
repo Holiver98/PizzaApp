@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringView(name = "custom")
 public class Custom extends HorizontalLayout implements View, ObservableHashSet.ObservableHashSetListener {
@@ -28,7 +29,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     private IPizzaService pizzaService;
 
     private VerticalLayout ingredientList;
-    private ComboBox<String> basesauceCB;
+    private ComboBox<Ingredient> basesauceCB;
     private ComboBox<PizzaSize> pizzaSizeCB;
     private VerticalLayout selectedToppingsVL;
     private Label totalPriceLabel;
@@ -60,8 +61,6 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         basesauceCB = new ComboBox<>("Base sauce");
         basesauceCB.setEmptySelectionAllowed(false);
         basesauceCB.setTextInputAllowed(false);
-        basesauceCB.setItems("Tomato", "Sour cream");//TODO: beégetett érték
-        basesauceCB.setValue("Tomato");
 
         selectedToppingsVL = new VerticalLayout();
         selectedToppingsVL.setCaption("Toppings");
@@ -75,6 +74,20 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         leftLayout.addComponent(selectedToppingsVL);
         leftLayout.addComponent(totalPriceLabel);
         leftLayout.addComponent(addToCartBtn);
+    }
+
+    private void setBaseSauceComboBoxItemsAndDefaultValue(){
+        List<Ingredient> baseSauces = pizzaService.getIngredients().stream()
+                .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE))
+                .collect(Collectors.toList());
+
+        if(baseSauces.isEmpty()){
+            return;
+        }
+
+        basesauceCB.setItems(baseSauces);
+        basesauceCB.setItemCaptionGenerator(Ingredient::getName);
+        basesauceCB.setValue(baseSauces.get(0));
     }
 
     private void createCustomPizzaAndAddToCart() {
@@ -98,7 +111,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     @PostConstruct
     private void afterInit(){
         basesauceCB.addValueChangeListener(valueChangeEvent -> calculateAndUpdateTotalPriceOnUi());
-        calculateAndUpdateTotalPriceOnUi();
+        setBaseSauceComboBoxItemsAndDefaultValue();
         loadIngredients();
     }
 
@@ -158,10 +171,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     }
 
     private Ingredient getSelectedBaseSauce(){
-        String selectedBaseSauceName = basesauceCB.getValue();
-        Optional<Ingredient> optionalIngredient = pizzaService.getPizzaIngredientByName(selectedBaseSauceName);
-        return optionalIngredient
-                .orElseThrow(() -> new NullPointerException("No Ingredient exists with such name, there might have been a typo in the base sauce comboBox!"));
+       return basesauceCB.getValue();
     }
 
     @Override
