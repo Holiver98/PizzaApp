@@ -4,13 +4,10 @@ import com.github.holiver98.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public abstract class UserServiceBase implements IUserService{
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
-    private List<IUserServiceListener> listeners = new ArrayList<>();
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
@@ -35,13 +32,11 @@ public abstract class UserServiceBase implements IUserService{
 
         User userInfo = tryGetUser(emailAddress);
         checkIfPasswordMatches(password, userInfo.getPassword());
-        listeners.forEach(listener -> listener.OnLoggedIn(userInfo));
         return userInfo;
     }
 
     @Override
     public int logout(String emailAddress){
-        listeners.forEach(listener -> listener.OnLoggedOut(emailAddress));
         return 1;
     }
 
@@ -51,16 +46,6 @@ public abstract class UserServiceBase implements IUserService{
         checkIfAlreadyRegistered(user);
         encodeUserPassword(user);
         save(user);
-    }
-
-    @Override
-    public void addListener(IUserServiceListener listener){
-        listeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(IUserServiceListener listener){
-        listeners.remove(listener);
     }
 
     protected boolean isValidUserName(String username) {

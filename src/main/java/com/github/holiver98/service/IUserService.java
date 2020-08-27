@@ -42,8 +42,4 @@ public interface IUserService{
      * @return the user or null if, no user is registered with this email address.
      */
     Optional<User> getUser(String emailAddress);
-
-    void addListener(IUserServiceListener listener);
-
-    void removeListener(IUserServiceListener listener);
 }
