@@ -6,18 +6,25 @@ import java.util.Optional;
 
 public interface IUserService{
     /**
-     * Logs in the user, that is identified by the emailAddress.
+     * Logs in the user, that is identified by the emailAddress and returns it.
      *
      * @param emailAddress The email address, that identifies the user.
      * @param password The password of the user.
      * @throws NullPointerException if the password or the emailAddress is null.
      * @throws IncorrectPasswordException if the given password does not match.
      * @throws NotFoundException if the given email address is not registered.
-     * @throws UnsupportedOperationException if already logged in with an account.
+     *
+     * @return the logged in user.
      */
-    void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
+    User login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
 
-    void logout();
+    /**
+     * Logs the user out.
+     *
+     * @param emailAddress the email address, that identifies the user.
+     * @return 0 on failure, 1 on success.
+     */
+    int logout(String emailAddress);
 
     /**
      * @param user The user we want to register. Contains the user information.
@@ -28,9 +35,13 @@ public interface IUserService{
     void register(User user) throws AlreadyExistsException;
 
     /**
-     * @return The logged in user or null if the user is not logged in.
+     * Gets the user identified by this emailAddress.
+     *
+     * @param emailAddress the user's email address.
+     *
+     * @return the user or null if, no user is registered with this email address.
      */
-    Optional<User> getLoggedInUser();
+    Optional<User> getUser(String emailAddress);
 
     void addListener(IUserServiceListener listener);
 

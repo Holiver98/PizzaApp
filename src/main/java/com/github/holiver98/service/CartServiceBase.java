@@ -1,14 +1,14 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.model.*;
-import org.springframework.web.context.annotation.SessionScope;
+import com.github.holiver98.model.Order;
+import com.github.holiver98.model.Pizza;
+import com.github.holiver98.model.User;
 
 import javax.mail.MessagingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class CartServiceBase implements ICartService {
     protected final int cartItemLimit = 15;
@@ -47,13 +47,17 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void placeOrder() throws CartIsEmptyException, NoPermissionException, MessagingException, NotFoundException {
+    public void placeOrder(String emailAddress) throws CartIsEmptyException, NoPermissionException, MessagingException{
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress was null");
+        }
         if(cartContent.isEmpty()){
             throw new CartIsEmptyException("Cart is empty, can't place order!");
         }
-        User loggedInUser = userService.getLoggedInUser().orElseThrow(
-                () -> new NoPermissionException("The user has to be logged in to place order!"));
-        Order order = createOrder(loggedInUser);
+
+        User user = userService.getUser(emailAddress)
+                .orElseThrow(() -> new NotRegisteredException("No user is registered with this email address: " + emailAddress));
+        Order order = createOrder(user);
         save(order);
         mailService.sendOrderConfirmationEmail(order);
     }

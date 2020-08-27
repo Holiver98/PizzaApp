@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/logout")
-    public void logout(){
-        userService.logout();
+    public void logout(@RequestBody String emailAddress){
+        userService.logout(emailAddress);
     }
 
     private static class LoginInfo{

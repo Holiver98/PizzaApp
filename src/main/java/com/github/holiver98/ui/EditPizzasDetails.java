@@ -147,7 +147,9 @@ public class EditPizzasDetails extends VerticalLayout implements View {
             }
 
             System.out.println(item);
-            pizzaService.updatePizza(item);
+            User loggedInUser = ((MainView)getUI()).getLoggedInUser()
+                    .orElseThrow(() -> new UnsupportedOperationException("Need to be logged in to edit pizza!"));
+            pizzaService.updatePizza(item, loggedInUser.getEmailAddress());
         }
     }
 }

@@ -35,17 +35,15 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public Optional<Pizza> savePizza(Pizza pizza){
+    public Optional<Pizza> savePizza(Pizza pizza, String emailAddress){
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
         checkIfPizzaIsValid(pizza);
         if(pizzaExists(pizza)){
             return Optional.empty();
         }
-        User user;
-        try{
-            user = tryGetLoggedInUser();
-        }catch (NoPermissionException e){
-            throw new NoPermissionException("You have to be logged in to save pizza!");
-        }
+        User user = tryGetUser(emailAddress);
         ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
         return doSavePizza(pizza);
     }
@@ -60,29 +58,25 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
-    public int updatePizza(Pizza pizza){
+    public int updatePizza(Pizza pizza, String emailAddress){
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
         checkIfPizzaIsValid(pizza);
         if(!pizzaExists(pizza)){
             return -1;
         }
-        User user;
-        try{
-            user = tryGetLoggedInUser();
-        }catch (NoPermissionException e){
-            throw new NoPermissionException("You have to be logged in to update pizza!");
-        }
+        User user = tryGetUser(emailAddress);
         ifUserIsNotChefThrowException(user, "You have to have Chef role to update pizza!");
         return doUpdatePizza(pizza);
     }
 
     @Override
-    public int deletePizza(long pizzaId) {
-        User user;
-        try{
-            user = tryGetLoggedInUser();
-        }catch (NoPermissionException e){
-            throw new NoPermissionException("You have to be logged in to delete pizza!");
+    public int deletePizza(long pizzaId, String emailAddress) {
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
         }
+        User user = tryGetUser(emailAddress);
         ifUserIsNotChefThrowException(user, "You have to have Chef role to delete pizza!");
         return doDeletePizza(pizzaId);
     }
@@ -184,9 +178,9 @@ public abstract class PizzaServiceBase implements IPizzaService {
         return hasValidNumberOfBasesauces;
     }
 
-    private User tryGetLoggedInUser() {
-        Optional<User> user = userService.getLoggedInUser();
-        return user.orElseThrow(() -> new NoPermissionException(""));
+    private User tryGetUser(String emailAddress) {
+        Optional<User> user = userService.getUser(emailAddress);
+        return user.orElseThrow(() -> new NotRegisteredException("No user is registered with this email address: " + emailAddress));
     }
 
     private void ifUserIsNotChefThrowException(User user, String exceptionMessage){

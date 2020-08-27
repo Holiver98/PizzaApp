@@ -3,7 +3,6 @@ package com.github.holiver98.ui;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.ICartService;
-import com.github.holiver98.service.IUserService;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
@@ -19,8 +18,6 @@ import java.util.Optional;
 public class Cart extends VerticalLayout implements View {
     @Autowired
     private ICartService cartService;
-    @Autowired
-    private IUserService userService;
 
     private VerticalLayout contentVL;
 
@@ -74,7 +71,7 @@ public class Cart extends VerticalLayout implements View {
             return;
         }
 
-        Optional<User> loggedInUser = userService.getLoggedInUser();
+        Optional<User> loggedInUser = ((MainView)getUI()).getLoggedInUser();
         if(loggedInUser.isPresent()){
             getUI().getNavigator().navigateTo("order");
         }else{

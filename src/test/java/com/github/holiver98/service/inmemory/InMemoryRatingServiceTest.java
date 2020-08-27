@@ -2,26 +2,14 @@ package com.github.holiver98.service.inmemory;
 
 import com.github.holiver98.dal.inmemory.IInMemoryRatingDao;
 import com.github.holiver98.model.Pizza;
-import com.github.holiver98.model.PizzaSize;
-import com.github.holiver98.model.Rating;
-import com.github.holiver98.model.User;
-import com.github.holiver98.service.*;
-import org.junit.jupiter.api.Assertions;
+import com.github.holiver98.service.IPizzaService;
+import com.github.holiver98.service.IUserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InMemoryRatingServiceTest {
@@ -43,7 +31,7 @@ public class InMemoryRatingServiceTest {
         ratingService = new InMemoryRatingService(ratingDao, userService, pizzaService);
     }
 
-    @Test
+    /*@Test
     void ratePizza_Pizza_Already_Rated_By_This_User_Should_Not_Rate_Pizza() throws NotFoundException {
         //Arrange
         final int rating = 3;
@@ -418,5 +406,5 @@ public class InMemoryRatingServiceTest {
         BigDecimal actualRatingAverage = pizzaUpdateData.getRatingAverage().stripTrailingZeros();
         BigDecimal expectedRatingAverage = BigDecimal.valueOf(2.5).stripTrailingZeros();
         assertThat(actualRatingAverage).isEqualTo(expectedRatingAverage);
-    }
+    }*/
 }

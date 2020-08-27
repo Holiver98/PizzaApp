@@ -12,6 +12,8 @@ public interface IUserServiceListener {
 
     /**
      * Called after a successful logout.
+     *
+     * @param emailAddress the logged out user's email address.
      */
-    void OnLoggedOut();
+    void OnLoggedOut(String emailAddress);
 }

@@ -8,43 +8,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
+public abstract class UserServiceBase implements IUserService{
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
-    private User loggedInUser;
     private List<IUserServiceListener> listeners = new ArrayList<>();
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
     protected abstract void update(User user);
 
-    @Override
-    public Optional<User> getLoggedInUser(){
-        return Optional.ofNullable(loggedInUser);
-    }
-
     public BCryptPasswordEncoder getPasswordEncoder(){
         return passwordEncoder;
     }
 
     @Override
-    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
-        super.login(emailAddress, password);
-        User userInfo = tryGetUser(emailAddress);
-        IfAlreadyLoggedInThrowException();
-        checkIfPasswordMatches(password, userInfo.getPassword());
-        loggedInUser = userInfo;
-        listeners.forEach(listener -> listener.OnLoggedIn(loggedInUser));
+    public Optional<User> getUser(String emailAddress){
+        return findByEmailAddress(emailAddress);
     }
 
     @Override
-    public void logout(){
-        loggedInUser = null;
-        listeners.forEach(listener -> listener.OnLoggedOut());
+    public User login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
+        if(password == null){
+            throw new NullPointerException("password was null");
+        }else if(emailAddress == null){
+            throw new NullPointerException("emailAddress was null");
+        }
+
+        User userInfo = tryGetUser(emailAddress);
+        checkIfPasswordMatches(password, userInfo.getPassword());
+        listeners.forEach(listener -> listener.OnLoggedIn(userInfo));
+        return userInfo;
+    }
+
+    @Override
+    public int logout(String emailAddress){
+        listeners.forEach(listener -> listener.OnLoggedOut(emailAddress));
+        return 1;
     }
 
     @Override
     public void register(User user) throws AlreadyExistsException {
-        super.register(user);
         checkIfUserInformationAreValid(user);
         checkIfAlreadyRegistered(user);
         encodeUserPassword(user);
@@ -105,6 +107,10 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     }
 
     private void checkIfUserInformationAreValid(User user){
+        if(user == null) {
+            throw new NullPointerException("user was null");
+        }
+
         if(!isValidUserName(user.getUsername())) {
             throw new IllegalArgumentException("invalid username: " + user.getUsername());
         }
@@ -130,12 +136,6 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     private void checkIfPasswordMatches(String password, String encodedPassword) throws IncorrectPasswordException {
         if(!passwordEncoder.matches(password, encodedPassword)){
             throw new IncorrectPasswordException("password incorrect: " + password);
-        }
-    }
-
-    private void IfAlreadyLoggedInThrowException() {
-        if(loggedInUser != null){
-            throw new UnsupportedOperationException("Already logged in with an account!");
         }
     }
 }

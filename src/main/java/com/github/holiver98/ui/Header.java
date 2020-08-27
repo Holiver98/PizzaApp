@@ -1,16 +1,16 @@
 package com.github.holiver98.ui;
 
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.IUserServiceListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Label;
+
 import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -19,10 +19,7 @@ import java.util.Optional;
 
 @UIScope
 @SpringView(name = "header")
-public class Header extends CssLayout implements View, IUserServiceListener {
-    @Autowired
-    private IUserService userService;
-
+public class Header extends CssLayout implements View {
     private CssLayout rightContainer;
     private Label usernameLabel = new Label("-");
     private Button registerBtn;
@@ -31,6 +28,8 @@ public class Header extends CssLayout implements View, IUserServiceListener {
     private Button profileBtn;
 
     public Header(){
+        addAttachListener(this::OnAttached);
+
         setStyleName("header");
         Responsive.makeResponsive(this);
         setWidthFull();
@@ -71,13 +70,15 @@ public class Header extends CssLayout implements View, IUserServiceListener {
 
     @PostConstruct
     public void afterInit(){
-        userService.addListener(this);
         setLogoutBtnClickListener();
+    }
+
+    public void OnAttached(AttachEvent attachEvent){
         updateHeaderIfUserIsLoggedIn();
     }
 
     private void goToProfile() {
-        User loggedInUser = userService.getLoggedInUser()
+        User loggedInUser = ((MainView)getUI()).getLoggedInUser()
                 .orElseThrow(() -> new RuntimeException("profile button clicked while not logged in"));
 
         String encodedEmail = "";
@@ -91,13 +92,11 @@ public class Header extends CssLayout implements View, IUserServiceListener {
     }
 
     private void setLogoutBtnClickListener(){
-        logoutBtn.addClickListener(clickEvent -> {
-            userService.logout();
-        });
+        logoutBtn.addClickListener(clickEvent -> logout());
     }
 
     private void updateHeaderIfUserIsLoggedIn(){
-        Optional<User> loggedInUser = userService.getLoggedInUser();
+        Optional<User> loggedInUser = ((MainView)getUI()).getLoggedInUser();
         loggedInUser.ifPresent(u -> login(u.getUsername()));
     }
 
@@ -111,22 +110,17 @@ public class Header extends CssLayout implements View, IUserServiceListener {
         getUI().getNavigator().navigateTo("");
     }
 
-    public void logout() {
+    private void logout() {
+        MainView.AuthenticationResult result = ((MainView)getUI()).logout();
+        if(result.equals(MainView.AuthenticationResult.FAILURE)){
+            return;
+        }
+
         usernameLabel.setValue("-");
         rightContainer.removeComponent(usernameLabel);
         rightContainer.removeComponent(profileBtn);
         rightContainer.removeComponent(logoutBtn);
         rightContainer.addComponent(registerBtn, 0);
         rightContainer.addComponent(loginBtn, 1);
-    }
-
-    @Override
-    public void OnLoggedIn(User user) {
-        login(user.getUsername());
-    }
-
-    @Override
-    public void OnLoggedOut() {
-        logout();
     }
 }

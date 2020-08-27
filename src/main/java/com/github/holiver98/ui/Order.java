@@ -41,7 +41,7 @@ public class Order extends VerticalLayout implements View {
 
     @PostConstruct
     private void afterInit(){
-        List<Pizza> items = cartService.getCartContent();
+        List<Pizza> items = cartService.getCartContent();//TODO: update all clients memory after successfully editing pizza
         addPizzasToUi(items);
         calculateTotalPrice(items);
     }

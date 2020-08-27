@@ -2,14 +2,12 @@ package com.github.holiver98.ui;
 
 import com.github.holiver98.model.Role;
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.IUserService;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -18,9 +16,6 @@ import java.util.Optional;
 
 @SpringView(name = "profile")
 public class Profile extends VerticalLayout implements View {
-    @Autowired
-    private IUserService userService;
-
     private Label usernameLabel;
     private Label emailLabel;
     private Label roleLabel;
@@ -50,7 +45,7 @@ public class Profile extends VerticalLayout implements View {
             String encodedEmail = event.getParameters();
             String email = decode(encodedEmail);
 
-            Optional<User> loggedInUser = userService.getLoggedInUser();
+            Optional<User> loggedInUser = ((MainView)getUI()).getLoggedInUser();
             loggedInUser.ifPresent(user -> setupUi(user));
         }
     }

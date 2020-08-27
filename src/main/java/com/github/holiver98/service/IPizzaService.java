@@ -22,12 +22,14 @@ public interface IPizzaService {
      * Saves the pizza. Requires authenticated user with Chef role.
      *
      * @param pizza The pizza to be saved.
+     * @param emailAddress the email address of the user who is saving the pizza.
      * @return The saved pizza with it's id set. If pizza already exists, null is returned.
-     * @throws NullPointerException if the pizza is null.
+     * @throws NullPointerException if the pizza or emailAddress is null.
      * @throws IllegalArgumentException if the pizza is invalid.
-     * @throws NoPermissionException if not logged in, or doesn't have Chef role.
+     * @throws NoPermissionException if doesn't have Chef role.
+     * @throws NotRegisteredException if no user is registered with this emailAddress.
      */
-    Optional<Pizza> savePizza(Pizza pizza);
+    Optional<Pizza> savePizza(Pizza pizza, String emailAddress);
 
     List<Pizza> getPizzas();
 
@@ -49,12 +51,14 @@ public interface IPizzaService {
      * Requires authenticated user with Chef role.
      *
      * @param pizza The pizza to be updated.
+     * @param  emailAddress the email address of the user who is updating the pizza.
      * @return 1 - success, -1 if pizza doesn't exist.
-     * @throws NullPointerException if the pizza is null.
+     * @throws NullPointerException if the pizza or emailAddress is null.
      * @throws IllegalArgumentException if the pizza is invalid.
-     * @throws NoPermissionException if not logged in, or doesn't have Chef role.
+     * @throws NoPermissionException if doesn't have Chef role.
+     * @throws NotRegisteredException if no user is registered with this emailAddress.
      */
-    int updatePizza(Pizza pizza);
+    int updatePizza(Pizza pizza, String emailAddress);
 
     /**
      *Updates the pizza, that has the same id, as the pizza argument, with the values of
@@ -73,10 +77,13 @@ public interface IPizzaService {
      * Requires authenticated user with Chef role.
      *
      * @param pizzaId The id of the pizza to be deleted.
+     * @param emailAddress The email address of the user, who is deleting the pizza.
      * @return 1 - success, -1 - pizza with this id doesn't exist.
-     * @throws NoPermissionException if not logged in, or doesn't have Chef role.
+     * @throws NullPointerException if emailAddress is null.
+     * @throws NoPermissionException if doesn't have Chef role.
+     * @throws NotRegisteredException if no user is registered with this emailAddress.
      */
-    int deletePizza(long pizzaId);
+    int deletePizza(long pizzaId, String emailAddress);
 
     List<Ingredient> getIngredients();
 

@@ -23,8 +23,6 @@ public class PizzaDetails extends VerticalLayout implements View {
     IRatingService ratingService;
     @Autowired
     ICartService cartService;
-    @Autowired
-    IUserService userService;
 
     private Pizza item;
 
@@ -87,8 +85,19 @@ public class PizzaDetails extends VerticalLayout implements View {
     private void OnConfirmRatingButtonPressed(Button.ClickEvent clickEvent){
         int rating = ratingStars.getValue().intValue();
 
+        User loggedInUser = new User();
         try {
-            ratingService.ratePizza(item.getId(), rating);
+            loggedInUser = ((MainView) getUI()).getLoggedInUser()
+                    .orElseThrow(() -> new UnsupportedOperationException(""));
+        }catch(UnsupportedOperationException e){
+            Notification.show("You have to be logged in to rate!", Notification.Type.ERROR_MESSAGE);
+            exitRatingMode();
+            ratingStars.setValue(item.getRatingAverage().doubleValue());
+            return;
+        }
+
+        try {
+            ratingService.ratePizza(item.getId(), rating, loggedInUser.getEmailAddress());
         } catch (NotFoundException e) {
             Notification.show("Internal server error: No pizza was found in the database with id: " + item.getId(), Notification.Type.ERROR_MESSAGE);
             exitRatingMode();
@@ -132,7 +141,7 @@ public class PizzaDetails extends VerticalLayout implements View {
     }
 
     private void onRatingButtonPressed(Button.ClickEvent clickEvent) {
-        Optional<User> loggedInUser = userService.getLoggedInUser();
+        Optional<User> loggedInUser = ((MainView)getUI()).getLoggedInUser();
         if(!loggedInUser.isPresent()){
             Notification.show("Have to be logged in.", Notification.Type.WARNING_MESSAGE);
             return;

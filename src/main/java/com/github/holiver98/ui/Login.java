@@ -1,23 +1,19 @@
 package com.github.holiver98.ui;
 
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.IncorrectPasswordException;
-import com.github.holiver98.service.NotFoundException;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 
 @SpringView(name = "login")
 public class Login extends VerticalLayout implements View {
-    @Autowired
-    private IUserService userService;
-
     public Login(){
         TextField emailTF = new TextField("Email");
         PasswordField passwordPF = new PasswordField("Password");
@@ -53,14 +49,6 @@ public class Login extends VerticalLayout implements View {
     }
 
     private void login(User user){
-        try {
-            userService.login(user.getEmailAddress(), user.getPassword());
-        } catch (IncorrectPasswordException e) {
-            //Invalid password
-            Notification.show("Invalid email or password.", Notification.Type.WARNING_MESSAGE);
-        } catch (NotFoundException e) {
-            //Invalid email
-            Notification.show("Invalid email or password.", Notification.Type.WARNING_MESSAGE);
-        }
+        ((MainView)getUI()).login(user.getEmailAddress(), user.getPassword());
     }
 }
