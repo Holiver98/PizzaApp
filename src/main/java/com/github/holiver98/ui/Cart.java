@@ -6,10 +6,12 @@ import com.github.holiver98.service.ICartService;
 import com.github.holiver98.service.IUserService;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.annotation.PostConstruct;
 import java.util.Optional;
 
@@ -24,11 +26,17 @@ public class Cart extends VerticalLayout implements View {
 
     public Cart(){
         contentVL = new VerticalLayout();
+        contentVL.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         Button orderBtn = new Button("Order");
+        orderBtn.setHeight("50px");
+        orderBtn.setWidth("100px");
 
         addComponent(contentVL);
         addComponent(orderBtn);
+
+        setComponentAlignment(orderBtn, Alignment.MIDDLE_CENTER);
+
 
         orderBtn.addClickListener(clickEvent -> goToOrderView());
     }

@@ -28,6 +28,8 @@ public class EditPizzasItem extends HorizontalLayout implements View {
     private Button deleteBtn;
 
     public EditPizzasItem(){
+        setStyleName("editPizzasItem");
+
         VerticalLayout idVL = new VerticalLayout();
         Label idCaptionLabel = new Label("Id:");
         idLabel = new Label("-");
@@ -43,6 +45,7 @@ public class EditPizzasItem extends HorizontalLayout implements View {
         editBtn = new Button("Edit");
         editBtn.addClickListener(clickEvent -> onEditButtonPressed());
         deleteBtn = new Button("Delete");
+        deleteBtn.setStyleName("removeBtn");
         deleteBtn.addClickListener(clickEvent -> onDeleteButtonPressed());
 
         addComponent(idVL);
