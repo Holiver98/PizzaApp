@@ -1,6 +1,7 @@
 package com.github.holiver98.config;
 
 import com.github.holiver98.dal.inmemory.*;
+import com.github.holiver98.service.*;
 import com.github.holiver98.service.inmemory.InMemoryCartService;
 import com.github.holiver98.service.inmemory.InMemoryPizzaService;
 import com.github.holiver98.service.inmemory.InMemoryRatingService;
@@ -9,12 +10,8 @@ import com.github.holiver98.service.jpa.JpaCartService;
 import com.github.holiver98.service.jpa.JpaPizzaService;
 import com.github.holiver98.service.jpa.JpaRatingService;
 import com.github.holiver98.service.jpa.JpaUserService;
-import com.github.holiver98.ui.Header;
-import com.vaadin.spring.annotation.EnableVaadin;
-import liquibase.pro.packaged.B;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.github.holiver98.service.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.context.annotation.SessionScope;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -42,7 +39,6 @@ public class ApplicationConfiguration {
     public IInMemoryUserDao inMemoryUserDao(){return new InMemoryUserDao();}
 
     @Bean
-    @SessionScope
     public IUserService inMemoryUserService(){
         return new InMemoryUserService(inMemoryUserDao());
     }
@@ -67,7 +63,6 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    @SessionScope
     @Primary
     public IUserService jpaUserService(){
         return new JpaUserService();
