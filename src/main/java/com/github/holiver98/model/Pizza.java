@@ -3,6 +3,7 @@ package com.github.holiver98.model;
 import lombok.Data;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "pizzas")
@@ -10,8 +11,7 @@ import java.util.Set;
 public class Pizza {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "database_seq")
-    @SequenceGenerator(name="database_seq", sequenceName = "pizzas_tb_seq",
-            initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name="database_seq", sequenceName = "pizzas_tb_seq", allocationSize = 1)
     private Long id;
     private String name;
     @JoinTable(
@@ -22,7 +22,7 @@ public class Pizza {
             @JoinColumn(name = "ingredient_name", referencedColumnName = "name")
     )
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
     @Enumerated(EnumType.STRING)
     @Column(name = "pizza_size")
     private PizzaSize size;

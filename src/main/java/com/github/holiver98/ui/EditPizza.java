@@ -15,37 +15,36 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@SpringView(name = "edit_pizzas_details")
-public class EditPizzasDetails extends VerticalLayout implements View {
+//TODO: a pizza árát számított értékként kezeltem egész eddig, pedig nem kéne annak lennie
+@SpringView(name = "edit_pizza")
+public class EditPizza extends VerticalLayout implements View {
     @Autowired
-    private IPizzaService pizzaService;
-
-    private Label nameLabel;
-    private Label ingredientsLabel;
-    private Label sizeLabel;
-    //TODO: a pizza árát számított értékként kezeltem egész eddig, pedig nem kéne annak lennie
-    private Label priceLabel;
-    private Label isCustomLabel;
+    protected IPizzaService pizzaService;
 
     private TextField nameTF;
+    protected ComboBox<Ingredient> basesauceCB;
     private TwinColSelect<String> ingredientsTCS;
     private ComboBox<PizzaSize> sizeCB;
     private TextField priceTF;
     private CheckBox isCustomChB;
 
     private Binder<Pizza> binder;
-    private Pizza item;
+    protected Pizza item;
 
-    private Button editBtn;
+    protected Button confirmBtn;
 
-    public EditPizzasDetails(){
-        nameLabel = new Label("Name:");
-        ingredientsLabel = new Label("Ingredients:");
-        sizeLabel = new Label("Size:");
-        priceLabel = new Label("Price:");
-        isCustomLabel = new Label("Custom:");
+    public EditPizza(){
+        Label nameLabel = new Label("Name:");
+        Label basesauceLabel = new Label("Base sauce:");
+        Label ingredientsLabel = new Label("Ingredients:");
+        Label sizeLabel = new Label("Size:");
+        Label priceLabel = new Label("Price:");
+        Label isCustomLabel = new Label("Custom:");
 
         nameTF = new TextField();
+        basesauceCB = new ComboBox<>();
+        basesauceCB.setEmptySelectionAllowed(false);
+        basesauceCB.setTextInputAllowed(false);
         ingredientsTCS = new TwinColSelect<>();
         ingredientsTCS.setLeftColumnCaption("All ingredients");
         ingredientsTCS.setRightColumnCaption("Selected ingredients");
@@ -57,12 +56,12 @@ public class EditPizzasDetails extends VerticalLayout implements View {
         priceTF = new TextField();
         isCustomChB = new CheckBox();
 
-        editBtn = new Button("Edit");
-        editBtn.addClickListener(clickEvent -> onEditButtonPressed());
+        confirmBtn = new Button("Edit");
+        confirmBtn.addClickListener(clickEvent -> onConfirmButtonPressed());
         Button cancelBtn = new Button("Cancel");
-        cancelBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("edit_pizzas"));
+        cancelBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("pizza_editor"));
         HorizontalLayout buttonContainer = new HorizontalLayout();
-        buttonContainer.addComponent(editBtn);
+        buttonContainer.addComponent(confirmBtn);
         buttonContainer.addComponent(cancelBtn);
 
         binder = new Binder<>();
@@ -70,6 +69,8 @@ public class EditPizzasDetails extends VerticalLayout implements View {
 
         addComponent(nameLabel);
         addComponent(nameTF);
+        addComponent(basesauceLabel);
+        addComponent(basesauceCB);
         addComponent(ingredientsLabel);
         addComponent(ingredientsTCS);
         addComponent(sizeLabel);
@@ -83,12 +84,7 @@ public class EditPizzasDetails extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        List<Ingredient> ingredients = pizzaService.getIngredients();
-        List<String> ingredientNames = ingredients.stream()
-                .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_TOPPING))
-                .map(ingredient -> ingredient.getName())
-                .collect(Collectors.toList());
-        ingredientsTCS.setItems(ingredientNames);
+        loadItemsIntoIngredientsTCS();
 
         if(event.getParameters() != null) {
             String stringId = event.getParameters();
@@ -98,11 +94,49 @@ public class EditPizzasDetails extends VerticalLayout implements View {
 
             updateDataOnUi(item);
         }
+
+        setBaseSauceComboBoxItems();
+    }
+
+    private void setBaseSauceComboBoxItems(){
+        List<Ingredient> baseSauces = pizzaService.getIngredients().stream()
+                .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE))
+                .collect(Collectors.toList());
+
+        if(baseSauces.isEmpty()){
+            return;
+        }
+
+        basesauceCB.setItems(baseSauces);
+        basesauceCB.setItemCaptionGenerator(Ingredient::getName);
+    }
+
+    private Ingredient getBasesauce(Pizza pizza) {
+        return pizza.getIngredients().stream()
+                .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void setBasesauce(Pizza pizza, Ingredient basesauce){
+        pizza.getIngredients().removeIf(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE));
+        pizza.getIngredients().add(basesauce);
+    }
+
+    protected void loadItemsIntoIngredientsTCS() {
+        List<Ingredient> ingredients = pizzaService.getIngredients();
+        List<String> ingredientNames = ingredients.stream()
+                .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_TOPPING))
+                .map(ingredient -> ingredient.getName())
+                .collect(Collectors.toList());
+        ingredientsTCS.setItems(ingredientNames);
     }
 
     private void updateDataOnUi(Pizza pizza) {
         binder.readBean(item);
-        pizza.getIngredients().forEach(ingredient -> ingredientsTCS.select(ingredient.getName()));
+        pizza.getIngredients().stream()
+                .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_TOPPING))
+                .forEach(ingredient -> ingredientsTCS.select(ingredient.getName()));
     }
 
     private void createBindings() {
@@ -111,6 +145,9 @@ public class EditPizzasDetails extends VerticalLayout implements View {
 
         binder.forField(nameTF)
                 .bind(Pizza::getName, Pizza::setName);
+
+        binder.forField(basesauceCB)
+                .bind(pizza -> getBasesauce(pizza), (pizza, ingredient) -> setBasesauce(pizza, ingredient));
 
         binder.forField(priceTF)
                 .bind(pizza -> pizza.getPrice().toString(), (pizza, priceString) -> pizza.setPrice(new BigDecimal(priceString)));
@@ -141,7 +178,7 @@ public class EditPizzasDetails extends VerticalLayout implements View {
                 .orElseThrow(() -> new NullPointerException("No ingredient in the list with name: " + name));
     }
 
-    private void onEditButtonPressed() {
+    private void onConfirmButtonPressed() {
         BinderValidationStatus<Pizza> result = binder.validate();
         if(result.isOk() && !result.hasErrors()){
             try {
@@ -151,13 +188,17 @@ public class EditPizzasDetails extends VerticalLayout implements View {
                 e.printStackTrace();
             }
 
-            MainView ui = (MainView)getUI();
-            User loggedInUser = ui.getLoggedInUser()
-                    .orElseThrow(() -> new UnsupportedOperationException("Need to be logged in to edit pizza!"));
-            pizzaService.updatePizza(item, loggedInUser.getEmailAddress());
-
-            ui.getNavigator().navigateTo("edit_pizzas");
-            Notification.show("Successfully edited pizza.", Notification.Type.WARNING_MESSAGE);
+            onValidationSucceededAfterConfirmButtonPressed();
         }
+    }
+
+    protected void onValidationSucceededAfterConfirmButtonPressed() {
+        MainView ui = (MainView)getUI();
+        User loggedInUser = ui.getLoggedInUser()
+                .orElseThrow(() -> new UnsupportedOperationException("Need to be logged in to edit pizza!"));
+        pizzaService.updatePizza(item, loggedInUser.getEmailAddress());
+
+        ui.getNavigator().navigateTo("pizza_editor");
+        Notification.show("Successfully edited pizza.", Notification.Type.WARNING_MESSAGE);
     }
 }

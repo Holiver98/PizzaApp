@@ -4,6 +4,7 @@ import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IPizzaService;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@SpringView(name = "edit_pizzas")
-public class EditPizzas extends VerticalLayout implements View, EditPizzasItem.Listener {
+@SpringView(name = "pizza_editor")
+public class PizzaEditor extends VerticalLayout implements View, EditPizzasItem.Listener {
     @Autowired
     private IPizzaService pizzaService;
 
-    public EditPizzas(){
+    private Button addBtn;
 
+    public PizzaEditor(){
+        addBtn = new Button("Add new");
+        addBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("add_pizza"));
     }
 
     @PostConstruct
@@ -28,6 +32,7 @@ public class EditPizzas extends VerticalLayout implements View, EditPizzasItem.L
             pizzaItemUi.addListener(this);
             addComponent(pizzaItemUi);
         }
+        addComponent(addBtn);
     }
 
     @Override
@@ -37,7 +42,7 @@ public class EditPizzas extends VerticalLayout implements View, EditPizzasItem.L
 
     @Override
     public void onEditButtonPressed(Pizza item) {
-        String path = "edit_pizzas_details/" + item.getId();
+        String path = "edit_pizza/" + item.getId();
         getUI().getNavigator().navigateTo(path);
     }
 }
