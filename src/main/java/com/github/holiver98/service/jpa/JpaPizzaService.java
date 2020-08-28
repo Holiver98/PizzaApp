@@ -5,10 +5,10 @@ import com.github.holiver98.dal.jpa.IPizzaRepository;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +65,9 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
+    @Transactional //TODO: transactional csak public metódusokon működik??
     protected int doDeletePizza(long pizzaId) {
+        pizzaRepository.deleteRatingsOfPizza(pizzaId);
         pizzaRepository.deleteById(pizzaId);
         return 1;
     }
