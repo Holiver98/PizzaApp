@@ -59,6 +59,11 @@ public class EditPizzasDetails extends VerticalLayout implements View {
 
         editBtn = new Button("Edit");
         editBtn.addClickListener(clickEvent -> onEditButtonPressed());
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("edit_pizzas"));
+        HorizontalLayout buttonContainer = new HorizontalLayout();
+        buttonContainer.addComponent(editBtn);
+        buttonContainer.addComponent(cancelBtn);
 
         binder = new Binder<>();
         createBindings();
@@ -73,7 +78,7 @@ public class EditPizzasDetails extends VerticalLayout implements View {
         addComponent(priceTF);
         addComponent(isCustomLabel);
         addComponent(isCustomChB);
-        addComponent(editBtn);
+        addComponent(buttonContainer);
     }
 
     @Override
@@ -146,10 +151,13 @@ public class EditPizzasDetails extends VerticalLayout implements View {
                 e.printStackTrace();
             }
 
-            System.out.println(item);
-            User loggedInUser = ((MainView)getUI()).getLoggedInUser()
+            MainView ui = (MainView)getUI();
+            User loggedInUser = ui.getLoggedInUser()
                     .orElseThrow(() -> new UnsupportedOperationException("Need to be logged in to edit pizza!"));
             pizzaService.updatePizza(item, loggedInUser.getEmailAddress());
+
+            ui.getNavigator().navigateTo("edit_pizzas");
+            Notification.show("Successfully edited pizza.", Notification.Type.WARNING_MESSAGE);
         }
     }
 }
