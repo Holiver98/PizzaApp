@@ -3,7 +3,7 @@ package com.github.holiver98.service;
 import com.github.holiver98.model.Order;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.User;
-
+import org.springframework.beans.factory.annotation.Value;
 import javax.mail.MessagingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,7 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class CartServiceBase implements ICartService {
-    protected final int cartItemLimit = 15;
+    @Value("${pizzaapp.cart.itemlimit}")
+    protected int cartItemLimit;
     protected List<Pizza> cartContent = new ArrayList<Pizza>();
     protected IUserService userService;
     protected IMailService mailService;
