@@ -154,6 +154,7 @@ public class PizzaDetails extends VerticalLayout implements View {
         try {
             item.setSize(pizzaSizeCB.getValue());
             cartService.addPizzaToCart(item);
+            Notification.show("Pizza added to the cart.", Notification.Type.WARNING_MESSAGE);
         } catch (CartIsFullException e) {
             Notification.show(e.getMessage(), Notification.Type.WARNING_MESSAGE);
         }

@@ -8,15 +8,20 @@ import com.github.holiver98.service.CartIsFullException;
 import com.github.holiver98.service.ICartService;
 import com.github.holiver98.service.IPizzaService;
 import com.github.holiver98.util.ObservableHashSet;
+import com.vaadin.event.LayoutEvents;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @SpringView(name = "custom")
@@ -28,7 +33,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     @Autowired
     private IPizzaService pizzaService;
 
-    private VerticalLayout ingredientList;
+    private VerticalLayout availableIngredientsVL;
     private ComboBox<Ingredient> basesauceCB;
     private ComboBox<PizzaSize> pizzaSizeCB;
     private VerticalLayout selectedToppingsVL;
@@ -47,8 +52,8 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         VerticalLayout leftLayout = new VerticalLayout();
         Panel rightPanel = new Panel();
         rightPanel.setHeight("400");
-        ingredientList = new VerticalLayout();
-        rightPanel.setContent(ingredientList);
+        availableIngredientsVL = new VerticalLayout();
+        rightPanel.setContent(availableIngredientsVL);
 
         addComponent(leftLayout);
         addComponent(rightPanel);
@@ -110,6 +115,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         try {
             cartService.addPizzaToCart(pizza);
             pizzaService.saveCustomPizzaWithoutAuthentication(pizza);
+            Notification.show("Pizza added to the cart.", Notification.Type.WARNING_MESSAGE);
         } catch (CartIsFullException e) {
             Notification.show("The cart is full!", Notification.Type.WARNING_MESSAGE);
         }
@@ -119,10 +125,10 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     private void afterInit(){
         basesauceCB.addValueChangeListener(valueChangeEvent -> calculateAndUpdateTotalPriceOnUi());
         setBaseSauceComboBoxItemsAndDefaultValue();
-        loadIngredients();
+        loadToppings();
     }
 
-    private void loadIngredients() {
+    private void loadToppings() {
         List<Ingredient> ingredients = pizzaService.getIngredients();
         for(Ingredient ingredient: ingredients){
             boolean isBaseSauce = ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE);
@@ -130,30 +136,44 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
                 continue;
             }
 
-            ItemCard item = new ItemCard(ingredient.getName());
-            item.setImage(new ThemeResource("images/ingredientTest.jpg"));
-            item.setHeight("200");
-            item.setWidth("200");
-            item.addLayoutClickListener(layoutClickEvent -> addToSelectedToppings(ingredient));
-            ingredientList.addComponent(item);
+            addIngredientToAvailableIngredientsLayout(ingredient);
         }
     }
 
-    private void addToSelectedToppings(Ingredient ingredient) {
+    private void addIngredientToAvailableIngredientsLayout(Ingredient ingredient){
+        ItemCard item = new ItemCard(ingredient.getName());
+        item.setImage(new ThemeResource("images/ingredientTest.jpg"));
+        item.setHeight("200");
+        item.setWidth("200");
+        item.addLayoutClickListener(layoutClickEvent -> addToSelectedToppings(ingredient, layoutClickEvent));
+        availableIngredientsVL.addComponent(item, 0);
+    }
+
+    private void addToSelectedToppings(Ingredient ingredient, LayoutEvents.LayoutClickEvent layoutClickEvent) {
         boolean didntContain = selectedToppings.add(ingredient);
         if(didntContain){
-            HorizontalLayout container = new HorizontalLayout();
-            container.addComponent(new Label(ingredient.getName()));
-            Button removeBtn = new Button();
-            removeBtn.setIcon(VaadinIcons.CLOSE_SMALL);
-            removeBtn.addClickListener(clickEvent -> {
-                selectedToppingsVL.removeComponent(container);
-                selectedToppings.remove(ingredient);
-                calculateAndUpdateTotalPriceOnUi();});
-            container.addComponent(removeBtn);
-            selectedToppingsVL.addComponent(container);
+            addToSelectedToppingsLayout(ingredient);
+            Component clickedComponent = layoutClickEvent.getComponent();
+            availableIngredientsVL.removeComponent(clickedComponent);
             calculateAndUpdateTotalPriceOnUi();
         }
+    }
+
+    private void addToSelectedToppingsLayout(Ingredient ingredient) {
+        HorizontalLayout container = new HorizontalLayout();
+        container.addComponent(new Label(ingredient.getName()));
+        Button removeBtn = new Button();
+        removeBtn.setIcon(VaadinIcons.CLOSE_SMALL);
+        removeBtn.addClickListener(clickEvent -> onIngredientRemoveButtonPressed(container, ingredient));
+        container.addComponent(removeBtn);
+        selectedToppingsVL.addComponent(container);
+    }
+
+    private void onIngredientRemoveButtonPressed(Component ingredientUiItem, Ingredient ingredient){
+        selectedToppingsVL.removeComponent(ingredientUiItem);
+        selectedToppings.remove(ingredient);
+        addIngredientToAvailableIngredientsLayout(ingredient);
+        calculateAndUpdateTotalPriceOnUi();
     }
 
     private BigDecimal calculateTotalPrice() {
