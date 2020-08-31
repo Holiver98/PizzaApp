@@ -192,4 +192,16 @@
     flex-wrap: wrap;
     align-items: center;
   }
+
+  .custom{
+    .selectedToppingsVL{
+        border: solid;
+        border-width: 1px;
+    }
+    .rightPanel{
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+  }
 }

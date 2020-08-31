@@ -4,6 +4,7 @@ import com.github.holiver98.model.User;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.IncorrectPasswordException;
 import com.github.holiver98.service.NotFoundException;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.View;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Title("PizzaApp")
 @SpringUI
 @SpringViewDisplay
+@PreserveOnRefresh
 public class MainView extends UI implements ViewDisplay {
     public enum AuthenticationResult{
         SUCCESS,

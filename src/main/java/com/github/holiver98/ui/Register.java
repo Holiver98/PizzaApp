@@ -46,21 +46,23 @@ public class Register extends VerticalLayout implements View {
         Binder<User> binder = new Binder<>();
         BindUserToForm(user, binder);
 
-        registerBtn.addClickListener(clickEvent -> {
-            BinderValidationStatus<User> result = binder.validate();
-            if(result.isOk() && !result.hasErrors()){
-                try {
-                    binder.writeBean(user);
-                } catch (ValidationException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    userService.register(user);
-                } catch (AlreadyExistsException e) {
-                    Notification.show("Email already registered.");
-                }
+        registerBtn.addClickListener(clickEvent -> register(user, binder));
+    }
+
+    private void register(User user, Binder<User> binder) {
+        BinderValidationStatus<User> result = binder.validate();
+        if(result.isOk() && !result.hasErrors()){
+            try {
+                binder.writeBean(user);
+            } catch (ValidationException e) {
+                e.printStackTrace();
             }
-        });
+            try {
+                userService.register(user);
+            } catch (AlreadyExistsException e) {
+                Notification.show("Email already registered.");
+            }
+        }
     }
 
     private void BindUserToForm(User user, Binder<User> binder){

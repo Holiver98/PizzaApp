@@ -38,6 +38,8 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     private Set<Ingredient> selectedToppings;
 
     public Custom(){
+        setStyleName("custom");
+
         ObservableHashSet<Ingredient> list = new ObservableHashSet<>();
         list.setListener(this);
         selectedToppings = list;
@@ -50,6 +52,9 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
 
         addComponent(leftLayout);
         addComponent(rightPanel);
+        rightPanel.setStyleName("rightPanel");
+        setComponentAlignment(leftLayout, Alignment.MIDDLE_CENTER);
+        setComponentAlignment(rightPanel, Alignment.TOP_CENTER);
 
         pizzaSizeCB = new ComboBox<>();
         pizzaSizeCB.setCaption("Size:");
@@ -64,6 +69,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
 
         selectedToppingsVL = new VerticalLayout();
         selectedToppingsVL.setCaption("Toppings");
+        selectedToppingsVL.setStyleName("selectedToppingsVL");
         totalPriceLabel = new Label(totalPriceLabelBaseText + "0.00$");
         addToCartBtn = new Button("Add to cart");
         addToCartBtn.setEnabled(false);
@@ -135,10 +141,10 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
     private void addToSelectedToppings(Ingredient ingredient) {
         boolean didntContain = selectedToppings.add(ingredient);
         if(didntContain){
-            CssLayout container = new CssLayout();
+            HorizontalLayout container = new HorizontalLayout();
             container.addComponent(new Label(ingredient.getName()));
             Button removeBtn = new Button();
-            removeBtn.setIcon(VaadinIcons.DEL);
+            removeBtn.setIcon(VaadinIcons.CLOSE_SMALL);
             removeBtn.addClickListener(clickEvent -> {
                 selectedToppingsVL.removeComponent(container);
                 selectedToppings.remove(ingredient);
