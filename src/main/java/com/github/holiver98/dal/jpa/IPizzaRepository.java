@@ -14,6 +14,8 @@ import java.util.List;
 public interface IPizzaRepository extends JpaRepository<Pizza, Long> {
     List<Pizza> findByIsCustom(boolean isCustom);
 
+    List<Pizza> findByIsCustomAndIsLegacy(boolean isCustom, boolean isLegacy);
+
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Transactional
     @Query(value = "delete from ratings where pizza_id = :id", nativeQuery = true)

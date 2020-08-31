@@ -31,6 +31,8 @@ public interface IPizzaService {
      */
     Optional<Pizza> savePizza(Pizza pizza, String emailAddress);
 
+    Optional<Pizza> saveCustomPizzaWithoutAuthentication(Pizza pizza);
+
     List<Pizza> getPizzas();
 
     /**
@@ -38,7 +40,9 @@ public interface IPizzaService {
      *
      * @return A list of the basic pizzas.
      */
-    List<Pizza> getBasicPizzas();
+    List<Pizza> getBasicNonLegacyPizzas();
+
+    List<Pizza> getCustomPizzas();
 
     /**
      * @return The pizza with the given id or null if it doesn't exist.
@@ -73,7 +77,9 @@ public interface IPizzaService {
     int updatePizzaWithoutAuthentication(Pizza pizza);
 
     /**
-     * Deletes the pizza, if it exists.
+     * Deletes the pizza, if it exists,
+     * or if there are any order entries, that reference this pizza, then
+     * it instead of removing it, the legacy flag will be set to true on this pizza.
      * Requires authenticated user with Chef role.
      *
      * @param pizzaId The id of the pizza to be deleted.

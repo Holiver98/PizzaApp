@@ -63,6 +63,11 @@ public abstract class CartServiceBase implements ICartService {
         mailService.sendOrderConfirmationEmail(order);
     }
 
+    @Override
+    public void clearContent(){
+        cartContent.clear();
+    }
+
     private Order createOrder(User loggedInUser) {
         Order order = new Order();
         order.setPizzas(cartContent);

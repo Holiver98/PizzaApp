@@ -3,10 +3,7 @@ package com.github.holiver98.ui;
 import com.github.holiver98.model.Pizza;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +11,14 @@ import java.util.List;
 @SpringView
 public class EditPizzasItem extends HorizontalLayout implements View {
     public interface Listener{
-        void onDeleteButtonPressed(Pizza item);
-        void onEditButtonPressed(Pizza item);
+        void onDeleteButtonPressed(Pizza item, EditPizzasItem clickedComponent);
+        void onEditButtonPressed(Pizza item, EditPizzasItem clickedComponent);
     }
 
     private Pizza item;
 
     private List<Listener> listeners = new ArrayList<>();
+    private List<Listener> newlyUnsubscribedListeners = new ArrayList<>();
 
     private Label idLabel;
     private Label nameLabel;
@@ -69,7 +67,7 @@ public class EditPizzasItem extends HorizontalLayout implements View {
     }
 
     public void removeListener(Listener listener){
-        listeners.remove(listener);
+        newlyUnsubscribedListeners.add(listener);
     }
 
     private void updateUiFields(){
@@ -78,10 +76,16 @@ public class EditPizzasItem extends HorizontalLayout implements View {
     }
 
     private void onEditButtonPressed(){
-        listeners.forEach(listener -> listener.onEditButtonPressed(item));
+        listeners.forEach(listener -> listener.onEditButtonPressed(item, this));
     }
 
     private void onDeleteButtonPressed(){
-        listeners.forEach(listener -> listener.onDeleteButtonPressed(item));
+        listeners.forEach(listener -> listener.onDeleteButtonPressed(item, this));
+        removeNewlyUnsubscribedListeners();
+    }
+
+    private void removeNewlyUnsubscribedListeners(){
+        newlyUnsubscribedListeners.forEach(listener ->listeners.remove(listener));
+        newlyUnsubscribedListeners.clear();
     }
 }

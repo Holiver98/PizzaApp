@@ -6,6 +6,7 @@ import com.github.holiver98.service.IPizzaService;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,7 +27,7 @@ public class PizzaEditor extends VerticalLayout implements View, EditPizzasItem.
 
     @PostConstruct
     private void afterInit(){
-        List<Pizza> pizzas = pizzaService.getPizzas();
+        List<Pizza> pizzas = pizzaService.getBasicNonLegacyPizzas();
         for(Pizza pizza : pizzas){
             EditPizzasItem pizzaItemUi = new EditPizzasItem(pizza);
             pizzaItemUi.addListener(this);
@@ -36,14 +37,19 @@ public class PizzaEditor extends VerticalLayout implements View, EditPizzasItem.
     }
 
     @Override
-    public void onDeleteButtonPressed(Pizza item) {
+    public void onDeleteButtonPressed(Pizza item, EditPizzasItem clickedComponent) {
         User loggedInUser = ((MainView)getUI()).getLoggedInUser()
                 .orElseThrow(() -> new NullPointerException("loggedInUser is null"));
-        pizzaService.deletePizza(item.getId(), loggedInUser.getEmailAddress());
+        int deletionResult = pizzaService.deletePizza(item.getId(), loggedInUser.getEmailAddress());
+        if(deletionResult == 1){
+            clickedComponent.removeListener(this);
+            removeComponent(clickedComponent);
+            Notification.show("Item deleted successfully.", Notification.Type.WARNING_MESSAGE);
+        }
     }
 
     @Override
-    public void onEditButtonPressed(Pizza item) {
+    public void onEditButtonPressed(Pizza item, EditPizzasItem clickedComponent) {
         String path = "edit_pizza/" + item.getId();
         getUI().getNavigator().navigateTo(path);
     }

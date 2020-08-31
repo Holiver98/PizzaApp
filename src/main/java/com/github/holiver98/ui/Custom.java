@@ -109,6 +109,7 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
 
         try {
             cartService.addPizzaToCart(pizza);
+            pizzaService.saveCustomPizzaWithoutAuthentication(pizza);
         } catch (CartIsFullException e) {
             Notification.show("The cart is full!", Notification.Type.WARNING_MESSAGE);
         }

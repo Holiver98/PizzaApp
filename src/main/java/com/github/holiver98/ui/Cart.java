@@ -75,6 +75,7 @@ public class Cart extends VerticalLayout implements View {
         if(loggedInUser.isPresent()){
             getUI().getNavigator().navigateTo("order");
         }else{
+            getUI().getNavigator().navigateTo("login");
             Notification.show("You need to be logged in!", Notification.Type.WARNING_MESSAGE);
         }
     }

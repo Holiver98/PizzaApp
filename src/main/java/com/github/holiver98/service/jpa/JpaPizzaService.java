@@ -1,8 +1,10 @@
 package com.github.holiver98.service.jpa;
 
 import com.github.holiver98.dal.jpa.IIngredientRepository;
+import com.github.holiver98.dal.jpa.IOrderRepository;
 import com.github.holiver98.dal.jpa.IPizzaRepository;
 import com.github.holiver98.model.Ingredient;
+import com.github.holiver98.model.Order;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.PizzaServiceBase;
@@ -17,6 +19,8 @@ public class JpaPizzaService extends PizzaServiceBase {
     private IIngredientRepository ingredientRepository;
     @Autowired
     private IPizzaRepository pizzaRepository;
+    @Autowired
+    private IOrderRepository orderRepository;
 
     public JpaPizzaService(IUserService userService) {
         super(userService);
@@ -28,8 +32,13 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public List<Pizza> getBasicPizzas() {
-        return pizzaRepository.findByIsCustom(false);
+    public List<Pizza> getBasicNonLegacyPizzas() {
+        return pizzaRepository.findByIsCustomAndIsLegacy(false, false);
+    }
+
+    @Override
+    public List<Pizza> getCustomPizzas() {
+        return pizzaRepository.findByIsCustom(true);
     }
 
     @Override
@@ -73,11 +82,17 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    protected boolean pizzaExists(Pizza pizza) {
+    protected boolean pizzaExistsById(Pizza pizza) {
         if(pizza.getId() == null){
             return false;
         }
 
         return pizzaRepository.existsById(pizza.getId());
+    }
+
+    @Override
+    protected boolean orderEntryExistsOnPizza(long pizzaId) {
+        List<Order> orders = orderRepository.findByPizzaId(pizzaId);
+        return orders.size() > 0;
     }
 }

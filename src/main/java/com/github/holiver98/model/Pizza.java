@@ -31,4 +31,6 @@ public class Pizza {
     private BigDecimal price = BigDecimal.valueOf(0);
     @Column(name = "custom")
     private boolean isCustom;
+    @Column(name = "legacy")
+    private boolean isLegacy = false;
 }

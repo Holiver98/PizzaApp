@@ -48,7 +48,7 @@ public class Home extends VerticalLayout implements View {
     }
 
     private void loadPizzas() {
-        pizzaService.getPizzas()
+        pizzaService.getBasicNonLegacyPizzas()
                 .forEach(pizza -> addToPizzaList(pizza));
     }
 

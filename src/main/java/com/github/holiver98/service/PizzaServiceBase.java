@@ -17,12 +17,15 @@ public abstract class PizzaServiceBase implements IPizzaService {
     protected abstract Optional<Pizza> doSavePizza(Pizza pizza);
     protected abstract int doUpdatePizza(Pizza pizza);
     protected abstract int doDeletePizza(long pizzaId);
-    protected abstract boolean pizzaExists(Pizza pizza);
+    protected abstract boolean pizzaExistsById(Pizza pizza);
+    protected  abstract boolean orderEntryExistsOnPizza(long pizzaId);
 
     @Override
     public abstract List<Pizza> getPizzas();
     @Override
-    public abstract List<Pizza> getBasicPizzas();
+    public abstract List<Pizza> getBasicNonLegacyPizzas();
+    @Override
+    public abstract List<Pizza> getCustomPizzas();
     @Override
     public abstract Optional<Pizza> getPizzaById(long pizzaId);
     @Override
@@ -40,7 +43,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
             throw new NullPointerException("emailAddress is null");
         }
         checkIfPizzaIsValid(pizza);
-        if(pizzaExists(pizza)){
+        if(pizzaExistsById(pizza)){
             return Optional.empty();
         }
         User user = tryGetUser(emailAddress);
@@ -49,9 +52,36 @@ public abstract class PizzaServiceBase implements IPizzaService {
     }
 
     @Override
+    public Optional<Pizza> saveCustomPizzaWithoutAuthentication(Pizza pizza){
+        checkIfPizzaIsValid(pizza);
+        if(customPizzaExists(pizza)){
+            return Optional.empty();
+        }
+        return doSavePizza(pizza);
+    }
+
+    private boolean customPizzaExists(Pizza pizza) {
+        List<Pizza> customPizzas = getCustomPizzas();
+
+        /*
+        The pizza we want to compare doesn't have an id, but the ones in the list do have id's, so the
+        equals() would always return false. This is why we set all the ids to null... we don't care about
+        the ids in this comparison.
+         */
+        customPizzas.forEach(p -> p.setId(null));
+
+        Optional<Pizza> optionalPizza = customPizzas.stream()
+                .filter(p -> p.equals(pizza))
+                .findFirst();
+
+        boolean pizzaExists = optionalPizza.isPresent();
+        return pizzaExists;
+    }
+
+    @Override
     public int updatePizzaWithoutAuthentication(Pizza pizza){
         checkIfPizzaIsValid(pizza);
-        if(!pizzaExists(pizza)){
+        if(!pizzaExistsById(pizza)){
             return -1;
         }
         return doUpdatePizza(pizza);
@@ -63,7 +93,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
             throw new NullPointerException("emailAddress is null");
         }
         checkIfPizzaIsValid(pizza);
-        if(!pizzaExists(pizza)){
+        if(!pizzaExistsById(pizza)){
             return -1;
         }
         User user = tryGetUser(emailAddress);
@@ -78,6 +108,15 @@ public abstract class PizzaServiceBase implements IPizzaService {
         }
         User user = tryGetUser(emailAddress);
         ifUserIsNotChefThrowException(user, "You have to have Chef role to delete pizza!");
+
+        if(orderEntryExistsOnPizza(pizzaId)){
+            Pizza pizza = getPizzaById(pizzaId)
+                    .orElseThrow(() -> new NullPointerException("pizza not found with id: " + pizzaId));
+            pizza.setLegacy(true);
+            updatePizza(pizza, emailAddress);
+            return 1;
+        }
+
         return doDeletePizza(pizzaId);
     }
 

@@ -49,6 +49,9 @@
             <column name="custom" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
+            <column name="legacy" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 

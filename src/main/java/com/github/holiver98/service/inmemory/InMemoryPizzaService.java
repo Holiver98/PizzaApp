@@ -5,9 +5,9 @@ import com.github.holiver98.dal.inmemory.IInMemoryPizzaDao;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +29,13 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public List<Pizza> getBasicPizzas() {
-        return pizzaDao.getBasicPizzas();
+    public List<Pizza> getBasicNonLegacyPizzas() {
+        return null; // TODO: implement
+    }
+
+    @Override
+    public List<Pizza> getCustomPizzas() {
+        return new ArrayList<Pizza>(); //TODO: implement method
     }
 
     @Override
@@ -71,12 +76,17 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    protected boolean pizzaExists(Pizza pizza) {
+    protected boolean pizzaExistsById(Pizza pizza) {
         Optional<Pizza> p = pizzaDao.getPizzaById(pizza.getId());
         if(p.isPresent()){
             return false;
         }else{
             return true;
         }
+    }
+
+    @Override
+    protected boolean orderEntryExistsOnPizza(long pizzaId) {
+        return false; //TODO: implement method
     }
 }

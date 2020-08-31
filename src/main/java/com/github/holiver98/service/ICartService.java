@@ -43,4 +43,6 @@ public interface ICartService {
      * @throws NotRegisteredException if no user is registered with this emailAddress.
      */
     void placeOrder(String emailAddress) throws CartIsEmptyException, MessagingException;
+
+    void clearContent();
 }
