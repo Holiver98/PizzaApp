@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringView(name = "custom")
@@ -113,8 +110,8 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         pizza.setRatingAverage(BigDecimal.valueOf(0));
 
         try {
-            cartService.addPizzaToCart(pizza);
-            pizzaService.saveCustomPizzaWithoutAuthentication(pizza);
+            Pizza savedPizza = pizzaService.saveCustomPizzaWithoutAuthentication(pizza);
+            cartService.addPizzaToCart(savedPizza);
             Notification.show("Pizza added to the cart.", Notification.Type.WARNING_MESSAGE);
         } catch (CartIsFullException e) {
             Notification.show("The cart is full!", Notification.Type.WARNING_MESSAGE);

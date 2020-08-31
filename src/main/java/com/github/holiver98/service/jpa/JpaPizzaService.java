@@ -57,14 +57,8 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public Optional<Pizza> doSavePizza(Pizza pizza) {
-        Pizza savedPizza;
-        try{
-            savedPizza = pizzaRepository.save(pizza);
-        }catch (IllegalArgumentException e){
-            return Optional.empty();
-        }
-        return Optional.of(savedPizza);
+    public Pizza doSavePizza(Pizza pizza) {
+        return pizzaRepository.save(pizza);
     }
 
     @Override

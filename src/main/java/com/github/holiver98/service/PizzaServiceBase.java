@@ -14,7 +14,7 @@ public abstract class PizzaServiceBase implements IPizzaService {
     protected static final int maxBaseSauce = 1;
     protected static final int minBaseSauce = 1;
 
-    protected abstract Optional<Pizza> doSavePizza(Pizza pizza);
+    protected abstract Pizza doSavePizza(Pizza pizza);
     protected abstract int doUpdatePizza(Pizza pizza);
     protected abstract int doDeletePizza(long pizzaId);
     protected abstract boolean pizzaExistsById(Pizza pizza);
@@ -48,34 +48,43 @@ public abstract class PizzaServiceBase implements IPizzaService {
         }
         User user = tryGetUser(emailAddress);
         ifUserIsNotChefThrowException(user, "You have to have Chef role to save pizza!");
-        return doSavePizza(pizza);
+        return Optional.of(doSavePizza(pizza));
     }
 
     @Override
-    public Optional<Pizza> saveCustomPizzaWithoutAuthentication(Pizza pizza){
+    public Pizza saveCustomPizzaWithoutAuthentication(Pizza pizza){
         checkIfPizzaIsValid(pizza);
-        if(customPizzaExists(pizza)){
-            return Optional.empty();
+
+        Optional<Pizza> existingSavedPizza = getPizzaIfExists(pizza);
+        if(existingSavedPizza.isPresent()){
+            //return the existing saved object
+            return existingSavedPizza.get();
         }
+
+        //if it doesn't exist, we save it and return the saved object
         return doSavePizza(pizza);
     }
 
-    private boolean customPizzaExists(Pizza pizza) {
+    private Optional<Pizza> getPizzaIfExists(Pizza pizza) {
         List<Pizza> customPizzas = getCustomPizzas();
 
-        /*
-        The pizza we want to compare doesn't have an id, but the ones in the list do have id's, so the
-        equals() would always return false. This is why we set all the ids to null... we don't care about
-        the ids in this comparison.
-         */
-        customPizzas.forEach(p -> p.setId(null));
+        for (Pizza p : customPizzas) {
+            Long pizzaId = new Long(p.getId());
+            p.setId(null);
+            /*
+            The pizza we want to compare doesn't have an id, but the ones in the list do have id's, so the
+            equals() would always return false. This is why we set the id to null... we don't care about
+            the ids in this comparison.
+            */
+            if(p.equals(pizza)){
+                //here we set it back to the old value, because we want to return the object
+                //with it's id
+                p.setId(pizzaId);
+                return Optional.of(p);
+            }
+        }
 
-        Optional<Pizza> optionalPizza = customPizzas.stream()
-                .filter(p -> p.equals(pizza))
-                .findFirst();
-
-        boolean pizzaExists = optionalPizza.isPresent();
-        return pizzaExists;
+        return Optional.empty();
     }
 
     @Override

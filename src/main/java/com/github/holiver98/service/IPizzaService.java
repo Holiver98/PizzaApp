@@ -31,7 +31,15 @@ public interface IPizzaService {
      */
     Optional<Pizza> savePizza(Pizza pizza, String emailAddress);
 
-    Optional<Pizza> saveCustomPizzaWithoutAuthentication(Pizza pizza);
+    /**
+     * saves the pizza and returns the saved object.
+     * If it is already saved, then it won't be saved, it will just return
+     * the existing saved object.
+     *
+     * @param pizza the pizza to be saved.
+     * @return the saved pizza object.
+     */
+    Pizza saveCustomPizzaWithoutAuthentication(Pizza pizza);
 
     List<Pizza> getPizzas();
 
