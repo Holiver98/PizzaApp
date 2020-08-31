@@ -4,7 +4,6 @@ import com.github.holiver98.model.User;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.IncorrectPasswordException;
 import com.github.holiver98.service.NotFoundException;
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.View;
@@ -24,7 +23,6 @@ import java.util.Optional;
 @Title("PizzaApp")
 @SpringUI
 @SpringViewDisplay
-@PreserveOnRefresh
 public class MainView extends UI implements ViewDisplay {
     public enum AuthenticationResult{
         SUCCESS,
@@ -43,12 +41,16 @@ public class MainView extends UI implements ViewDisplay {
     //ez később hívódik meg, mint a @PostConstruct
     @Override
     protected void init(VaadinRequest request){
+        User user = (User) getSession().getAttribute("loggedInUser");
+        if(user != null){
+            loggedInUser = user;
+        }
+
         VerticalLayout content = new VerticalLayout();
         content.setStyleName("main");
         setContent(content);
 
         content.addComponent(header);
-
         content.addComponent(body);
 
         footer = new Footer();
@@ -74,6 +76,7 @@ public class MainView extends UI implements ViewDisplay {
         }
 
         loggedInUser = user;
+        getSession().setAttribute("loggedInUser", user);
         header.login(user.getUsername());
         return AuthenticationResult.SUCCESS;
     }
