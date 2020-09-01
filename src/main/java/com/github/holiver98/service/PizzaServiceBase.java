@@ -18,7 +18,12 @@ public abstract class PizzaServiceBase implements IPizzaService {
     protected abstract int doUpdatePizza(Pizza pizza);
     protected abstract int doDeletePizza(long pizzaId);
     protected abstract boolean pizzaExistsById(Pizza pizza);
-    protected  abstract boolean orderEntryExistsOnPizza(long pizzaId);
+    protected abstract boolean orderEntryExistsOnPizza(long pizzaId);
+
+    protected abstract Ingredient doSaveIngredient(Ingredient ingredient);
+    protected abstract int doUpdateIngredient(Ingredient ingredient);
+    protected abstract int doDeleteIngredient(String ingredientName);
+    protected abstract boolean isIngredientReferencedByAPizza(String ingredientName);
 
     @Override
     public abstract List<Pizza> getPizzas();
@@ -35,6 +40,51 @@ public abstract class PizzaServiceBase implements IPizzaService {
 
     public PizzaServiceBase(IUserService userService){
         this.userService = userService;
+    }
+
+    @Override
+    public Optional<Ingredient> saveIngredient(Ingredient ingredient, String emailAddress){
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
+        checkIfIngredientIsValid(ingredient);
+
+        Optional<Ingredient> existingIngredient = getPizzaIngredientByName(ingredient.getName());
+        if(existingIngredient.isPresent()){
+            return Optional.empty();
+        }
+
+        User user = tryGetUser(emailAddress);
+        ifUserIsNotChefThrowException(user, "You have to have Chef role to save ingredient!");
+        return Optional.of(doSaveIngredient(ingredient));
+    }
+
+    @Override
+    public int updateIngredient(Ingredient ingredient, String emailAddress){
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
+        checkIfIngredientIsValid(ingredient);
+
+        User user = tryGetUser(emailAddress);
+        ifUserIsNotChefThrowException(user, "You have to have Chef role to save ingredient!");
+        return doUpdateIngredient(ingredient);
+    }
+
+    @Override
+    public int deleteIngredient(String ingredientName, String emailAddress){
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress is null");
+        }
+
+        User user = tryGetUser(emailAddress);
+        ifUserIsNotChefThrowException(user, "You have to have Chef role to save ingredient!");
+
+        if(isIngredientReferencedByAPizza(ingredientName)){
+            return -1;
+        }
+
+        return doDeleteIngredient(ingredientName);
     }
 
     @Override
@@ -234,6 +284,18 @@ public abstract class PizzaServiceBase implements IPizzaService {
     private void ifUserIsNotChefThrowException(User user, String exceptionMessage){
         if(!user.getRole().equals(Role.CHEF)){
             throw new NoPermissionException(exceptionMessage);
+        }
+    }
+
+    private void checkIfIngredientIsValid(Ingredient ingredient) {
+        if(ingredient == null){
+            throw new NullPointerException("ingredient is null");
+        }else if(ingredient.getType() == null){
+            throw new NullPointerException("ingredient type is null");
+        }else if(ingredient.getName() == null){
+            throw new NullPointerException("ingredient name is null");
+        }else if(ingredient.getName().length() < 1){
+            throw new IllegalArgumentException("ingredient name too short: " + ingredient.getName().length());
         }
     }
 }

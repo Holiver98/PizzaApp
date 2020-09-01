@@ -29,6 +29,7 @@ public class Profile extends VerticalLayout implements View {
         editPizzasBtn = new Button("Edit pizzas");
         editPizzasBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("pizza_editor"));
         editIngredientsBtn = new Button("Edit ingredients");
+        editIngredientsBtn.addClickListener(clickEvent -> getUI().getNavigator().navigateTo("ingredient_editor"));
 
         addComponents(usernameCaptionLabel, usernameLabel,
                 emailCaptionLabel, emailLabel,

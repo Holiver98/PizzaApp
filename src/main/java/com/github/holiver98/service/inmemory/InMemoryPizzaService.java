@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//TODO: implement methods
 public class InMemoryPizzaService extends PizzaServiceBase {
 
     private IInMemoryIngredientDao ingredientDao;
@@ -89,5 +90,25 @@ public class InMemoryPizzaService extends PizzaServiceBase {
     @Override
     protected boolean orderEntryExistsOnPizza(long pizzaId) {
         return false; //TODO: implement method
+    }
+
+    @Override
+    protected Ingredient doSaveIngredient(Ingredient ingredient) {
+        return null;
+    }
+
+    @Override
+    protected int doUpdateIngredient(Ingredient ingredient) {
+        return 0;
+    }
+
+    @Override
+    protected int doDeleteIngredient(String ingredientName) {
+        return 0;
+    }
+
+    @Override
+    protected boolean isIngredientReferencedByAPizza(String ingredientName) {
+        return false;
     }
 }

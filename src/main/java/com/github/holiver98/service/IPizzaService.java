@@ -105,4 +105,8 @@ public interface IPizzaService {
      * @return The ingredient with the given name or null if it doesn't exist.
      */
     Optional<Ingredient> getPizzaIngredientByName(String ingredientName);
+
+    Optional<Ingredient> saveIngredient(Ingredient ingredient, String emailAddress);
+    int updateIngredient(Ingredient ingredient, String emailAddress);
+    int deleteIngredient(String ingredientName, String emailAddress);
 }

@@ -89,4 +89,28 @@ public class JpaPizzaService extends PizzaServiceBase {
         List<Order> orders = orderRepository.findByPizzaId(pizzaId);
         return orders.size() > 0;
     }
+
+    @Override
+    protected Ingredient doSaveIngredient(Ingredient ingredient) {
+        return ingredientRepository.save(ingredient);
+    }
+
+    @Override
+    protected int doUpdateIngredient(Ingredient ingredient) {
+        ingredientRepository.save(ingredient);
+        return 1;
+    }
+
+    @Override
+    protected int doDeleteIngredient(String ingredientName) {
+        ingredientRepository.deleteById(ingredientName);
+        return 1;
+    }
+
+    @Override
+    protected boolean isIngredientReferencedByAPizza(String ingredientName) {
+        int numberOfReferences = ingredientRepository.getNumberOfReferencesByPizzasOnThisIngredient(ingredientName);
+
+        return numberOfReferences > 0;
+    }
 }
