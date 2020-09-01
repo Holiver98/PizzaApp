@@ -59,6 +59,8 @@ public class Register extends VerticalLayout implements View {
             }
             try {
                 userService.register(user);
+                getUI().getNavigator().navigateTo("login");
+                Notification.show("Registered successfully.", Notification.Type.WARNING_MESSAGE);
             } catch (AlreadyExistsException e) {
                 Notification.show("Email already registered.");
             }

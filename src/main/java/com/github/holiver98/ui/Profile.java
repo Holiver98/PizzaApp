@@ -8,10 +8,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @SpringView(name = "profile")
@@ -42,9 +38,6 @@ public class Profile extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         if(event.getParameters() != null) {
-            String encodedEmail = event.getParameters();
-            String email = decode(encodedEmail);
-
             Optional<User> loggedInUser = ((MainView)getUI()).getLoggedInUser();
             loggedInUser.ifPresent(user -> setupUi(user));
         }
@@ -66,14 +59,5 @@ public class Profile extends VerticalLayout implements View {
             addComponent(editPizzasBtn);
             addComponent(editIngredientsBtn);
         }
-    }
-
-    private String decode(String encodedString){
-        try {
-            return URLDecoder.decode(encodedString, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 }

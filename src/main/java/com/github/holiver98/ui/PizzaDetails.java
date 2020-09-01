@@ -41,11 +41,14 @@ public class PizzaDetails extends VerticalLayout implements View {
     private static final String priceLabelBaseText = "Price: ";
 
     public PizzaDetails(){
+        setStyleName("pizzaDetails");
         pizzaRatingL = new Label(ratingLabelBaseText);
         pizzaNameL = new Label(nameLabelBaseText);
         pizzaPriceL = new Label(priceLabelBaseText);
 
         ingredientsVL = new VerticalLayout();
+        ingredientsVL.setWidthUndefined();
+        ingredientsVL.setStyleName("ingredientsVL");
         ingredientsVL.setCaption("Ingredients:");
 
         pizzaSizeCB = new ComboBox<>();

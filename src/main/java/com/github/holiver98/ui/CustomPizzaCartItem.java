@@ -17,7 +17,7 @@ public class CustomPizzaCartItem extends CssLayout implements View {
 
         VerticalLayout pizzaInfoVL = new VerticalLayout();
         pizzaInfoVL.addComponent(new Label(pizza.getName()));
-        pizzaInfoVL.addComponent(new Label("Size: " + pizza.getSize().name()));
+        pizzaInfoVL.addComponent(new Label("Size: " + pizza.getSize().toString()));
         pizzaInfoVL.addComponent(new Label("Base sauce: " + pizza.getIngredients().stream()
                 .filter(ingredient -> ingredient.getType().equals(IngredientType.PIZZA_BASESAUCE))
                 .findFirst().get().getName()));

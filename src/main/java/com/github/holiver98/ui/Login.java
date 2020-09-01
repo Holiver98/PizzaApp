@@ -25,11 +25,9 @@ public class Login extends VerticalLayout implements View {
 
         Binder<User> binder = new Binder<>();
         binder.forField(emailTF)
-                .asRequired("Required field")
-                .withValidator(new EmailValidator("wrong email"))
+                .withValidator(new EmailValidator("Invalid email."))
                 .bind(User::getEmailAddress, User::setEmailAddress);
         binder.forField(passwordPF)
-                .asRequired("Required field")
                 .bind(User::getPassword, User::setPassword);
 
         User user = new User();

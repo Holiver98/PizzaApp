@@ -4,17 +4,14 @@ import com.github.holiver98.model.User;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Responsive;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 
 import javax.annotation.PostConstruct;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @UIScope
@@ -34,8 +31,6 @@ public class Header extends CssLayout implements View {
         Responsive.makeResponsive(this);
         setWidthFull();
 
-        Label logo = new Label("I hate " + VaadinIcons.VAADIN_H.getHtml() + " very much!",
-                ContentMode.HTML);
         Button homeBtn = new Button("Home");
         Button customPizzaBtn = new Button("Custom Pizza");
         registerBtn = new Button("Register");
@@ -47,7 +42,6 @@ public class Header extends CssLayout implements View {
 
         CssLayout leftContainer = new CssLayout();
         leftContainer.setStyleName("leftcontainer");
-        leftContainer.addComponent(logo);
         leftContainer.addComponent(homeBtn);
         leftContainer.addComponent(customPizzaBtn);
 
@@ -78,17 +72,7 @@ public class Header extends CssLayout implements View {
     }
 
     private void goToProfile() {
-        User loggedInUser = ((MainView)getUI()).getLoggedInUser()
-                .orElseThrow(() -> new RuntimeException("profile button clicked while not logged in"));
-
-        String encodedEmail = "";
-        try {
-            encodedEmail = URLEncoder.encode(loggedInUser.getEmailAddress(), StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        getUI().getNavigator().navigateTo("profile/" + encodedEmail);
+        getUI().getNavigator().navigateTo("profile");
     }
 
     private void setLogoutBtnClickListener(){
@@ -122,5 +106,7 @@ public class Header extends CssLayout implements View {
         rightContainer.removeComponent(logoutBtn);
         rightContainer.addComponent(registerBtn, 0);
         rightContainer.addComponent(loginBtn, 1);
+        getUI().getNavigator().navigateTo("");
+        Notification.show("Successfully logged out", Notification.Type.WARNING_MESSAGE);
     }
 }
