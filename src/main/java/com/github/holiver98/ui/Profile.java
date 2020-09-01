@@ -52,7 +52,7 @@ public class Profile extends VerticalLayout implements View {
     private void updateUiFields(User user) {
         usernameLabel.setValue(user.getUsername());
         emailLabel.setValue(user.getEmailAddress());
-        roleLabel.setValue(user.getRole().name());
+        roleLabel.setValue(user.getRole().toString());
     }
 
     private void addEditButtonsIfIsAdmin(User user) {
