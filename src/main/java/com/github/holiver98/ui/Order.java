@@ -4,6 +4,7 @@ import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.CartIsEmptyException;
 import com.github.holiver98.service.ICartService;
+import com.github.holiver98.util.RequiresAuthentication;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+@RequiresAuthentication
 @SpringView(name = "order")
 public class Order extends VerticalLayout implements View {
     @Autowired

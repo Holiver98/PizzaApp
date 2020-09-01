@@ -1,8 +1,10 @@
 package com.github.holiver98.ui;
 
 import com.github.holiver98.model.Pizza;
+import com.github.holiver98.model.Role;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.IPizzaService;
+import com.github.holiver98.util.RequiresRole;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@RequiresRole(role = Role.CHEF)
 @SpringView(name = "pizza_editor")
 public class PizzaEditor extends VerticalLayout implements View, EditPizzasItem.Listener {
     @Autowired

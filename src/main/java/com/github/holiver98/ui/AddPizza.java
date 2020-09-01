@@ -1,9 +1,7 @@
 package com.github.holiver98.ui;
 
-import com.github.holiver98.model.Ingredient;
-import com.github.holiver98.model.IngredientType;
-import com.github.holiver98.model.Pizza;
-import com.github.holiver98.model.User;
+import com.github.holiver98.model.*;
+import com.github.holiver98.util.RequiresRole;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Notification;
@@ -11,6 +9,7 @@ import com.vaadin.ui.Notification;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiresRole(role = Role.CHEF)
 @SpringView(name = "add_pizza")
 public class AddPizza extends EditPizza{
     @Override

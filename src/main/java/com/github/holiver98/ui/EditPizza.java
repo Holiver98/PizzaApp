@@ -2,6 +2,7 @@ package com.github.holiver98.ui;
 
 import com.github.holiver98.model.*;
 import com.github.holiver98.service.IPizzaService;
+import com.github.holiver98.util.RequiresRole;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationException;
@@ -10,12 +11,15 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 //TODO: a pizza árát számított értékként kezeltem egész eddig, pedig nem kéne annak lennie
+@RequiresRole(role = Role.CHEF)
 @SpringView(name = "edit_pizza")
 public class EditPizza extends VerticalLayout implements View {
     @Autowired

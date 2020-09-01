@@ -1,22 +1,29 @@
 package com.github.holiver98.ui;
 
+import com.github.holiver98.model.Role;
 import com.github.holiver98.model.User;
 import com.github.holiver98.service.IUserService;
 import com.github.holiver98.service.IncorrectPasswordException;
 import com.github.holiver98.service.NotFoundException;
+import com.github.holiver98.util.RequiresAuthentication;
+import com.github.holiver98.util.RequiresRole;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 
+import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 @Theme("mytheme")
@@ -35,6 +42,8 @@ public class MainView extends UI implements ViewDisplay {
     private Header header;
     private Panel body = new Panel();
     private Footer footer;
+    @Autowired
+    private SpringNavigator navigator;
 
     private User loggedInUser;
 
@@ -55,7 +64,30 @@ public class MainView extends UI implements ViewDisplay {
 
         footer = new Footer();
         content.addComponent(footer);
+        
+        navigator.addViewChangeListener(this::beforeViewChange);
     }
+
+    private boolean beforeViewChange(ViewChangeListener.ViewChangeEvent event) {
+        Annotation requiresAuthenticationAnnotation = AnnotationUtils.findAnnotation(event.getNewView().getClass(), RequiresAuthentication.class);
+        if(requiresAuthenticationAnnotation != null){
+            if(loggedInUser == null){
+                Notification.show("You need to be logged in.", Notification.Type.WARNING_MESSAGE);
+                return false;
+            }
+
+            if(event.getNewView().getClass().isAnnotationPresent(RequiresRole.class)){
+                Role requiredRole = event.getNewView().getClass().getAnnotation(RequiresRole.class).role();
+                if(!loggedInUser.getRole().equals(requiredRole)){
+                    Notification.show("You need to have " + requiredRole.toString() + " role.", Notification.Type.WARNING_MESSAGE);
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 
     @Override
     public void showView(View view) {
@@ -92,6 +124,7 @@ public class MainView extends UI implements ViewDisplay {
             return AuthenticationResult.FAILURE;
         }else{
             loggedInUser = null;
+            getSession().setAttribute("loggedInUser", null);
             return AuthenticationResult.SUCCESS;
         }
     }
