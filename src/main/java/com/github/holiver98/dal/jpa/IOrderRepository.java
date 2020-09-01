@@ -10,6 +10,9 @@ import java.util.List;
 
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Long>{
-    @Query(value = "select * from orders where :id in (select pizza_id from orders_pizzas)", nativeQuery = true)
+    @Query(value = "select id, email, order_date, total_price from orders\n" +
+            "left join orders_pizzas\n" +
+            "on orders.id = orders_pizzas.order_id\n" +
+            "where :id = pizza_id", nativeQuery = true)
     List<Order> findByPizzaId(@Param("id") long pizzaId);
 }
