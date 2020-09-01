@@ -91,7 +91,6 @@ public class Header extends CssLayout implements View {
         rightContainer.addComponent(usernameLabel, 0);
         rightContainer.addComponent(profileBtn, 1);
         rightContainer.addComponent(logoutBtn, 2);
-        getUI().getNavigator().navigateTo("");
     }
 
     private void logout() {

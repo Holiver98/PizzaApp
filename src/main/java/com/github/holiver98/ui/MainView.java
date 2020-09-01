@@ -110,6 +110,7 @@ public class MainView extends UI implements ViewDisplay {
         loggedInUser = user;
         getSession().setAttribute("loggedInUser", user);
         header.login(user.getUsername());
+        getNavigator().navigateTo("");
         return AuthenticationResult.SUCCESS;
     }
 
