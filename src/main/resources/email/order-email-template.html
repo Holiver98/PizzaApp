@@ -18,12 +18,12 @@
         <td>
             Items:
             <ul th:each="pizza: ${order.pizzas}">
-               <li><span th:text="${pizza.name}"></span> - <span th:text="${pizza.price}"></span></li>
+               <li><span th:text="${pizza.name}"></span> - <span th:text="${pizza.price}"></span>$</li>
             </ul>
         </td>
     </tr>
     <tr>
-        <td>Total price: <span th:text="${order.totalPrice}"></span></td>
+        <td>Total price: <span th:text="${order.totalPrice}"></span>$</td>
     </tr>
     </tbody>
 </table>
