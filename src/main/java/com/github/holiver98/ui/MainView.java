@@ -59,7 +59,7 @@ public class MainView extends UI implements ViewDisplay {
         User user = (User) getSession().getAttribute("loggedInUser");
         if(user != null){
             loggedInUser = user;
-        }//TODO: megcsinálni úgy mint a cartcontentet
+        }
 
         List<Pizza> sessionCartContent = (List<Pizza>) getSession().getAttribute("cartContent");
         if(sessionCartContent != null){
