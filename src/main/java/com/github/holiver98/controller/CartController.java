@@ -1,11 +1,15 @@
 package com.github.holiver98.controller;
 
-import com.github.holiver98.model.Pizza;
-import com.github.holiver98.service.*;
+import com.github.holiver98.service.CartIsEmptyException;
+import com.github.holiver98.service.ICartService;
+import com.github.holiver98.service.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.mail.MessagingException;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/cart")
@@ -13,23 +17,8 @@ public class CartController {
     @Autowired
     private ICartService cartService;
 
-    @GetMapping
-    public List<Pizza> getCartContent(){
-        return cartService.getCartContent();
-    }
-
-    @PostMapping("/add")
-    public void addPizzaToCart(@RequestBody Pizza pizza) throws CartIsFullException {
-        cartService.addPizzaToCart(pizza);
-    }
-
-    @PostMapping("/remove")
-    public void removePizzaFromCart(@RequestBody Pizza pizza){
-        cartService.removePizzaFromCart(pizza);
-    }
-
-    @PostMapping("/order")
+    /*@PostMapping("/order")
     public void placeOrder(@RequestBody String emailAddress) throws CartIsEmptyException, MessagingException, NotFoundException {
         cartService.placeOrder(emailAddress);
-    }
+    }*/
 }

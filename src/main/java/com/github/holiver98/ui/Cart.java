@@ -11,7 +11,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @SpringView(name = "cart")
@@ -22,6 +21,8 @@ public class Cart extends VerticalLayout implements View {
     private VerticalLayout contentVL;
 
     public Cart(){
+        addAttachListener(this::onAttach);
+
         contentVL = new VerticalLayout();
         contentVL.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
@@ -38,27 +39,26 @@ public class Cart extends VerticalLayout implements View {
         orderBtn.addClickListener(clickEvent -> goToOrderView());
     }
 
-    @PostConstruct
-    public void afterInit(){
-        for(Pizza pizza : cartService.getCartContent()){
+    private void onAttach(AttachEvent attachEvent) {
+        for(Pizza pizza : ((MainView)getUI()).getCartContent()){
             if(pizza.isCustom()){
                 continue;
             }
             PizzaCartItem pizzaUi = new PizzaCartItem(pizza);
             pizzaUi.getRemoveBtn().addClickListener(clickEvent -> {
-                cartService.removePizzaFromCart(pizza);
+                ((MainView)getUI()).removePizzaFromCart(pizza);
                 contentVL.removeComponent(pizzaUi);
             });
             contentVL.addComponent(pizzaUi);
         }
 
-        for(Pizza pizza : cartService.getCartContent()){
+        for(Pizza pizza : ((MainView)getUI()).getCartContent()){
             if(!pizza.isCustom()){
                 continue;
             }
             CustomPizzaCartItem pizzaUi = new CustomPizzaCartItem(pizza);
             pizzaUi.getRemoveBtn().addClickListener(clickEvent -> {
-                cartService.removePizzaFromCart(pizza);
+                ((MainView)getUI()).removePizzaFromCart(pizza);
                 contentVL.removeComponent(pizzaUi);
             });
             contentVL.addComponent(pizzaUi);
@@ -66,7 +66,7 @@ public class Cart extends VerticalLayout implements View {
     }
 
     private void goToOrderView(){
-        if(cartService.getCartContent().size() == 0){
+        if(((MainView)getUI()).getCartContent().size() == 0){
             Notification.show("The cart is empty.", Notification.Type.WARNING_MESSAGE);
             return;
         }
