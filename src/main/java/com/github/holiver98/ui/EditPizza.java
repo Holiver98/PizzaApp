@@ -6,19 +6,19 @@ import com.github.holiver98.util.RequiresRole;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//TODO: a pizza árát számított értékként kezeltem egész eddig, pedig nem kéne annak lennie
 @RequiresRole(role = Role.CHEF)
 @SpringView(name = "edit_pizza")
 public class EditPizza extends VerticalLayout implements View {
@@ -148,13 +148,16 @@ public class EditPizza extends VerticalLayout implements View {
         binder.setBean(item);
 
         binder.forField(nameTF)
+                .withValidator(new StringLengthValidator("Incorrect length.", 1 , 40))
                 .bind(Pizza::getName, Pizza::setName);
 
         binder.forField(basesauceCB)
                 .bind(pizza -> getBasesauce(pizza), (pizza, ingredient) -> setBasesauce(pizza, ingredient));
 
-        binder.forField(priceTF)//TODO: validation
-                .bind(pizza -> pizza.getPrice().toString(), (pizza, priceString) -> pizza.setPrice(new BigDecimal(priceString)));
+        binder.forField(priceTF)
+                .withConverter(new StringToBigDecimalConverter(
+                        "Must enter a number (also use ',' instead of '.' as decimal point)."))
+                .bind(Pizza::getPrice, Pizza::setPrice);
 
         binder.forField(isCustomChB)
                 .bind(Pizza::isCustom, Pizza::setCustom);
