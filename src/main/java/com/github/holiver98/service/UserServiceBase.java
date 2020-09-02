@@ -36,11 +36,6 @@ public abstract class UserServiceBase implements IUserService{
     }
 
     @Override
-    public int logout(String emailAddress){
-        return 1;
-    }
-
-    @Override
     public void register(User user) throws AlreadyExistsException {
         checkIfUserInformationAreValid(user);
         checkIfAlreadyRegistered(user);

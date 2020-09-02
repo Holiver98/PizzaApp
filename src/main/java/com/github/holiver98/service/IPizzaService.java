@@ -3,21 +3,10 @@ package com.github.holiver98.service;
 import com.github.holiver98.model.Ingredient;
 import com.github.holiver98.model.Pizza;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 public interface IPizzaService {
-    /**
-     * Calculates the price of the pizza.
-     *
-     * @param pizza The pizza, which price will be calculated.
-     * @return The price of the pizza.
-     * @throws NullPointerException if the pizza is null.
-     * @throws IllegalArgumentException if the pizza is invalid.
-     */
-    BigDecimal calculatePrice(Pizza pizza);
-
     /**
      * Saves the pizza. Requires authenticated user with Chef role.
      *

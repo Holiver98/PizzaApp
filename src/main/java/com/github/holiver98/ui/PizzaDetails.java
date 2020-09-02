@@ -156,7 +156,7 @@ public class PizzaDetails extends VerticalLayout implements View {
     private void onCartButtonPressed(Button.ClickEvent clickEvent) {
         try {
             item.setSize(pizzaSizeCB.getValue());
-            cartService.addPizzaToCart(item);
+            ((MainView)getUI()).addPizzaToCart(item);
             Notification.show("Pizza added to the cart.", Notification.Type.WARNING_MESSAGE);
         } catch (CartIsFullException e) {
             Notification.show(e.getMessage(), Notification.Type.WARNING_MESSAGE);

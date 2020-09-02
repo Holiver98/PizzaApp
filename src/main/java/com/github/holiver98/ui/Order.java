@@ -10,7 +10,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,6 +27,8 @@ public class Order extends VerticalLayout implements View {
     private static final String totalPriceLabelText = "Total price: ";
 
     public Order(){
+        addAttachListener(this::onAttach);
+
         Panel contentPanel = new Panel();
         VerticalLayout orderInfoVL = new VerticalLayout();
         contentPanel.setContent(orderInfoVL);
@@ -45,9 +46,8 @@ public class Order extends VerticalLayout implements View {
         addComponent(orderBtn);
     }
 
-    @PostConstruct
-    private void afterInit(){
-        List<Pizza> items = cartService.getCartContent();//TODO: update all clients memory after successfully editing pizza
+    private void onAttach(AttachEvent attachEvent) {
+        List<Pizza> items = ((MainView)getUI()).getCartContent();//TODO: update all clients memory after successfully editing pizza
         addPizzasToUi(items);
         calculateTotalPrice(items);
     }
@@ -68,10 +68,12 @@ public class Order extends VerticalLayout implements View {
     }
 
     private void onOrderButtonPressed(){
-        Optional<User> loggedInUser = ((MainView)getUI()).getLoggedInUser();
+        MainView mainView = (MainView) getUI();
+
+        Optional<User> loggedInUser = mainView.getLoggedInUser();
         if(loggedInUser.isPresent()){
             try {
-                cartService.placeOrder(loggedInUser.get().getEmailAddress());
+                cartService.placeOrder(loggedInUser.get().getEmailAddress(), mainView.getCartContent());
             } catch (CartIsEmptyException e) {
                 Notification.show("Cart is empty.", Notification.Type.WARNING_MESSAGE);
                 return;
@@ -81,13 +83,13 @@ public class Order extends VerticalLayout implements View {
                 return;
             }
         }else{
-            getUI().getNavigator().navigateTo("login");
+            mainView.getNavigator().navigateTo("login");
             Notification.show("You need to be logged in.", Notification.Type.WARNING_MESSAGE);
             return;
         }
 
-        getUI().getNavigator().navigateTo("");
-        cartService.clearContent();
+        mainView.getNavigator().navigateTo("");
+        mainView.clearCartContent();
         Notification.show("Order placed successfully.", Notification.Type.WARNING_MESSAGE);
     }
 }

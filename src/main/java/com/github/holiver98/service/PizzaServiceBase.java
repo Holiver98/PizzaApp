@@ -179,15 +179,6 @@ public abstract class PizzaServiceBase implements IPizzaService {
         return doDeletePizza(pizzaId);
     }
 
-    public static boolean isValidPizza(Pizza pizza){
-        try {
-            checkIfPizzaIsValid(pizza);
-        } catch (RuntimeException e) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Throws exceptions if the pizza is invalid.
      */
@@ -200,18 +191,6 @@ public abstract class PizzaServiceBase implements IPizzaService {
         checkIfHasValidNumberOfToppings(pizza);
         checkIfHasValidIngredientPrices(pizza);
         checkIfPizzaPriceIsNotNegative(pizza);
-    }
-
-    @Override
-    public BigDecimal calculatePrice(Pizza pizza) {
-        checkIfPizzaIsValid(pizza);
-
-        BigDecimal totalPrice = new BigDecimal(0);
-        for (Ingredient ingredient: pizza.getIngredients()) {
-            totalPrice = totalPrice.add(ingredient.getPrice());
-        }
-
-        return totalPrice;
     }
 
     private static void checkIfFieldsAreInitialized(Pizza pizza) {

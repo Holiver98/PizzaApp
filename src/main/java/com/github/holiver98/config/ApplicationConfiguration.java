@@ -52,7 +52,6 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    @SessionScope
     public ICartService inMemoryCartService(){
         return new InMemoryCartService(inMemoryUserService(), inMemoryOrderDao(), mailService());
     }
@@ -75,7 +74,6 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    @SessionScope
     @Primary
     public ICartService jpaCartService() { return new JpaCartService(jpaUserService(), mailService()); }
 

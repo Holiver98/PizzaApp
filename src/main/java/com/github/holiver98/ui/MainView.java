@@ -1,10 +1,9 @@
 package com.github.holiver98.ui;
 
+import com.github.holiver98.model.Pizza;
 import com.github.holiver98.model.Role;
 import com.github.holiver98.model.User;
-import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.IncorrectPasswordException;
-import com.github.holiver98.service.NotFoundException;
+import com.github.holiver98.service.*;
 import com.github.holiver98.util.RequiresAuthentication;
 import com.github.holiver98.util.RequiresRole;
 import com.vaadin.annotations.Theme;
@@ -21,9 +20,12 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Theme("mytheme")
@@ -45,7 +47,11 @@ public class MainView extends UI implements ViewDisplay {
     @Autowired
     private SpringNavigator navigator;
 
+    @Value("${pizzaApp.cart.itemLimit}")
+    private int cartItemLimit;
+
     private User loggedInUser;
+    private List<Pizza> cartContent = new ArrayList<Pizza>();
 
     //ez később hívódik meg, mint a @PostConstruct
     @Override
@@ -53,6 +59,13 @@ public class MainView extends UI implements ViewDisplay {
         User user = (User) getSession().getAttribute("loggedInUser");
         if(user != null){
             loggedInUser = user;
+        }
+
+        List<Pizza> sessionCartContent = (List<Pizza>) getSession().getAttribute("cartContent");
+        if(sessionCartContent != null){
+            cartContent = sessionCartContent;
+        }else{
+            getSession().setAttribute("cartContent", cartContent);
         }
 
         VerticalLayout content = new VerticalLayout();
@@ -119,14 +132,35 @@ public class MainView extends UI implements ViewDisplay {
             throw new UnsupportedOperationException("Need to be logged in to logout!");
         }
 
-        int result = userService.logout(loggedInUser.getEmailAddress());
+        loggedInUser = null;
+        getSession().setAttribute("loggedInUser", null);
+        return AuthenticationResult.SUCCESS;
+    }
 
-        if(result == 0){
-            return AuthenticationResult.FAILURE;
-        }else{
-            loggedInUser = null;
-            getSession().setAttribute("loggedInUser", null);
-            return AuthenticationResult.SUCCESS;
+    /**
+     * @return A copy of the cart content.
+     */
+    public List<Pizza> getCartContent() {
+        return new ArrayList<>(cartContent);
+    }
+
+    public void clearCartContent(){
+        cartContent.clear();
+    }
+
+    public void addPizzaToCart(Pizza pizza) throws CartIsFullException {
+        boolean cartIsFull = cartContent.size() >= cartItemLimit;
+        if(cartIsFull){
+            throw new CartIsFullException("Cart is full, can't add any more pizza!");
         }
+        PizzaServiceBase.checkIfPizzaIsValid(pizza);
+        cartContent.add(pizza);
+    }
+
+    public void removePizzaFromCart(Pizza pizza){
+        if(pizza == null){
+            throw new NullPointerException("pizza was null");
+        }
+        cartContent.remove(pizza);
     }
 }
