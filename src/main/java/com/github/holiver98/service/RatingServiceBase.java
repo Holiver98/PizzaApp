@@ -7,7 +7,6 @@ import com.github.holiver98.model.User;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class RatingServiceBase implements IRatingService{
     protected IUserService userService;
@@ -25,12 +24,20 @@ public abstract class RatingServiceBase implements IRatingService{
     protected abstract List<Rating> findByUserEmailAddress(String emailAddress);
 
     @Override
-    public void ratePizza(long pizzaId, int rating, String userEmailAddress) throws NoPermissionException, NotFoundException {
-        User user = tryGetLoggedInUser(userEmailAddress);
+    public void ratePizza(long pizzaId, int rating, String emailAddress) throws NoPermissionException, NotFoundException {
+        User user = tryGetUser(emailAddress);
         checkForExceptions(pizzaId, rating, user);
         Rating ratingToGive = createRating(pizzaId, rating, user.getEmailAddress());
         save(ratingToGive);
         recalculateRatingAverage(pizzaId);
+    }
+
+    private User tryGetUser(String emailAddress) {
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress was null");
+        }
+        return userService.getUser(emailAddress)
+                .orElseThrow(() -> new NotRegisteredException("No user is registered with this email address: " + emailAddress));
     }
 
     @Override
@@ -79,11 +86,6 @@ public abstract class RatingServiceBase implements IRatingService{
         newRating.setRating(rating);
         newRating.setUserEmailAddress(emailAddress);
         return newRating;
-    }
-
-    private User tryGetLoggedInUser(String userEmailAddress) throws NoPermissionException, NotFoundException {
-        Optional<User> user = userService.getLoggedInUser(userEmailAddress);
-        return user.orElseThrow(() -> new NoPermissionException("Only logged in users may rate pizzas."));
     }
 
     private void checkForExceptions(long pizzaId, int rating, User user) throws NotFoundException {

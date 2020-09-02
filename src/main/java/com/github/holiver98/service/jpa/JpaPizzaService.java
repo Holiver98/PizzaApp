@@ -1,13 +1,16 @@
 package com.github.holiver98.service.jpa;
 
 import com.github.holiver98.dal.jpa.IIngredientRepository;
+import com.github.holiver98.dal.jpa.IOrderRepository;
 import com.github.holiver98.dal.jpa.IPizzaRepository;
+import com.github.holiver98.model.Ingredient;
+import com.github.holiver98.model.Order;
 import com.github.holiver98.model.Pizza;
 import com.github.holiver98.service.IUserService;
-import com.github.holiver98.service.NotFoundException;
 import com.github.holiver98.service.PizzaServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,8 @@ public class JpaPizzaService extends PizzaServiceBase {
     private IIngredientRepository ingredientRepository;
     @Autowired
     private IPizzaRepository pizzaRepository;
+    @Autowired
+    private IOrderRepository orderRepository;
 
     public JpaPizzaService(IUserService userService) {
         super(userService);
@@ -27,8 +32,13 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public List<Pizza> getBasicPizzas() {
-        return pizzaRepository.findByIsCustom(false);
+    public List<Pizza> getBasicNonLegacyPizzas() {
+        return pizzaRepository.findByIsCustomAndIsLegacy(false, false);
+    }
+
+    @Override
+    public List<Pizza> getCustomPizzas() {
+        return pizzaRepository.findByIsCustom(true);
     }
 
     @Override
@@ -37,14 +47,18 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
-    public Optional<Pizza> doSavePizza(Pizza pizza) {
-        Pizza savedPizza;
-        try{
-            savedPizza = pizzaRepository.save(pizza);
-        }catch (IllegalArgumentException e){
-            return Optional.empty();
-        }
-        return Optional.of(savedPizza);
+    public List<Ingredient> getIngredients() {
+        return ingredientRepository.findAll();
+    }
+
+    @Override
+    public Optional<Ingredient> getPizzaIngredientByName(String ingredientName) {
+        return ingredientRepository.findById(ingredientName);
+    }
+
+    @Override
+    public Pizza doSavePizza(Pizza pizza) {
+        return pizzaRepository.save(pizza);
     }
 
     @Override
@@ -54,17 +68,49 @@ public class JpaPizzaService extends PizzaServiceBase {
     }
 
     @Override
+    @Transactional //TODO: transactional csak public metódusokon működik??
     protected int doDeletePizza(long pizzaId) {
+        pizzaRepository.deleteRatingsOfPizza(pizzaId);
         pizzaRepository.deleteById(pizzaId);
         return 1;
     }
 
     @Override
-    protected boolean pizzaExists(Pizza pizza) {
+    protected boolean pizzaExistsById(Pizza pizza) {
         if(pizza.getId() == null){
             return false;
         }
 
         return pizzaRepository.existsById(pizza.getId());
+    }
+
+    @Override
+    protected boolean orderEntryExistsOnPizza(long pizzaId) {
+        List<Order> orders = orderRepository.findByPizzaId(pizzaId);
+        return orders.size() > 0;
+    }
+
+    @Override
+    protected Ingredient doSaveIngredient(Ingredient ingredient) {
+        return ingredientRepository.save(ingredient);
+    }
+
+    @Override
+    protected int doUpdateIngredient(Ingredient ingredient) {
+        ingredientRepository.save(ingredient);
+        return 1;
+    }
+
+    @Override
+    protected int doDeleteIngredient(String ingredientName) {
+        ingredientRepository.deleteById(ingredientName);
+        return 1;
+    }
+
+    @Override
+    protected boolean isIngredientReferencedByAPizza(String ingredientName) {
+        int numberOfReferences = ingredientRepository.getNumberOfReferencesByPizzasOnThisIngredient(ingredientName);
+
+        return numberOfReferences > 0;
     }
 }

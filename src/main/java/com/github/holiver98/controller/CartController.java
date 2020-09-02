@@ -29,7 +29,7 @@ public class CartController {
     }
 
     @PostMapping("/order")
-    public void placeOrder(@RequestBody String userEmailAddress) throws CartIsEmptyException, MessagingException, NotFoundException {
-        cartService.placeOrder(userEmailAddress);
+    public void placeOrder(@RequestBody String emailAddress) throws CartIsEmptyException, MessagingException, NotFoundException {
+        cartService.placeOrder(emailAddress);
     }
 }

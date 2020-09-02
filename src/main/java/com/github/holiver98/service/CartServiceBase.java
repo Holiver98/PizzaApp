@@ -1,22 +1,18 @@
 package com.github.holiver98.service;
 
-import com.github.holiver98.model.*;
-
+import com.github.holiver98.model.Order;
+import com.github.holiver98.model.Pizza;
+import com.github.holiver98.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import javax.mail.MessagingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class CartServiceBase implements ICartService {
-
-    //TODO: A limit lehetne paraméter, "más és más ügyfélnél lehetne eltérő az igény".
-    protected final int cartItemLimit = 15;
-    //TODO: +1, Ha memórába szeretnéd tárolni a kosár tartalmát, az rendben van, viszont a jelen műkés az nem fog jól működi, több felhasználó esetén.
-    // A CartService singleton, tehát csak egy példány van belőle az egész alkamazásban, viszont a lista az minden felhasználónak más és más.
-    // A service az stateless, és valamilyen függőség mentén legyen tárolva a state. A "session scope-nak érdemes kicsit utánaolvasni", ha elakadnál akkor szólj
-    // és átbeszéljük, ez annyira nem triviális.
+    @Value("${pizzaApp.cart.itemLimit}")
+    protected int cartItemLimit;
     protected List<Pizza> cartContent = new ArrayList<Pizza>();
     protected IUserService userService;
     protected IMailService mailService;
@@ -52,15 +48,24 @@ public abstract class CartServiceBase implements ICartService {
     }
 
     @Override
-    public void placeOrder(String userEmailAddress) throws CartIsEmptyException, NoPermissionException, MessagingException, NotFoundException {
+    public void placeOrder(String emailAddress) throws CartIsEmptyException, NoPermissionException, MessagingException{
+        if(emailAddress == null){
+            throw new NullPointerException("emailAddress was null");
+        }
         if(cartContent.isEmpty()){
             throw new CartIsEmptyException("Cart is empty, can't place order!");
         }
-        User loggedInUser = userService.getLoggedInUser(userEmailAddress).orElseThrow(
-                () -> new NoPermissionException("The user has to be logged in to place order!"));
-        Order order = createOrder(loggedInUser);
+
+        User user = userService.getUser(emailAddress)
+                .orElseThrow(() -> new NotRegisteredException("No user is registered with this email address: " + emailAddress));
+        Order order = createOrder(user);
         save(order);
         mailService.sendOrderConfirmationEmail(order);
+    }
+
+    @Override
+    public void clearContent(){
+        cartContent.clear();
     }
 
     private Order createOrder(User loggedInUser) {

@@ -4,25 +4,27 @@ import com.github.holiver98.model.User;
 
 import java.util.Optional;
 
-public interface IUserService {
+public interface IUserService{
     /**
-     * Logs in the user, that is identified by the emailAddress.
+     * Logs in the user, that is identified by the emailAddress and returns it.
      *
      * @param emailAddress The email address, that identifies the user.
      * @param password The password of the user.
      * @throws NullPointerException if the password or the emailAddress is null.
      * @throws IncorrectPasswordException if the given password does not match.
      * @throws NotFoundException if the given email address is not registered.
-     * @throws UnsupportedOperationException if the user is already logged in.
+     *
+     * @return the logged in user.
      */
-    void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
+    User login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
 
     /**
-     * @throws NullPointerException if emailAddress is null.
-     * @throws NotFoundException if the emailAddress isn't registered.
-     * @throws UnsupportedOperationException if the user isn't logged in.
+     * Logs the user out.
+     *
+     * @param emailAddress the email address, that identifies the user.
+     * @return 0 on failure, 1 on success.
      */
-    void logout(String emailAddress) throws NotFoundException;
+    int logout(String emailAddress);
 
     /**
      * @param user The user we want to register. Contains the user information.
@@ -33,9 +35,11 @@ public interface IUserService {
     void register(User user) throws AlreadyExistsException;
 
     /**
-     * @return The logged in user (identified by emailAddress) or null if the user is not logged in.
-     * @throws NotFoundException if the given email address is not registered.
-     * @throws NullPointerException if emailAddress is null.
+     * Gets the user identified by this emailAddress.
+     *
+     * @param emailAddress the user's email address.
+     *
+     * @return the user or null if, no user is registered with this email address.
      */
-    Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException;
+    Optional<User> getUser(String emailAddress);
 }

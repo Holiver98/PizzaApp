@@ -25,6 +25,10 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="Oliver" id="create sequence for pizzas table">
+        <createSequence sequenceName="pizzas_tb_seq"/>
+    </changeSet>
+
     <changeSet author="Oliver" id="create pizza table">
         <createTable tableName="pizzas">
             <column name="id" type="NUMBER" autoIncrement="true">
@@ -45,11 +49,10 @@
             <column name="custom" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
+            <column name="legacy" type="BOOLEAN" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
-    </changeSet>
-
-    <changeSet author="Oliver" id="create sequence for pizzas table">
-        <createSequence sequenceName="pizzas_tb_seq"/>
     </changeSet>
 
     <changeSet author="Oliver" id="create rating table">
@@ -164,18 +167,18 @@
 
     <changeSet author="Oliver" id="insert pizza test data">
         <insert tableName="pizzas">
-            <column name="id" value="1"/>
+            <column name="id" valueComputed="pizzas_tb_seq.NEXTVAL"/>
             <column name="name" value="Pepperoni pizza"/>
             <column name="pizza_size" value="NORMAL"/>
-            <column name="rating_average" valueNumeric="4"/>
+            <column name="rating_average" valueNumeric="3.5"/>
             <column name="price" valueNumeric="34"/>
             <column name="custom" valueBoolean="false"/>
         </insert>
         <insert tableName="pizzas">
-            <column name="id" value="2"/>
+            <column name="id" valueComputed="pizzas_tb_seq.NEXTVAL"/>
             <column name="name" value="Meat lover"/>
             <column name="pizza_size" value="SMALL"/>
-            <column name="rating_average" valueNumeric="3.5"/>
+            <column name="rating_average" valueNumeric="4"/>
             <column name="price" valueNumeric="18.4"/>
             <column name="custom" valueBoolean="false"/>
         </insert>
@@ -206,6 +209,21 @@
             <column name="name" value="Ham"/>
             <column name="price" valueNumeric="16.2"/>
             <column name="type" value="PIZZA_TOPPING"/>
+        </insert>
+        <insert tableName="ingredients">
+            <column name="name" value="Mushroom"/>
+            <column name="price" valueNumeric="23.11"/>
+            <column name="type" value="PIZZA_TOPPING"/>
+        </insert>
+        <insert tableName="ingredients">
+            <column name="name" value="Pineapple"/>
+            <column name="price" valueNumeric="8.34"/>
+            <column name="type" value="PIZZA_TOPPING"/>
+        </insert>
+        <insert tableName="ingredients">
+            <column name="name" value="Sour cream"/>
+            <column name="price" valueNumeric="0.8"/>
+            <column name="type" value="PIZZA_BASESAUCE"/>
         </insert>
     </changeSet>
 

@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/logout")
-    public void logout(@RequestBody String emailAddress) throws NotFoundException {
+    public void logout(@RequestBody String emailAddress){
         userService.logout(emailAddress);
     }
 

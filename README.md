@@ -1,5 +1,25 @@
 # PizzaApp
 
+## Telepítés
+
+Az alkalmazás oracle adatbázist használ az adatok mentéséhez. Ahhoz, hogy tudd használni az
+alkalmazást futtatnod kell egy oracle adatbázist, aminek a csatlakozási adatait meg kell adnod az
+application.yml és liquibase.properties fájlban.
+
+A megrendelést megerősítő email küldésére az alkalmazás a gmail smtp szerverét használja. Ehhez a funkcióhoz
+meg kell adni egy gmail fiók belépési adatait, ami a levelek feladójaként fog szolgálni. Ehhez hozz létre egy
+emailsender.txt nevű fájlt a src/main/resources mappában, aminek első sora legyen a fiók email cím és a második
+sora pedig a fiók jelszó. Tesztelés céljából be lehet állítani, hogy az email a feladónak legyen elküldve. Ezt
+az application.yml fájlban lehet beállítani az alábbi kódrészlet hozzáadásával / módosításával:
+
+    pizzaApp:
+        email:
+            sendToSelf: true
+
+Lehetséges értékek:  
+- true: a levél a feladónak lesz elküldve.  
+- false: a levél annak a felhasználónak lesz elküldve, aki a pizzát megrendelte.
+
 ## Üzleti igény
 
 ### Specifikáció

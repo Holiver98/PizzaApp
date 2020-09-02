@@ -24,3 +24,9 @@ logging:
             sql:
               BasicBinder: TRACE
 
+pizzaApp:
+  cart:
+    itemLimit: 15
+  email:
+    sendToSelf: true
+

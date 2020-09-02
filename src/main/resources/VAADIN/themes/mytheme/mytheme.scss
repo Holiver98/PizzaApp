@@ -1,0 +1,219 @@
+// If you edit this file you need to compile the theme. See README.md for details.
+
+// Global variable overrides. Must be declared before importing Valo.
+
+// Defines the plaintext font size, weight and family. Font size affects general component sizing.
+//$v-font-size: 16px;
+//$v-font-weight: 300;
+//$v-font-family: "Open Sans", sans-serif;
+
+// Defines the border used by all components.
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
+
+// Affects the color of some component elements, e.g Button, Panel title, etc
+//$v-background-color: hsl(210, 0%, 98%);
+// Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+//$v-app-background-color: $v-background-color;
+
+// Affects the visual appearance of all components
+//$v-gradient: v-linear 8%;
+//$v-bevel-depth: 30%;
+//$v-shadow-opacity: 5%;
+
+// Defines colors for indicating status (focus, success, failure)
+//$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
+//$v-friendly-color: #2c9720;
+//$v-error-indicator-color: #ed473b;
+
+// For more information, see: https://vaadin.com/book/-/page/themes.valo.html
+// Example variants can be copy/pasted from https://vaadin.com/docs/v8/framework/articles/ValoExamples.html
+
+@import "../valo/valo.scss";
+
+@mixin basicbar{
+    border-radius: 5px;
+    color: rgb(235, 235, 235);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background: rgb(194, 76, 87);
+    padding: 3px;
+}
+
+@mixin mytheme {
+  @include valo;
+
+  .main{
+    .title{
+        font-size: 56px;
+        margin-top: 25vh;
+    }
+    .motto{
+        font-size: 20px;
+        margin-bottom: 25vh;
+    }
+  }
+
+  .footer {
+      @include basicbar;
+
+      &[width-range~="0-700px"] {
+        flex-direction: column;
+        .supportInfoContainer{
+            flex-direction: column;
+        }
+      }
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .supportInfoContainer{
+          display: flex;
+          flex-wrap: wrap;
+      }
+  }
+
+  .header {
+    @include basicbar;
+
+     &[width-range~="0-700px"] {
+            flex-direction: column;
+            .leftcontainer{
+                flex-direction: column;
+            }
+            .leftcontainer > .v-button{
+                width: 100%;
+            }
+            .rightcontainer{
+                flex-direction: column;
+            }
+            .rightcontainer > .v-button{
+                width: 100%;
+            }
+          }
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+
+    .leftcontainer{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .rightcontainer{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+  }
+
+  .pizzacard{
+
+  }
+
+  .itemcard{
+    .captionlabel{
+        background: rgba(0, 0, 0, 0.6);
+        color: rgb(235, 235, 235);
+        text-align: center;
+        padding: 5px;
+    }
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .pizzalist{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .customPizzaCartItem{
+    .removeBtn{
+        margin: 10px;
+    }
+
+    .toppingsVL{
+        border: solid;
+        border-width: 1px;
+    }
+
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+  }
+
+  .pizzaCartItem{
+      .removeBtn{
+         margin: 10px;
+      }
+
+      .leftLayout{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pizzaImage{
+        margin: 10px;
+      }
+
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 5px;
+  }
+
+  .removeBtn{
+    transition: background 0.5s;
+  }
+
+  .removeBtn:hover{
+    @include valo-button-style($background-color: red);
+  }
+
+  .editPizzasItem{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .editIngredientsItem{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .custom{
+    .selectedToppingsVL{
+        border: solid;
+        border-width: 1px;
+    }
+    .rightPanel{
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+  }
+
+  .pizzaDetails{
+    .ingredientsVL{
+        border: solid 1px black;
+    }
+  }
+}

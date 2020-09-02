@@ -2,6 +2,7 @@ package com.github.holiver98.service;
 
 import com.github.holiver98.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -14,13 +15,12 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Properties;
 
-
-//TODO: A Spring Mail-t esetleg érdemes megnézni, had csináljon meg mindent a Spring, neked meg csak a tényleges e-mail tartalommal kelljen foglalkozni.
 public class MailService implements IMailService{
     private String senderEmailAddress = "";
     private String senderPassword = "";
     private static final String senderInformationFilePath = "src/main/resources/emailsender.txt";
-    private static final boolean debug_SendToSelf = true;
+    @Value("${pizzaApp.mail.sendToSelf}")
+    private static boolean debug_SendToSelf;
 
     @Autowired
     TemplateEngine templateEngine;
@@ -55,8 +55,6 @@ public class MailService implements IMailService{
         sendMailTo(order.getUserEmailAddress(), body);
     }
 
-    //TODO: +1, nem rossz gondolat, de talán feleslegesen bonyolult. Egy sima username, password paraméter elég, amit nem kell felvenni a property-kközé, hanem
-    // Hanem indítási paraméterként kapja meg.
     private void tryLoadEmailAndPasswordFromFile() {
         try {
             loadEmailAndPasswordFromFile();

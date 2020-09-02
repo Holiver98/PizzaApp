@@ -6,53 +6,42 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.security.SecureRandom;
 import java.util.Optional;
 
-public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
+public abstract class UserServiceBase implements IUserService{
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12, new SecureRandom());
 
     protected abstract Optional<User> findByEmailAddress(String emailAddress);
     protected abstract void save(User user);
     protected abstract void update(User user);
 
-    @Override
-    public Optional<User> getLoggedInUser(String emailAddress) throws NotFoundException{
-        User user = tryGetUser(emailAddress);
-        if(user.isLoggedIn()){
-            return Optional.of(user);
-        }else{
-            return Optional.empty();
-        }
-    }
-
     public BCryptPasswordEncoder getPasswordEncoder(){
         return passwordEncoder;
     }
 
     @Override
-    public void login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
-        super.login(emailAddress, password);
-        User userInfo = tryGetUser(emailAddress);
-        if(userInfo.isLoggedIn()){
-            throw new UnsupportedOperationException("Already logged in!");
-        }
-        checkIfPasswordMatches(password, userInfo.getPassword());
-        userInfo.setLoggedIn(true);
-        update(userInfo);
+    public Optional<User> getUser(String emailAddress){
+        return findByEmailAddress(emailAddress);
     }
 
     @Override
-    public void logout(String emailAddress) throws NotFoundException {
-        super.logout(emailAddress);
-        User user = tryGetUser(emailAddress);
-        if(!user.isLoggedIn()){
-            throw new UnsupportedOperationException("Not logged in!");
+    public User login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException {
+        if(password == null){
+            throw new NullPointerException("password was null");
+        }else if(emailAddress == null){
+            throw new NullPointerException("emailAddress was null");
         }
-        user.setLoggedIn(false);
-        update(user);
+
+        User userInfo = tryGetUser(emailAddress);
+        checkIfPasswordMatches(password, userInfo.getPassword());
+        return userInfo;
+    }
+
+    @Override
+    public int logout(String emailAddress){
+        return 1;
     }
 
     @Override
     public void register(User user) throws AlreadyExistsException {
-        super.register(user);
         checkIfUserInformationAreValid(user);
         checkIfAlreadyRegistered(user);
         encodeUserPassword(user);
@@ -103,6 +92,10 @@ public abstract class UserServiceBase extends UserServiceBaseExceptionHandler{
     }
 
     private void checkIfUserInformationAreValid(User user){
+        if(user == null) {
+            throw new NullPointerException("user was null");
+        }
+
         if(!isValidUserName(user.getUsername())) {
             throw new IllegalArgumentException("invalid username: " + user.getUsername());
         }
