@@ -119,14 +119,8 @@ public class MainView extends UI implements ViewDisplay {
             throw new UnsupportedOperationException("Need to be logged in to logout!");
         }
 
-        int result = userService.logout(loggedInUser.getEmailAddress());
-
-        if(result == 0){
-            return AuthenticationResult.FAILURE;
-        }else{
-            loggedInUser = null;
-            getSession().setAttribute("loggedInUser", null);
-            return AuthenticationResult.SUCCESS;
-        }
+        loggedInUser = null;
+        getSession().setAttribute("loggedInUser", null);
+        return AuthenticationResult.SUCCESS;
     }
 }

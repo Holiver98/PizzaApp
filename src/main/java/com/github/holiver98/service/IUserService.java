@@ -19,14 +19,6 @@ public interface IUserService{
     User login(String emailAddress, String password) throws IncorrectPasswordException, NotFoundException;
 
     /**
-     * Logs the user out.
-     *
-     * @param emailAddress the email address, that identifies the user.
-     * @return 0 on failure, 1 on success.
-     */
-    int logout(String emailAddress);
-
-    /**
      * @param user The user we want to register. Contains the user information.
      * @throws NullPointerException if the user is null.
      * @throws IllegalArgumentException if the user information are invalid.
