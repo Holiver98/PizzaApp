@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
 import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,8 +19,8 @@ public class MailService implements IMailService{
     private String senderEmailAddress = "";
     private String senderPassword = "";
     private static final String senderInformationFilePath = "src/main/resources/emailsender.txt";
-    @Value("${pizzaApp.mail.sendToSelf}")
-    private static boolean debug_SendToSelf;
+    @Value("${pizzaApp.email.sendToSelf}")
+    private boolean debug_SendToSelf;
 
     @Autowired
     TemplateEngine templateEngine;
