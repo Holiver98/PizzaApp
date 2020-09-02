@@ -178,6 +178,7 @@ public class PizzaDetails extends VerticalLayout implements View {
         pizzaRatingL.setValue(ratingLabelBaseText + pizza.getRatingAverage() + " (" + numberOfRatingsOnPizza + ")");
         ratingStars.setValue(pizza.getRatingAverage().doubleValue());
         pizzaNameL.setValue(nameLabelBaseText + pizza.getName());
+        pizzaSizeCB.setValue(pizza.getSize());
         for(Ingredient ingredient : pizza.getIngredients()){
             ingredientsVL.addComponent(new Label(ingredient.getName()));
         }

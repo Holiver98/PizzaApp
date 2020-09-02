@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class CartServiceBase implements ICartService {
-    @Value("${pizzaapp.cart.itemlimit}")
+    @Value("${pizzaApp.cart.itemLimit}")
     protected int cartItemLimit;
     protected List<Pizza> cartContent = new ArrayList<Pizza>();
     protected IUserService userService;

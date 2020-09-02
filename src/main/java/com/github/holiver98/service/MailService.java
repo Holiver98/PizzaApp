@@ -2,6 +2,7 @@ package com.github.holiver98.service;
 
 import com.github.holiver98.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -18,7 +19,8 @@ public class MailService implements IMailService{
     private String senderEmailAddress = "";
     private String senderPassword = "";
     private static final String senderInformationFilePath = "src/main/resources/emailsender.txt";
-    private static final boolean debug_SendToSelf = true;
+    @Value("${pizzaApp.mail.sendToSelf}")
+    private static boolean debug_SendToSelf;
 
     @Autowired
     TemplateEngine templateEngine;

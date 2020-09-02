@@ -153,7 +153,7 @@ public class EditPizza extends VerticalLayout implements View {
         binder.forField(basesauceCB)
                 .bind(pizza -> getBasesauce(pizza), (pizza, ingredient) -> setBasesauce(pizza, ingredient));
 
-        binder.forField(priceTF)
+        binder.forField(priceTF)//TODO: validation
                 .bind(pizza -> pizza.getPrice().toString(), (pizza, priceString) -> pizza.setPrice(new BigDecimal(priceString)));
 
         binder.forField(isCustomChB)
