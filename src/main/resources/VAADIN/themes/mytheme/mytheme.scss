@@ -200,13 +200,16 @@
   }
 
   .custom{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 20px;
+
     .selectedToppingsVL{
         border: solid;
         border-width: 1px;
     }
     .rightPanel{
-        margin-top: 20px;
-        margin-bottom: 20px;
         padding: 10px;
     }
   }

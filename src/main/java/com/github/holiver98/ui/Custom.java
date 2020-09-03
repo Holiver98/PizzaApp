@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringView(name = "custom")
-public class Custom extends HorizontalLayout implements View, ObservableHashSet.ObservableHashSetListener {
+public class Custom extends CssLayout implements View, ObservableHashSet.ObservableHashSetListener {
     private static final String totalPriceLabelBaseText = "Total price: ";
 
     @Autowired
@@ -51,12 +51,12 @@ public class Custom extends HorizontalLayout implements View, ObservableHashSet.
         rightPanel.setHeight("400");
         availableIngredientsVL = new VerticalLayout();
         rightPanel.setContent(availableIngredientsVL);
+        leftLayout.setWidthUndefined();
+        rightPanel.setWidthUndefined();
 
         addComponent(leftLayout);
         addComponent(rightPanel);
         rightPanel.setStyleName("rightPanel");
-        setComponentAlignment(leftLayout, Alignment.MIDDLE_CENTER);
-        setComponentAlignment(rightPanel, Alignment.TOP_CENTER);
 
         pizzaSizeCB = new ComboBox<>();
         pizzaSizeCB.setCaption("Size:");
