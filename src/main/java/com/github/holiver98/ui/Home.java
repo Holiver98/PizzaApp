@@ -39,9 +39,6 @@ public class Home extends VerticalLayout implements View {
 
         pizzaList = new CssLayout();
         pizzaList.setStyleName("pizzalist");
-        for(int i=0; i<15; i++){
-            pizzaList.addComponent(new ItemCard("Pizza"));
-        }
         addComponent(pizzaList);
     }
 
