@@ -24,10 +24,13 @@ public class Home extends VerticalLayout implements View {
         title.setStyleName("title");
         addComponent(title);
         setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+        CssLayout mottoContainer = new CssLayout();
+        mottoContainer.setStyleName("mottoContainer");
         Label motto = new Label("Insert some cheesy, inspirational or funny motto here.");
         motto.setStyleName("motto");
-        addComponent(motto);
-        setComponentAlignment(motto, Alignment.MIDDLE_CENTER);
+        mottoContainer.addComponent(motto);
+        addComponent(mottoContainer);
+        setComponentAlignment(mottoContainer, Alignment.MIDDLE_CENTER);
 
         Label separator =  new Label("<hr />", ContentMode.HTML);
         addComponent(separator);
@@ -36,9 +39,6 @@ public class Home extends VerticalLayout implements View {
 
         pizzaList = new CssLayout();
         pizzaList.setStyleName("pizzalist");
-        for(int i=0; i<15; i++){
-            pizzaList.addComponent(new ItemCard("Pizza"));
-        }
         addComponent(pizzaList);
     }
 
